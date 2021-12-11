@@ -18,6 +18,10 @@
   },
   "homepage": "https://github.com/charon1212/vc-auto-trade-v2#readme",
   "devDependencies": {
+    "@types/websocket": "^1.0.4",
     "typescript": "^4.5.3"
+  },
+  "dependencies": {
+    "websocket": "^1.0.34"
   }
 }
