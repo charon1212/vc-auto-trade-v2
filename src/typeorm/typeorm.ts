@@ -4,6 +4,8 @@ import { getProcessEnv } from "../common/dotenv/processEnv";
 
 let conn: Connection | undefined = undefined;
 
+export const connected = () => { return conn !== undefined };
+
 export const getConnection = () => {
   if (conn) return conn;
   throw new Error('typeormコネクションの初期化前にgetConnection呼び出しが発生。');
