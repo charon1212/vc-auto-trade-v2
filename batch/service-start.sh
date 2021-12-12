@@ -8,7 +8,7 @@ cd $dir
 cd ../
 
 # コンパイル
-tsc
+npm run build
 
 # サービススタート
 forever start ./dist/index.js
