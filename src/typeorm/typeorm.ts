@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import { Connection, createConnection } from "typeorm";
 import { getProcessEnv } from "../common/dotenv/processEnv";
+import { PriceHistory } from "./entity/PriceHistory";
 
 let conn: Connection | undefined = undefined;
 
@@ -20,7 +21,7 @@ export const startConnection = async () => {
     username: env.TYPEORM_USERNAME,
     password: env.TYPEORM_PASSWORD,
     database: env.TYPEORM_DATABASE,
-    entities: [],
+    entities: [PriceHistory],
     synchronize: true,
     logging: false,
   });
