@@ -43,6 +43,15 @@ export class PriceManager {
     cron.schedule('0 0 * * * *', () => {
       const before1h = Date.now() - 60 * 60 * 1000;
       const saveData = this.shortHistory.filter((data: PriceHistory) => data.timestamp < before1h);
+      console.log(`savebatch::${JSON.stringify({
+        firstShortHistory: this.shortHistory[0],
+        lastShortHistory: this.shortHistory[this.shortHistory.length - 1],
+        now: Date.now(),
+        before1h,
+        saveDataLength: saveData.length,
+        firstSavaData: saveData[0],
+        lastSaveData: saveData[saveData.length - 1],
+      })}`)
       if (saveData.length > 0) {
         const saveDataOrm = saveData.map((d) => new PriceHistoryOrm(d));
         getConnection().manager.save(saveDataOrm);
