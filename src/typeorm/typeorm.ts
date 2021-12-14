@@ -12,7 +12,10 @@ export const getConnection = () => {
   throw new Error('typeormコネクションの初期化前にgetConnection呼び出しが発生。');
 };
 
-export const startConnection = async () => {
+export const resetConnection = async () => {
+  if (conn) {
+    await conn.close();
+  }
   const env = getProcessEnv();
   conn = await createConnection({
     type: 'mysql',

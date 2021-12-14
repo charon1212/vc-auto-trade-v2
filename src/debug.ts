@@ -1,13 +1,12 @@
 import { PriceManager } from "./domain/trade/PriceManager";
-import * as cron from 'node-cron';
 import { loadDotEnv } from "./common/dotenv/processEnv";
-import { startConnection } from "./typeorm/typeorm";
+import { resetConnection } from "./typeorm/typeorm";
 
 const debug = async () => {
 
   // 初期準備
   loadDotEnv();
-  await startConnection();
+  await resetConnection();
 
   const manager = new PriceManager('btc_jpy');
   manager.start();
