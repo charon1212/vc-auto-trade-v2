@@ -55,10 +55,11 @@ export class PriceManager {
       })}`)
       if (saveData.length > 0) {
         const saveDataOrm = saveData.map((d) => new PriceHistory(d));
-        logger.debug({ saveData, saveDataOrm });
-        // await resetConnection();
-        await getConnection().manager.save(saveDataOrm);
-        logger.info('saved');
+        for (let data of saveDataOrm) {
+          logger.debug({ data });
+          await getConnection().manager.save(data);
+          logger.info('saved');
+        }
       }
       this.shortHistory = this.shortHistory.filter((data: PriceHistoryData) => data.timestamp >= before1h);
     });
