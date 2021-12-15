@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { Connection, createConnection } from "typeorm";
-import { getProcessEnv } from "../common/dotenv/processEnv";
+import { processEnv } from "../common/dotenv/processEnv";
 import { PriceHistory } from "./entity/PriceHistory";
 
 let conn: Connection | undefined = undefined;
@@ -16,14 +16,13 @@ export const resetConnection = async () => {
   if (conn) {
     await conn.close();
   }
-  const env = getProcessEnv();
   conn = await createConnection({
     type: 'mysql',
-    host: env.TYPEORM_HOST,
-    port: +env.TYPEORM_PORT,
-    username: env.TYPEORM_USERNAME,
-    password: env.TYPEORM_PASSWORD,
-    database: env.TYPEORM_DATABASE,
+    host: processEnv.TYPEORM_HOST,
+    port: +processEnv.TYPEORM_PORT,
+    username: processEnv.TYPEORM_USERNAME,
+    password: processEnv.TYPEORM_PASSWORD,
+    database: processEnv.TYPEORM_DATABASE,
     entities: [PriceHistory],
     synchronize: true,
     logging: false,
