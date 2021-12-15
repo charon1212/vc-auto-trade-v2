@@ -3,6 +3,7 @@ import { Pair } from "../../type/coincheck";
 import * as cron from 'node-cron';
 import { PriceHistory as PriceHistoryOrm } from '../../typeorm/entity/PriceHistory'
 import { connected, getConnection, resetConnection } from "../../typeorm/typeorm";
+import { logger } from "../../common/log/logger";
 
 export type PriceHistory = { timestamp: number, price: number };
 /**
@@ -52,6 +53,7 @@ export class PriceManager {
         saveData,
       })}`)
       if (saveData.length > 0) {
+        logger.debug({ saveData });
         const saveDataOrm = saveData.map((d) => new PriceHistoryOrm(d));
         await resetConnection();
         await getConnection().manager.save(saveDataOrm);
