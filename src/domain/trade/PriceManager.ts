@@ -37,29 +37,16 @@ export class PriceManager {
       if (this.current) {
         const timespan = 10000;
         const timestamp = Math.round(Date.now() / timespan) * timespan;
-        logger.debug('update-current-price:', { timestamp, price: this.current.price });
         this.shortHistory.push({ timestamp, price: this.current.price });
       }
     });
     // 1時間ごとに、1時間以上前のshortHistoryをDBに保存してメモリから削除する。
-    // 検証用に、3分ごととする。
-    cron.schedule('0 */3 * * * *', async () => {
-      const before1h = Date.now() - 3 * 60 * 1000;
+    cron.schedule('0 0 * * * *', async () => {
+      const before1h = Date.now() - 60 * 60 * 1000;
       const saveData = this.shortHistory.filter((data: PriceHistoryData) => data.timestamp < before1h);
-      console.log(`savebatch::${JSON.stringify({
-        firstShortHistory: this.shortHistory[0],
-        lastShortHistory: this.shortHistory[this.shortHistory.length - 1],
-        now: Date.now(),
-        before1h,
-        saveData,
-      })}`)
       if (saveData.length > 0) {
-        const saveDataOrm = saveData.map(({timestamp,price}) => new PriceHistory({timestamp: timestamp.toString(), price}));
-        for (let data of saveDataOrm) {
-          logger.debug({ data });
-          await getConnection().manager.save(data);
-          logger.info('saved');
-        }
+        const saveDataEntity = saveData.map(({ timestamp, price }) => new PriceHistory({ timestamp: timestamp.toString(), price }));
+        await getConnection().manager.save(saveDataEntity);
       }
       this.shortHistory = this.shortHistory.filter((data: PriceHistoryData) => data.timestamp >= before1h);
     });
