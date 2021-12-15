@@ -40,8 +40,9 @@ export class PriceManager {
       }
     });
     // 1時間ごとに、1時間以上前のshortHistoryをDBに保存してメモリから削除する。
-    cron.schedule('0 0 * * * *', async () => {
-      const before1h = Date.now() - 60 * 60 * 1000;
+    // 検証用に、3分ごととする。
+    cron.schedule('0 */3 * * * *', async () => {
+      const before1h = Date.now() - 3 * 60 * 1000;
       const saveData = this.shortHistory.filter((data: PriceHistory) => data.timestamp < before1h);
       console.log(`savebatch::${JSON.stringify({
         firstShortHistory: this.shortHistory[0],
