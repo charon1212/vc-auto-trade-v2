@@ -5,7 +5,7 @@ export class PriceHistory {
 
   @PrimaryColumn()
   timestamp: number = 0;
-  @Column()
+  @Column({ type: "int", width: 200 })
   price: number = 0;
 
   constructor(param?: { timestamp?: number, price?: number }) {
