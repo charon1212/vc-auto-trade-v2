@@ -3,7 +3,7 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 @Entity()
 export class PriceHistory {
 
-  @PrimaryColumn()
+  @PrimaryColumn({ type: "bigint" })
   timestamp: number = 0;
   @Column({ type: "bigint" })
   price: number = 0;
