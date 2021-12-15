@@ -4,11 +4,11 @@ import { Column, Entity, PrimaryColumn } from "typeorm";
 export class PriceHistory {
 
   @PrimaryColumn({ type: "bigint" })
-  timestamp: number = 0;
-  @Column({ type: "bigint" })
+  timestamp: string = '0';
+  @Column()
   price: number = 0;
 
-  constructor(param?: { timestamp?: number, price?: number }) {
+  constructor(param?: { timestamp?: string, price?: number }) {
     if (param?.timestamp !== undefined) this.timestamp = param.timestamp;
     if (param?.price !== undefined) this.price = param.price;
   }

@@ -54,7 +54,7 @@ export class PriceManager {
         saveData,
       })}`)
       if (saveData.length > 0) {
-        const saveDataOrm = saveData.map((d) => new PriceHistory(d));
+        const saveDataOrm = saveData.map(({timestamp,price}) => new PriceHistory({timestamp: timestamp.toString(), price}));
         for (let data of saveDataOrm) {
           logger.debug({ data });
           await getConnection().manager.save(data);
