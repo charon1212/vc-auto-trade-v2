@@ -1,11 +1,11 @@
 import { websocketTradeStart } from "../../interfaces/coincheck/wsTrade";
 import { Pair } from "../../type/coincheck";
 import * as cron from 'node-cron';
-import { PriceHistory as PriceHistoryOrm } from '../../typeorm/entity/PriceHistory'
+import { PriceHistory } from '../../typeorm/entity/PriceHistory'
 import { connected, getConnection, resetConnection } from "../../typeorm/typeorm";
 import { logger } from "../../common/log/logger";
 
-export type PriceHistory = { timestamp: number, price: number };
+export type PriceHistoryData = { timestamp: number, price: number };
 /**
  * 市場の取引状況を監視し、過去の価格履歴や最新価格を提供する。
  */
@@ -14,7 +14,7 @@ export class PriceManager {
   // 最新価格
   public current: { id: number, price: number } | undefined;
   // 10秒ごとの価格リスト
-  public shortHistory: PriceHistory[] = [];
+  public shortHistory: PriceHistoryData[] = [];
   /**
    * @param pair 取引ペア
    */
@@ -37,6 +37,7 @@ export class PriceManager {
       if (this.current) {
         const timespan = 10000;
         const timestamp = Math.round(Date.now() / timespan) * timespan;
+        logger.trace('update-current-price:', { timestamp, price: this.current.price });
         this.shortHistory.push({ timestamp, price: this.current.price });
       }
     });
@@ -44,7 +45,7 @@ export class PriceManager {
     // 検証用に、3分ごととする。
     cron.schedule('0 */3 * * * *', async () => {
       const before1h = Date.now() - 3 * 60 * 1000;
-      const saveData = this.shortHistory.filter((data: PriceHistory) => data.timestamp < before1h);
+      const saveData = this.shortHistory.filter((data: PriceHistoryData) => data.timestamp < before1h);
       console.log(`savebatch::${JSON.stringify({
         firstShortHistory: this.shortHistory[0],
         lastShortHistory: this.shortHistory[this.shortHistory.length - 1],
@@ -53,12 +54,13 @@ export class PriceManager {
         saveData,
       })}`)
       if (saveData.length > 0) {
-        logger.debug({ saveData });
-        const saveDataOrm = saveData.map((d) => new PriceHistoryOrm(d));
-        await resetConnection();
+        const saveDataOrm = saveData.map((d) => new PriceHistory(d));
+        logger.debug({ saveData, saveDataOrm });
+        // await resetConnection();
         await getConnection().manager.save(saveDataOrm);
+        logger.info('saved');
       }
-      this.shortHistory = this.shortHistory.filter((data: PriceHistory) => data.timestamp >= before1h);
+      this.shortHistory = this.shortHistory.filter((data: PriceHistoryData) => data.timestamp >= before1h);
     });
   }
 
