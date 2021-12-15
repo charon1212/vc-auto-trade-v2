@@ -37,7 +37,7 @@ export class PriceManager {
       if (this.current) {
         const timespan = 10000;
         const timestamp = Math.round(Date.now() / timespan) * timespan;
-        logger.trace('update-current-price:', { timestamp, price: this.current.price });
+        logger.debug('update-current-price:', { timestamp, price: this.current.price });
         this.shortHistory.push({ timestamp, price: this.current.price });
       }
     });
