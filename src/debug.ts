@@ -5,15 +5,18 @@ import { getConnection } from "typeorm";
 import { PriceHistory } from "./typeorm/entity/PriceHistory";
 import * as cron from 'node-cron';
 import { logger } from "./common/log/logger";
+import { apiTicker } from "./interfaces/coincheck/apiTicker";
 
 const debug = async () => {
 
   // 初期準備
   loadDotEnv();
-  await resetConnection();
+  // await resetConnection();
 
-  const manager = new PriceManager('btc_jpy');
-  manager.start();
+  const ticker = await apiTicker('btc_jpy');
+  console.log(ticker);
+  // const manager = new PriceManager('btc_jpy');
+  // manager.start();
 
 };
 
