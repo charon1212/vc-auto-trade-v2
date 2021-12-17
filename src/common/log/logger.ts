@@ -23,7 +23,7 @@ const log = (level: LogLevel, data: any) => {
   if (level === 'INFO') console.info(dataStr);
   if (level === 'DEBUG') console.debug(dataStr);
   if (level === 'TRACE') console.trace(dataStr);
-  if (processEnv.LOG_PATH) fs.writeFileSync(processEnv.LOG_PATH, `[${level}][${Date.now()}]${dataStr}`);
+  if (processEnv.LOG_PATH) fs.writeFileSync(processEnv.LOG_PATH, `[${level}][${Date.now()}]${dataStr}`, { flag: 'a' });
 };
 
 export const logger = {
