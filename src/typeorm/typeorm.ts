@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { Connection, createConnection } from "typeorm";
 import { processEnv } from "../common/dotenv/processEnv";
 import { PriceHistory } from "./entity/PriceHistory";
+import { TradeResult } from "./entity/TradeResult";
 
 let conn: Connection | undefined = undefined;
 
@@ -23,7 +24,7 @@ export const resetConnection = async () => {
     username: processEnv.TYPEORM_USERNAME,
     password: processEnv.TYPEORM_PASSWORD,
     database: processEnv.TYPEORM_DATABASE,
-    entities: [PriceHistory],
+    entities: [PriceHistory, TradeResult],
     synchronize: true,
     logging: false,
   });
