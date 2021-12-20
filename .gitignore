@@ -3,3 +3,4 @@ node_modules/
 package-lock.json
 .env
 vcat-2.log
+logs/
