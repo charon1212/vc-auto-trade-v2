@@ -3,16 +3,12 @@ import * as fs from 'fs';
 
 type LogLevel = 'ERROR' | 'WARN' | 'INFO' | 'DEBUG' | 'TRACE';
 
-const canPutLog = (logLevel: LogLevel) => {
-  if (processEnv.LOG_LEVEL === 'ERROR')
-    return logLevel === 'ERROR';
-  if (processEnv.LOG_LEVEL === 'WARN')
-    return logLevel === 'ERROR' || logLevel === 'WARN';
-  if (processEnv.LOG_LEVEL === 'INFO')
-    return logLevel === 'ERROR' || logLevel === 'WARN' || logLevel === 'INFO';
-  if (processEnv.LOG_LEVEL === 'DEBUG')
-    return logLevel === 'ERROR' || logLevel === 'WARN' || logLevel === 'INFO' || logLevel === 'DEBUG';
-  return true;
+export const logger = {
+  error: (...data: any[]) => log('ERROR', data),
+  warn: (...data: any[]) => log('WARN', data),
+  info: (...data: any[]) => log('INFO', data),
+  debug: (...data: any[]) => log('DEBUG', data),
+  trace: (...data: any[]) => log('TRACE', data),
 };
 
 const log = (level: LogLevel, data: any) => {
@@ -23,13 +19,24 @@ const log = (level: LogLevel, data: any) => {
   if (level === 'INFO') console.info(dataStr);
   if (level === 'DEBUG') console.debug(dataStr);
   if (level === 'TRACE') console.trace(dataStr);
-  if (processEnv.LOG_PATH) fs.writeFileSync(processEnv.LOG_PATH, `[${level}][${Date.now()}]${dataStr}\r\n`, { flag: 'a' });
+  const path = getLogFilePath();
+  if(path) fs.writeFileSync(path, `[${level}][${Date.now()}]${dataStr}\r\n`, { flag: 'a' });
 };
 
-export const logger = {
-  error: (...data: any[]) => log('ERROR', data),
-  warn: (...data: any[]) => log('WARN', data),
-  info: (...data: any[]) => log('INFO', data),
-  debug: (...data: any[]) => log('DEBUG', data),
-  trace: (...data: any[]) => log('TRACE', data),
+const getLogFilePath = () => {
+  if (!processEnv.LOG_PATH) return '';
+  const now = new Date();
+  return `${processEnv.LOG_PATH}/vcat2_${now.getUTCFullYear()}${now.getUTCMonth()}${now.getUTCDay()}.log`;
+};
+
+const canPutLog = (logLevel: LogLevel) => {
+  if (processEnv.LOG_LEVEL === 'ERROR')
+    return logLevel === 'ERROR';
+  if (processEnv.LOG_LEVEL === 'WARN')
+    return logLevel === 'ERROR' || logLevel === 'WARN';
+  if (processEnv.LOG_LEVEL === 'INFO')
+    return logLevel === 'ERROR' || logLevel === 'WARN' || logLevel === 'INFO';
+  if (processEnv.LOG_LEVEL === 'DEBUG')
+    return logLevel === 'ERROR' || logLevel === 'WARN' || logLevel === 'INFO' || logLevel === 'DEBUG';
+  return true;
 };
