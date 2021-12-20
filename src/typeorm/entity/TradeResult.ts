@@ -6,16 +6,22 @@ export class TradeResult {
   @PrimaryGeneratedColumn('increment')
   id: number | undefined;
   @Column()
-  type: 'buy' | 'sell';
+  type: 'market' | 'limit'; // 注文タイプ(market:成行, limit: 指値)
   @Column()
-  rate: number;
+  side: 'buy' | 'sell'; // 注文サイド
   @Column()
-  amount: number;
+  rate: number; // 価格レート(1仮想通貨が何円か)
+  @Column()
+  amount: number; // 注文量(単位は仮想通貨)
+  @Column({ type: "bigint" })
+  orderTimestamp: string; // 発注時刻
 
-  constructor(param: { type: 'buy' | 'sell', rate: number, amount: number, }) {
+  constructor(param: { type: 'market' | 'limit', side: 'buy' | 'sell', rate: number, amount: number, orderTimestamp: string, }) {
     this.type = param.type;
+    this.side = param.side;
     this.rate = param.rate;
     this.amount = param.amount;
+    this.orderTimestamp = param.orderTimestamp;
   }
 
 }
