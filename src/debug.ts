@@ -1,22 +1,20 @@
-import { PriceManager } from "./domain/trade/PriceManager";
+import { PriceManager } from "./domain/price/PriceManager";
 import { loadDotEnv } from "./common/dotenv/processEnv";
 import { resetConnection } from "./typeorm/typeorm";
-import { getConnection } from "typeorm";
-import { PriceHistory } from "./typeorm/entity/PriceHistory";
-import * as cron from 'node-cron';
-import { logger } from "./common/log/logger";
-import { apiTicker } from "./interfaces/coincheck/apiTicker";
+import { StrategyBoxContainer } from "./domain/strategyBoxContainer/strategyBoxContainer";
+import { StrategyBox1 } from "./domain/strategyBox/strategyBox1/StrategyBox1";
 
 const debug = async () => {
 
   // 初期準備
   loadDotEnv();
-  // await resetConnection();
+  await resetConnection();
 
-  const ticker = await apiTicker('btc_jpy');
-  console.log(ticker);
-  // const manager = new PriceManager('btc_jpy');
-  // manager.start();
+  const priceManager = new PriceManager('btc_jpy');
+
+  const container = new StrategyBoxContainer();
+  container.boxList.push(new StrategyBox1('btc_jpy', priceManager));
+  container.start();
 
 };
 

@@ -16,12 +16,12 @@ export class TradeResult {
   @Column({ type: "bigint" })
   orderTimestamp: string; // 発注時刻
 
-  constructor(param: { type: 'market' | 'limit', side: 'buy' | 'sell', rate: number, amount: number, orderTimestamp: string, }) {
-    this.type = param.type;
-    this.side = param.side;
-    this.rate = param.rate;
-    this.amount = param.amount;
-    this.orderTimestamp = param.orderTimestamp;
+  constructor(param?: { type: 'market' | 'limit', side: 'buy' | 'sell', rate: number, amount: number, orderTimestamp: string, }) {
+    this.type = param?.type || 'market';
+    this.side = param?.side || 'buy';
+    this.rate = param?.rate || 0;
+    this.amount = param?.amount || 0;
+    this.orderTimestamp = param?.orderTimestamp || '';
   }
 
 }

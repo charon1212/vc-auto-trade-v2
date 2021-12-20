@@ -1,3 +1,4 @@
+import { logger } from "../../common/log/logger";
 import { Pair } from "../../type/coincheck";
 import { PriceManager } from "../price/PriceManager";
 
@@ -34,7 +35,10 @@ export abstract class StrategyBoxBase {
     try {
       if (this.mode !== 'running') return;
       this.lastExecutionTime = Date.now();
-      this.tick(() => { setTimeout(this.tickBase, 3000); });
+      this.tick(() => {
+        logger.debug('set next');
+        setTimeout(() => { this.tickBase() }, this.tickSpanMilliseconds);
+      });
     } catch (e) {
       this.mode = 'error';
     }

@@ -1,3 +1,4 @@
+import { logger } from "../../../common/log/logger";
 import { Pair } from "../../../type/coincheck";
 import { PriceManager } from "../../price/PriceManager";
 import { sendMyTradeDummy } from "../../trade/MyTradeDummy";
@@ -12,6 +13,7 @@ export class StrategyBox1 extends StrategyBoxBase {
     this.position = 'rc';
   }
   protected tick(next: () => unknown): void {
+    logger.debug(`tick: ${Date.now()}`);
     if (this.priceManager.shortHistory.length < 600) { // 1時間分のデータが溜まってないなら、いったん保留にする。
       next();
       return;
@@ -29,6 +31,8 @@ export class StrategyBox1 extends StrategyBoxBase {
         },
         () => { this.mode = 'error' },
       );
+    } else {
+      next();
     }
   }
 
