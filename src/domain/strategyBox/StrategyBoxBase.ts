@@ -17,7 +17,7 @@ export abstract class StrategyBoxBase {
   public mode: StrategyBoxMode = 'sleep';
   public readonly pair: Pair;
   public readonly priceManager: PriceManager;
-  public readonly tickSpanMilliseconds: number = 5000;
+  public readonly tickSpanMilliseconds: number = 10000;
   constructor(pair: Pair, priceManager: PriceManager) {
     this.pair = pair;
     this.priceManager = priceManager;
