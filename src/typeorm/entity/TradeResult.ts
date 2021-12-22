@@ -11,17 +11,23 @@ export class TradeResult {
   side: 'buy' | 'sell'; // 注文サイド
   @Column()
   rate: number; // 価格レート(1仮想通貨が何円か)
-  @Column()
+  @Column("decimal")
   amount: number; // 注文量(単位は仮想通貨)
   @Column({ type: "bigint" })
   orderTimestamp: string; // 発注時刻
+  @Column()
+  isDummy: boolean;
+  @Column()
+  strategyBoxId: string;
 
-  constructor(param?: { type: 'market' | 'limit', side: 'buy' | 'sell', rate: number, amount: number, orderTimestamp: string, }) {
+  constructor(param?: { type: 'market' | 'limit', side: 'buy' | 'sell', rate: number, amount: number, orderTimestamp: string, isDummy: boolean, strategyBoxId: string, }) {
     this.type = param?.type || 'market';
     this.side = param?.side || 'buy';
     this.rate = param?.rate || 0;
     this.amount = param?.amount || 0;
     this.orderTimestamp = param?.orderTimestamp || '';
+    this.isDummy = param?.isDummy || false;
+    this.strategyBoxId = param?.strategyBoxId || '';
   }
 
 }

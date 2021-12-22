@@ -14,7 +14,7 @@ const debug = async () => {
   priceManager.start();
 
   const container = new StrategyBoxContainer();
-  container.boxList.push(new StrategyBox1('btc_jpy', priceManager));
+  container.boxList.push(new StrategyBox1('sb-1', 'btc_jpy', priceManager));
   container.start();
 
 };

@@ -18,7 +18,9 @@ export abstract class StrategyBoxBase {
   public readonly pair: Pair;
   public readonly priceManager: PriceManager;
   public readonly tickSpanMilliseconds: number = 10000;
-  constructor(pair: Pair, priceManager: PriceManager) {
+  public id: string;
+  constructor(id: string, pair: Pair, priceManager: PriceManager) {
+    this.id = id;
     this.pair = pair;
     this.priceManager = priceManager;
   }

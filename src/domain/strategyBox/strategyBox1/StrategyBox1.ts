@@ -8,8 +8,8 @@ import { judgeStrategyBox1 } from "./judge";
 export class StrategyBox1 extends StrategyBoxBase {
 
   position: 'rc' | 'vc';
-  constructor(pair: Pair, priceManager: PriceManager) {
-    super(pair, priceManager);
+  constructor(id: string, pair: Pair, priceManager: PriceManager) {
+    super(id, pair, priceManager);
     this.position = 'rc';
   }
   protected tick(next: () => unknown): void {
@@ -24,7 +24,7 @@ export class StrategyBox1 extends StrategyBoxBase {
     if (this.position === 'vc' && judge === 'rc') side = 'sell'
     if (side) {
       sendMyTradeDummy(
-        { pair: this.pair, ammountByUnit: 1, side },
+        { pair: this.pair, ammountByUnit: 1, side, strategyBoxId: this.id },
         () => {
           this.position = side === 'buy' ? 'vc' : 'rc';
           next();
