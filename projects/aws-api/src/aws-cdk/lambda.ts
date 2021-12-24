@@ -25,7 +25,7 @@ export type LambdaProp = {
  * @param params.scope lambda.Functionのコンストラクタ第1引数に渡すscope。
  * @param params.id lambda.Functionのコンストラクタ第2引数に渡すID。このLambda関数を表す一意識別子で、多分同一AWSアカウント内で被らないように設定する。
  * @param params.codeDirPath lambda関数に渡すコードアセットのディレクトリ。プロジェクトディレクトリからの相対パス。
- * @param params.handler ハンドラーのファイル名と関数名。
+ * @param params.handler ハンドラーのファイル名と関数名。codeDirPathで指定したルートディレクトリからの相対パスと、関数名を指定する。例："Handler/Hoge/Top.handler"。
  * @param params.environment Lambda関数の環境変数。
  * @param params.timeoutSecond タイムアウト。秒数で指定する。
  * @param params.memorySize メモリサイズ。
