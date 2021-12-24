@@ -10,7 +10,7 @@ export type LambdaProp = {
   id: string,
   codeDirPath: string,
   handler: string,
-  environment: { [key: string]: string; },
+  environment?: { [key: string]: string; },
   timeoutSecond?: number,
   memorySize?: number,
   schedule?: {
