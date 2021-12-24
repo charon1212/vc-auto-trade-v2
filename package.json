@@ -6,6 +6,7 @@
   "scripts": {
     "start": "tsc && node dist/index.js",
     "debug": "tsc && node dist/debug.js",
+    "start-server": "tsc && node dist/express/index.js",
     "build": "tsc"
   },
   "repository": {
