@@ -1,6 +1,9 @@
 import express from 'express';
+import { loadDotEnv } from '../common/dotenv/processEnv';
 import { PriceHistory } from '../typeorm/entity/PriceHistory';
 import { getConnection, resetConnection } from '../typeorm/typeorm';
+
+loadDotEnv();
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
