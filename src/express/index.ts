@@ -12,6 +12,9 @@ const index = async () => {
   const app = express();
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'localhost:3000');
+  });
 
   app.listen(3000, () => {
     console.log('start on port 3000.');
