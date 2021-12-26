@@ -19,11 +19,13 @@ const index = async () => {
       params: req.params,
       query: req.query,
     }));
+    next();
   });
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'localhost:3000');
+    next();
   });
 
   app.listen(3000, () => {
