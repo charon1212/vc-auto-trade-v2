@@ -1,8 +1,8 @@
 import express from 'express';
 import { loadDotEnv } from '../common/dotenv/processEnv';
-import { PriceHistory } from '../typeorm/entity/PriceHistory';
-import { getConnection, resetConnection } from '../typeorm/typeorm';
+import { resetConnection } from '../typeorm/typeorm';
 import { addGetPriceHistory } from './priceHistory/getPriceHistory';
+import { addGetTradeResult } from './tradeResult/getTradeResult';
 
 const index = async () => {
 
@@ -18,6 +18,7 @@ const index = async () => {
   });
 
   addGetPriceHistory(app); // GET:/vcat2/v1/pair/:pair/price-history
+  addGetTradeResult(app); // GET:/vcat2/v1/trade-result
 
   // テスト用
   app.get('/test', (request, response) => {
