@@ -4,6 +4,16 @@ export type Params = {
   minTimestamp?: number,
   maxTimestamp?: number,
 };
+type TradeResult = {
+  id: number;
+  type: 'market' | 'limit';
+  side: 'buy' | 'sell';
+  rate: number;
+  amount: number;
+  orderTimestamp: string;
+  isDummy: boolean;
+  strategyBoxId: string;
+};
 export const getTradeResult = async (params: Params) => {
 
   const { minTimestamp, maxTimestamp } = params;
@@ -18,6 +28,9 @@ export const getTradeResult = async (params: Params) => {
   console.log(url, data);
   const json = await data.json();
   console.log(json);
-  return json;
+  return json as {
+    result: TradeResult[],
+    count: number,
+  };
 
 };

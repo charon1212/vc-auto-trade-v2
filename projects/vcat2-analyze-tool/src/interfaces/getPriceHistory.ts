@@ -5,6 +5,7 @@ export type Params = {
   minTimestamp?: number,
   maxTimestamp?: number,
 };
+type PriceHistory = { timestamp: number, price: number };
 export const getPriceHistory = async (params: Params) => {
 
   const { pair, minTimestamp, maxTimestamp } = params;
@@ -19,6 +20,10 @@ export const getPriceHistory = async (params: Params) => {
   console.log(url, data);
   const json = await data.json();
   console.log(json);
-  return json;
+  return json as {
+    pair: string,
+    result: PriceHistory[],
+    count: number,
+  };
 
 };
