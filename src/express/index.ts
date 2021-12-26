@@ -12,7 +12,13 @@ const index = async () => {
   const app = express();
   app.use((req, res, next) => {
     console.log('**REQUEST**');
-    console.log(JSON.stringify(req));
+    console.log(JSON.stringify({
+      url: req.url,
+      headers: req.headers,
+      body: req.body,
+      params: req.params,
+      query: req.query,
+    }));
   });
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
