@@ -21,8 +21,8 @@ export const addGetTradeResult = (app: express.Express) => {
 
     // build query
     const queries = [];
-    startTimestamp && queries.push('trade_result.timestamp >= :startTimestamp');
-    lastTimestamp && queries.push('trade_result.timestamp < :lastTimestamp');
+    startTimestamp && queries.push('trade_result.orderTimestamp >= :startTimestamp');
+    lastTimestamp && queries.push('trade_result.orderTimestamp < :lastTimestamp');
     const query = queries.join(' AND ');
 
     // get many
