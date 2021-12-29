@@ -1,7 +1,9 @@
+import Main from './components/Main';
+
 const App = () => {
   return (
     <>
-      <h1>サンプル</h1>
+      <Main />
     </>
   );
 };
