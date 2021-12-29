@@ -1,8 +1,8 @@
 import fetch from "node-fetch";
 
 export type Params = {
-  minTimestamp?: number,
-  maxTimestamp?: number,
+  startTimestamp?: number,
+  lastTimestamp?: number,
 };
 type TradeResult = {
   id: number;
@@ -16,10 +16,10 @@ type TradeResult = {
 };
 export const getTradeResult = async (params: Params) => {
 
-  const { minTimestamp, maxTimestamp } = params;
+  const { startTimestamp, lastTimestamp } = params;
   const queryParams = [];
-  if (minTimestamp !== undefined) queryParams.push(`min-timestamp=${minTimestamp}`);
-  if (maxTimestamp !== undefined) queryParams.push(`max-timestamp=${maxTimestamp}`);
+  if (startTimestamp !== undefined) queryParams.push(`start-timestamp=${startTimestamp}`);
+  if (lastTimestamp !== undefined) queryParams.push(`last-timestamp=${lastTimestamp}`);
   const query = queryParams.join('&');
 
   let url = (process.env['REACT_APP_VCAT2_URL'] || '') + '/trade-result';
