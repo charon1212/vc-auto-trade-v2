@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import startOfDay from 'date-fns/startOfDay';
-import { getTradeResult } from '../interfaces/getTradeResult';
+import { getTradeResult } from '../../interfaces/getTradeResult';
 
 export const useTradeResult = (params: { date?: Date }) => {
   const { date } = params;

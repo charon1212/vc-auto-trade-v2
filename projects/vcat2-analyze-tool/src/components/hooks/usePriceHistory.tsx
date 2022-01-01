@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import startOfDay from 'date-fns/startOfDay';
-import { getPriceHistory } from '../interfaces/getPriceHistory';
+import { getPriceHistory } from '../../interfaces/getPriceHistory';
 
 export const usePriceHistory = (params: { pair: 'btc_jpy'; date?: Date }) => {
   const { pair, date } = params;
