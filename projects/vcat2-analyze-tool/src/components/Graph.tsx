@@ -4,9 +4,10 @@ import Chart from 'react-apexcharts';
 type Props = {
   priceHistory: { timestamp: number; price: number }[];
   tradeResult: { timestamp: number; price: number; side: 'buy' | 'sell' }[];
+  height: number;
 };
 const Graph = (props: Props) => {
-  const { priceHistory, tradeResult } = props;
+  const { priceHistory, tradeResult, height } = props;
   const series = useMemo(() => {
     console.log('priceHistory', priceHistory);
     return priceHistory.map(({ timestamp, price }) => ({ x: timestamp, y: price }));
@@ -20,7 +21,7 @@ const Graph = (props: Props) => {
   return (
     <>
       <Chart
-        height={800}
+        height={height}
         series={[{ data: series }]}
         options={{
           annotations: {
