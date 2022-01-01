@@ -42,7 +42,7 @@ const Graph = (props: Props) => {
           },
           stroke: { curve: 'smooth' },
           grid: { padding: { right: 30, left: 20 } },
-          xaxis: { type: 'datetime' },
+          xaxis: { type: 'datetime', labels: { datetimeUTC: false } },
         }}
       />
     </>
