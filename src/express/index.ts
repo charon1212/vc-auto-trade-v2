@@ -26,7 +26,7 @@ const index = async () => {
   app.use((req, res, next) => {
     const allowOrigins = [/^http:\/\/localhost:[0-9]{1,4}$/, /^https:\/\/vcat2-analyze-tool.web.app$/];
     if (allowOrigins.some((regexp) => regexp.test(req.headers.origin || ''))) {
-      res.header('Access-Control-Allow-Origin', 'req.headers.origin');
+      res.header('Access-Control-Allow-Origin', req.headers.origin);
     }
     next();
   });
