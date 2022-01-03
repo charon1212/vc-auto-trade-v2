@@ -3,6 +3,7 @@ import MyTabContainer from './util/MyTabContainer';
 import { useDateSelector } from './hooks/useDateSelector';
 import { usePriceHistory } from './hooks/usePriceHistory';
 import { useTradeResult } from './hooks/useTradeResult';
+import ScoreBoard from './ScoreBoard';
 
 const Main = () => {
   const { date, setDate, DateSelector } = useDateSelector();
@@ -23,10 +24,12 @@ const Main = () => {
             ),
           },
           {
-            title: '結果まとめ',
-            contents: <div style={{ margin: '20px' }}>
-
-            </div>,
+            title: 'スコアボード',
+            contents: (
+              <div style={{ margin: '20px' }}>
+                <ScoreBoard priceHistory={priceHistory} tradeResult={tradeResult} />
+              </div>
+            ),
           },
         ]}
       />
