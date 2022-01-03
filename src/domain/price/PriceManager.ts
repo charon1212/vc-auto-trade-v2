@@ -48,9 +48,9 @@ export class PriceManager {
         this.shortHistory.push({ timestamp, price: this.shortHistory[this.shortHistory.length - 1].price, lostData: true });
       }
     });
-    // 1時間ごとに、1時間以上前のshortHistoryを削除する。
+    // 1時間ごとに、3時間以上前のshortHistoryを削除する。
     cron.schedule('0 0 * * * *', async () => {
-      const before1h = Date.now() - 60 * 60 * 1000;
+      const before1h = Date.now() - 3 * 60 * 60 * 1000;
       this.shortHistory = this.shortHistory.filter((data: PriceHistoryData) => data.timestamp >= before1h);
     });
   }
