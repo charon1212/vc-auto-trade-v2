@@ -1,9 +1,12 @@
+import Auth from './components/Auth';
 import Main from './components/Main';
 
 const App = () => {
   return (
     <>
-      <Main />
+      <Auth>
+        <Main />
+      </Auth>
     </>
   );
 };
