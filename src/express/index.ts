@@ -24,7 +24,10 @@ const index = async () => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    const allowOrigins = [/^http:\/\/localhost:[0-9]{1,4}$/, /^https:\/\/vcat2-analyze-tool.web.app$/];
+    if (allowOrigins.some((regexp) => regexp.test(req.headers.origin || ''))) {
+      res.header('Access-Control-Allow-Origin', 'req.headers.origin');
+    }
     next();
   });
 
