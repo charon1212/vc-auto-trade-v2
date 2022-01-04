@@ -1,17 +1,11 @@
 import { logger } from "../../../common/log/logger";
-import { Pair } from "../../../type/coincheck";
-import { PriceManager } from "../../price/PriceManager";
 import { sendMyTradeDummy } from "../../trade/MyTradeDummy";
 import { StrategyBoxBase } from "../StrategyBoxBase";
 import { judgeStrategyBox1 } from "./judge";
 
 export class StrategyBox1 extends StrategyBoxBase {
 
-  position: 'rc' | 'vc';
-  constructor(id: string, pair: Pair, priceManager: PriceManager) {
-    super(id, pair, priceManager);
-    this.position = 'rc';
-  }
+  position: 'rc' | 'vc' = 'rc';
   protected tick(next: () => unknown): void {
     logger.debug(`tick: ${Date.now()}`);
     if (this.priceManager.shortHistory.length < 360) { // 1時間分のデータが溜まってないなら、いったん保留にする。
