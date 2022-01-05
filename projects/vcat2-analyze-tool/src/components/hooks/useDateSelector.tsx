@@ -11,7 +11,6 @@ export const useDateSelector = () => {
     <div>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <MobileDatePicker
-          label='Date mobile'
           inputFormat='MM/dd/yyyy'
           value={date}
           onChange={(value) => {
