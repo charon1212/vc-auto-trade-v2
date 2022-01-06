@@ -41,8 +41,6 @@ const calcBenefit = (result: ATradeResult[], priceHistory: APriceHistory[]) => {
       v -= dv;
     }
   }
-  // 仮想通貨の損益を、現実通貨に変換する。不足分は初期価格で買っているものと仮定し、過剰分は最終価格で売却するものと仮定する。
-  const vToR = v < 0 ? v * firstPrice : v * lastPrice;
-  console.log({ r, v, vToR });
-  return r + vToR;
+  // 仮想通貨の損益は、現時点の最終価格で売却/買取したとして計算する。
+  return r + v * lastPrice;
 };
