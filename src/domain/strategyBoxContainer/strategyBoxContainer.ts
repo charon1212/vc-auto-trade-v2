@@ -15,15 +15,18 @@ export class StrategyBoxContainer {
   }
 
   private priceManagerList = [] as { pair: Pair, priceManager: PriceManager }[];
-  addStrategyBox(pair: Pair, creator: (param: StrategyBoxCreatorParams) => StrategyBoxBase<any>) {
+  private getPriceManager = (pair: Pair) => {
     const existingPriceManager = this.priceManagerList.find((v) => v.pair === pair)?.priceManager;
-    if (existingPriceManager) {
-      this.boxList.push(creator({ pair, priceManager: existingPriceManager }));
-    } else {
-      const newPriceManager = new PriceManager(pair);
-      this.priceManagerList.push({ pair, priceManager: newPriceManager });
-      this.boxList.push(creator({ pair, priceManager: newPriceManager }));
-    }
+    if (existingPriceManager) return existingPriceManager;
+    const priceManager = new PriceManager(pair);
+    this.priceManagerList.push({ pair, priceManager, });
+    return priceManager;
+  };
+  addStrategyBox(pair: Pair, creator: (param: StrategyBoxCreatorParams) => StrategyBoxBase<any>) {
+    this.boxList.push(creator({
+      pair,
+      priceManager: this.getPriceManager(pair),
+    }));
   }
 
 }
