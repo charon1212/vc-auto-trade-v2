@@ -18,7 +18,7 @@ export const initParamStrategyBox1: ParamStrategyBox1 = {
   macdShort: 5,
   macdLong: 30,
   threshold: 0.0003,
-  reverse: true,
+  reverse: false,
 };
 
 /**
