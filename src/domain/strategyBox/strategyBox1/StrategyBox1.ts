@@ -38,7 +38,7 @@ export class StrategyBox1 extends StrategyBoxBase<ContextStrategyBox1> {
 
   protected tick(next: () => unknown): void {
     if (this.priceManager.shortHistory.length < 360) { // 1時間分のデータが溜まってないなら、いったん保留にする。
-      logger.debug(`十分なデータなし。this.priceManager.shortHistory.length = ${this.priceManager.shortHistory.length}`);
+      logger.debug(`[${this.id}]十分なデータなし。this.priceManager.shortHistory.length = ${this.priceManager.shortHistory.length}`);
       next();
       return;
     }
