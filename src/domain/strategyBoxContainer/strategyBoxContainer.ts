@@ -8,7 +8,10 @@ export class StrategyBoxContainer {
 
   public boxList: StrategyBoxBase<any>[] = [];
   start() {
-    this.boxList.map((box) => box.start());
+    this.boxList.map((box) => {
+      box.loadContextFromFile();
+      box.start();
+    });
   }
 
   private priceManagerList = [] as { pair: Pair, priceManager: PriceManager }[];
