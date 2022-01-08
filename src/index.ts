@@ -7,7 +7,7 @@ const index = async () => {
   await startup();
 
   const container = new StrategyBoxContainer();
-  container.addStrategyBox('btc_jpy', ({ pair, priceManager }) => new StrategyBox1('sb-1', pair, priceManager));
+  container.addStrategyBox('btc_jpy', StrategyBox1.creator({ id: 'sb-1' }));
   container.start();
 
 };

@@ -5,3 +5,4 @@ package-lock.json
 .env.ec2
 vcat-2.log
 logs/
+files/*/

@@ -1,26 +1,41 @@
 import { logger } from "../../../common/log/logger";
+import { StrategyBoxCreatorParams } from "../../strategyBoxContainer/strategyBoxContainer";
 import { sendMyTradeDummy } from "../../trade/MyTradeDummy";
 import { StrategyBoxBase } from "../StrategyBoxBase";
 import { judgeStrategyBox1 } from "./judge";
 
-export class StrategyBox1 extends StrategyBoxBase {
+export type ContextStrategyBox1 = { position: 'rc' | 'vc', };
+export const initContextStrategyBox1: ContextStrategyBox1 = { position: 'rc' };
 
-  position: 'rc' | 'vc' = 'rc';
+export class StrategyBox1 extends StrategyBoxBase<ContextStrategyBox1> {
+  protected isContextType = (arg: any): arg is ContextStrategyBox1 => {
+    if (typeof arg !== 'object') return false;
+    if (arg?.position !== 'rc' && arg?.position !== 'vc') return false;
+    return true;
+  };
+
+  static creator(creatorParams: { id: string }) {
+    return (params: StrategyBoxCreatorParams) => {
+      return new StrategyBox1(creatorParams.id, params.pair, params.priceManager, initContextStrategyBox1);
+    };
+  };
+
   protected tick(next: () => unknown): void {
-    logger.debug(`tick: ${Date.now()}`);
     if (this.priceManager.shortHistory.length < 360) { // 1時間分のデータが溜まってないなら、いったん保留にする。
+      logger.debug(`十分なデータなし。this.priceManager.shortHistory.length = ${this.priceManager.shortHistory.length}`);
       next();
       return;
     }
+    const { position } = this.context;
     const judge = judgeStrategyBox1(this.priceManager.shortHistory.map((v) => v.price));
     let side: '' | 'buy' | 'sell' = '';
-    if (this.position === 'rc' && judge === 'vc') side = 'buy'
-    if (this.position === 'vc' && judge === 'rc') side = 'sell'
+    if (position === 'rc' && judge === 'vc') side = 'buy'
+    if (position === 'vc' && judge === 'rc') side = 'sell'
     if (side) {
       sendMyTradeDummy(
         { pair: this.pair, ammountByUnit: 1, side, strategyBoxId: this.id },
         () => {
-          this.position = side === 'buy' ? 'vc' : 'rc';
+          this.setContext((before) => ({ ...before, position: side === 'buy' ? 'vc' : 'rc' }));
           next();
         },
         () => { this.mode = 'error' },
