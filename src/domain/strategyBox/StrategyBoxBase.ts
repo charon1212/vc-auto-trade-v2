@@ -57,7 +57,6 @@ export abstract class StrategyBoxBase<ContextType extends Object> {
       if (this.mode !== 'running') return;
       this.lastExecutionTime = Date.now();
       this.tick(() => {
-        logger.debug('set next');
         setTimeout(() => { this.tickBase() }, this.tickSpanMilliseconds);
       });
     } catch (e) {
