@@ -14,9 +14,10 @@ export class StrategyBox1 extends StrategyBoxBase<ContextStrategyBox1> {
     return true;
   };
 
-  static creator(creatorParams: { id: string }) {
+  static getCreator(creatorParams: { id: string }, postConstructor?: (instance: StrategyBox1) => StrategyBox1) {
     return (params: StrategyBoxCreatorParams) => {
-      return new StrategyBox1(creatorParams.id, params.pair, params.priceManager, initContextStrategyBox1);
+      const newStrategyBox1 = new StrategyBox1(creatorParams.id, params.pair, params.priceManager, initContextStrategyBox1);
+      return postConstructor ? postConstructor(newStrategyBox1) : newStrategyBox1;
     };
   };
 
