@@ -20,13 +20,16 @@ const log = (level: LogLevel, data: any) => {
   if (level === 'DEBUG') console.debug(dataStr);
   if (level === 'TRACE') console.trace(dataStr);
   const path = getLogFilePath();
-  if(path) fs.writeFileSync(path, `[${level}][${Date.now()}]${dataStr}\r\n`, { flag: 'a' });
+  if (path) fs.writeFileSync(path, `[${level}][${Date.now()}]${dataStr}\r\n`, { flag: 'a' });
 };
 
 const getLogFilePath = () => {
   if (!processEnv.LOG_PATH) return '';
   const now = new Date();
-  return `${processEnv.LOG_PATH}/vcat2_${now.getUTCFullYear()}${now.getUTCMonth()}${now.getUTCDay()}.log`;
+  const year = (now.getUTCFullYear()).toString().padStart(4, '0');
+  const month = (now.getUTCMonth() + 1).toString().padStart(2, '0');
+  const date = (now.getUTCDate()).toString().padStart(2, '0');
+  return `${processEnv.LOG_PATH}/vcat2_${year}${month}${date}.log`;
 };
 
 const canPutLog = (logLevel: LogLevel) => {
