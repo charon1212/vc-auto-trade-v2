@@ -2,6 +2,8 @@ import { logger } from "../../common/log/logger";
 import { Pair } from "../../type/coincheck";
 import { PriceManager } from "../price/PriceManager";
 import * as fs from 'fs';
+import { ArgSendMyTradeDummy, sendMyTrade } from "../trade/MyTrade";
+import { sendMyTradeDummy } from "../trade/MyTradeDummy";
 
 /**
  * StrategyBoxのモード
@@ -65,6 +67,12 @@ export abstract class StrategyBoxBase<ContextType extends Object> {
   }
   // 定期実行処理
   protected abstract tick(next: () => unknown): unknown;
+
+  /** トレード */
+  public isDummy = false;
+  protected sendTrade(arg: ArgSendMyTradeDummy) {
+    this.isDummy ? sendMyTradeDummy(arg) : sendMyTrade(arg);
+  }
 
   /** コンテキスト */
   protected context: ContextType;

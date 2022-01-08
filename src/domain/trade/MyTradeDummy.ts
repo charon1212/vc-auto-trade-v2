@@ -1,18 +1,12 @@
 import { logger } from "../../common/log/logger";
 import { apiTicker } from "../../interfaces/coincheck/apiTicker";
-import { Pair } from "../../type/coincheck";
 import { TradeResult } from "../../typeorm/entity/TradeResult";
 import { getConnection } from "../../typeorm/typeorm";
+import { ArgSendMyTradeDummy } from "./MyTrade";
 
-export type TradeParams = {
-  pair: Pair,
-  side: 'buy' | 'sell',
-  ammountByUnit: number, // 最小注文量の整数倍で指定
-  strategyBoxId: string,
-};
+export const sendMyTradeDummy = (arg: ArgSendMyTradeDummy) => {
 
-export const sendMyTradeDummy = (param: TradeParams, onSuccess: () => unknown, onFail: () => unknown) => {
-
+  const { param, onSuccess, onFail } = arg;
   logger.info(`dummy-trade: ${JSON.stringify({ param })}`);
   const orderTimestamp = Date.now().toString();
   const { pair, side, ammountByUnit, strategyBoxId } = param;
@@ -24,12 +18,12 @@ export const sendMyTradeDummy = (param: TradeParams, onSuccess: () => unknown, o
         const rate = side === 'buy' ? ticker.ask : ticker.bid;
         const tr = new TradeResult({ type: 'market', side, amount, rate, orderTimestamp, isDummy: true, strategyBoxId });
         await getConnection().manager.save(tr);
-        onSuccess();
+        if (onSuccess) onSuccess();
       } else {
-        onFail();
+        if (onFail) onFail();
       }
     } catch (e) {
-      onFail();
+      if (onFail) onFail();
     }
   };
   setTimeout(exec, 5000); // 5秒後に実行

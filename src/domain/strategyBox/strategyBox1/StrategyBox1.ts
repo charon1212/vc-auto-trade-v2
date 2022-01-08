@@ -48,14 +48,14 @@ export class StrategyBox1 extends StrategyBoxBase<ContextStrategyBox1> {
     if (position === 'rc' && judge === 'vc') side = 'buy'
     if (position === 'vc' && judge === 'rc') side = 'sell'
     if (side) {
-      sendMyTradeDummy(
-        { pair: this.pair, ammountByUnit: 1, side, strategyBoxId: this.id },
-        () => {
+      this.sendTrade({
+        param: { pair: this.pair, ammountByUnit: 1, side, strategyBoxId: this.id },
+        onSuccess: () => {
           this.setContext((before) => ({ ...before, position: side === 'buy' ? 'vc' : 'rc' }));
           next();
         },
-        () => { this.mode = 'error' },
-      );
+        onFail: () => { this.mode = 'error' },
+      })
     } else {
       next();
     }
