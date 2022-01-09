@@ -2,6 +2,7 @@ import AsyncLock from 'async-lock';
 import fetch from 'node-fetch';
 import { processEnv } from '../../common/dotenv/processEnv';
 import * as crypto from 'crypto';
+import { logger } from '../../common/log/logger';
 
 export type ApiRequestParam = {
   uri: string,
@@ -14,6 +15,7 @@ export type ApiRequestParam = {
 
 const hostUrlCoincheck = 'https://coincheck.com';
 export const sendApiRequest = async (params: ApiRequestParam) => {
+  logger.info(`SendApiRequest_Coincheck: ${JSON.stringify(params)}`);
   const { uri, method, headers, requestParam, isPrivate, body } = params;
   let url = hostUrlCoincheck + uri;
   if (requestParam) {
@@ -23,7 +25,6 @@ export const sendApiRequest = async (params: ApiRequestParam) => {
     }
   }
   const authorizationHeader = isPrivate ? (await getAuthorizationHeader(url, body || '')) : {};
-  console.log({ authorizationHeader });
   try {
     const response = await fetch(url, {
       method: method || 'GET',
