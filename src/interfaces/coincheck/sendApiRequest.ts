@@ -1,5 +1,5 @@
 import AsyncLock from 'async-lock';
-import fetch from 'node-fetch';
+import fetch, { Response as FetchResponse } from 'node-fetch';
 import { processEnv } from '../../common/dotenv/processEnv';
 import * as crypto from 'crypto';
 import { logger } from '../../common/log/logger';
@@ -12,9 +12,10 @@ export type ApiRequestParam = {
   body?: string,
   isPrivate?: boolean,
 };
+export type ApiRequestResult = { success: true, response: FetchResponse, responseBody: any } | { success: false, response?: FetchResponse, responseBody?: any, error?: any, };
 
 const hostUrlCoincheck = 'https://coincheck.com';
-export const sendApiRequest = async (params: ApiRequestParam) => {
+export const sendApiRequest = async (params: ApiRequestParam): Promise<ApiRequestResult> => {
   logger.info(`SendApiRequest_Coincheck: ${JSON.stringify(params)}`);
   const { uri, method, headers, requestParam, isPrivate, body } = params;
   let url = hostUrlCoincheck + uri;
@@ -28,12 +29,18 @@ export const sendApiRequest = async (params: ApiRequestParam) => {
   try {
     const response = await fetch(url, {
       method: method || 'GET',
-      headers: { ...headers, ...authorizationHeader },
+      headers: { 'Content-Type': 'application/json', ...headers, ...authorizationHeader },
       body,
     });
-    return { response };
+    const responseBody = await getResponseBody(response);
+    if (response.ok) {
+      return { success: true, response, responseBody };
+    } else {
+      return { success: false, response, responseBody };
+    }
+
   } catch (e) {
-    return { error: e };
+    return { success: false, error: e };
   }
 };
 
@@ -45,6 +52,14 @@ const getAuthorizationHeader = async (url: string, body: string) => {
     'ACCESS-NONCE': nonce,
     'ACCESS-SIGNATURE': crypto.createHmac('sha256', processEnv.COINCHECK_SECRET_KEY).update(message).digest('hex'),
   };
+};
+
+const getResponseBody = async (response: FetchResponse) => {
+  try {
+    return response.json();
+  } catch (e) {
+    return undefined;
+  }
 };
 
 /**

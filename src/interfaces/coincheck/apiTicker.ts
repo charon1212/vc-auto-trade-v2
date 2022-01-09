@@ -1,3 +1,5 @@
+import { handleError } from "../../common/error/handleError";
+import { logger } from "../../common/log/logger";
 import { Pair } from "../../type/coincheck";
 import { sendApiRequest } from "./sendApiRequest";
 
@@ -11,15 +13,16 @@ export type ApiResultTicker = {
   timestamp: number
 };
 export const apiTicker = async (pair: Pair) => {
-  const { response, error } = await sendApiRequest({
+  const requestResult = await sendApiRequest({
     uri: '/api/ticker',
     method: 'GET',
     requestParam: { pair },
   });
-  if (response) { // request success
-    const json = await response.json();
-    return json;
+  if (requestResult.success) { // request success
+    return requestResult.responseBody as ApiResultTicker;
   } else { // request fail
+    logger.error(`[APIエラー:postApiExchangeOrder]${JSON.stringify(requestResult)}`);
+    handleError({ __filename, method: 'apiTicker', });
     return undefined;
   }
 };
