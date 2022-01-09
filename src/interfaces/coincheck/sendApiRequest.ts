@@ -1,15 +1,20 @@
+import AsyncLock from 'async-lock';
 import fetch from 'node-fetch';
+import { processEnv } from '../../common/dotenv/processEnv';
+import * as crypto from 'crypto';
 
 export type ApiRequestParam = {
   uri: string,
   method?: 'GET' | 'POST',
   headers?: { [key: string]: string },
   requestParam?: { [key: string]: string },
+  body?: string,
+  isPrivate?: boolean,
 };
 
 const hostUrlCoincheck = 'https://coincheck.com';
 export const sendApiRequest = async (params: ApiRequestParam) => {
-  const { uri, method, headers, requestParam } = params;
+  const { uri, method, headers, requestParam, isPrivate, body } = params;
   let url = hostUrlCoincheck + uri;
   if (requestParam) {
     url += '?';
@@ -17,13 +22,44 @@ export const sendApiRequest = async (params: ApiRequestParam) => {
       url += encodeURIComponent(key) + '=' + encodeURIComponent(requestParam[key]);
     }
   }
+  const authorizationHeader = isPrivate ? (await getAuthorizationHeader(url, body || '')) : {};
+  console.log({ authorizationHeader });
   try {
     const response = await fetch(url, {
       method: method || 'GET',
-      headers: { ...headers },
+      headers: { ...headers, ...authorizationHeader },
+      body,
     });
-    return response;
+    return { response };
   } catch (e) {
-    return undefined;
+    return { error: e };
   }
 };
+
+const getAuthorizationHeader = async (url: string, body: string) => {
+  const nonce = (await getNounce()).toString();
+  const message = `${nonce}${url}${body}`;
+  return {
+    'ACCESS-KEY': processEnv.COINCHECK_API_KEY,
+    'ACCESS-NONCE': nonce,
+    'ACCESS-SIGNATURE': crypto.createHmac('sha256', processEnv.COINCHECK_SECRET_KEY).update(message).digest('hex'),
+  };
+};
+
+/**
+ * Nounce管理
+ * リクエストごとに増加する正の整数を割り振る必要がある。
+ */
+const locker = new AsyncLock();
+let requestNonce = 0; // リクエストごとに増加する必要のある正の整数。
+const getNounce = async () => {
+  return locker.acquire('coincheck-nounce', () => {
+    if (requestNonce === 0) {
+      requestNonce = Date.now();
+    } else {
+      requestNonce++;
+    }
+    return requestNonce;
+  });
+};
+

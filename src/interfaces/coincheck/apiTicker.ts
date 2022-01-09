@@ -11,11 +11,15 @@ export type ApiResultTicker = {
   timestamp: number
 };
 export const apiTicker = async (pair: Pair) => {
-  const res = await sendApiRequest({
+  const { response, error } = await sendApiRequest({
     uri: '/api/ticker',
     method: 'GET',
     requestParam: { pair },
   });
-  const json = await res?.json();
-  return json as ApiResultTicker | undefined;
+  if (response) { // request success
+    const json = await response.json();
+    return json;
+  } else { // request fail
+    return undefined;
+  }
 };
