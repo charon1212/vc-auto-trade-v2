@@ -2,9 +2,9 @@ import { logger } from "../../common/log/logger";
 import { apiTicker } from "../../interfaces/coincheck/apiTicker";
 import { TradeResult } from "../../typeorm/entity/TradeResult";
 import { getConnection } from "../../typeorm/typeorm";
-import { ArgSendMyTradeDummy } from "./MyTrade";
+import { ArgSendMyTrade } from "./MyTrade";
 
-export const sendMyTradeDummy = (arg: ArgSendMyTradeDummy) => {
+export const sendMyTradeDummy = (arg: ArgSendMyTrade) => {
 
   const { param, onSuccess, onFail } = arg;
   logger.info(`dummy-trade: ${JSON.stringify({ param })}`);

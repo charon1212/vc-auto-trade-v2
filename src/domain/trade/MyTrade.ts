@@ -7,13 +7,13 @@ export type TradeParams = {
   ammountByUnit: number, // 最小注文量の整数倍で指定
   strategyBoxId: string,
 };
-export type ArgSendMyTradeDummy = {
+export type ArgSendMyTrade = {
   param: TradeParams,
   onSuccess?: () => unknown,
   onFail?: () => unknown,
 };
 
-export const sendMyTrade = (arg: ArgSendMyTradeDummy) => {
+export const sendMyTrade = (arg: ArgSendMyTrade) => {
 
   logger.info(`trade: ${JSON.stringify(arg.param)}`);
   throw new Error('未実装');

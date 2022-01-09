@@ -2,7 +2,7 @@ import { logger } from "../../common/log/logger";
 import { Pair } from "../../type/coincheck";
 import { PriceManager } from "../price/PriceManager";
 import * as fs from 'fs';
-import { ArgSendMyTradeDummy, sendMyTrade } from "../trade/MyTrade";
+import { ArgSendMyTrade, sendMyTrade } from "../trade/MyTrade";
 import { sendMyTradeDummy } from "../trade/MyTradeDummy";
 
 /**
@@ -70,7 +70,7 @@ export abstract class StrategyBoxBase<ContextType extends Object> {
 
   /** トレード */
   public isDummy = false;
-  protected sendTrade(arg: ArgSendMyTradeDummy) {
+  protected sendTrade(arg: ArgSendMyTrade) {
     this.isDummy ? sendMyTradeDummy(arg) : sendMyTrade(arg);
   }
 
