@@ -7,20 +7,25 @@ const index = async () => {
   await startup();
 
   const container = new StrategyBoxContainer();
-  container.addStrategyBox('btc_jpy', StrategyBox1.getCreator({ id: 'sb-1' }, (instance) => {
-    instance.isDummy = true;
-    return instance;
-  }));
-  container.addStrategyBox('btc_jpy', StrategyBox1.getCreator({ id: 'sb-1-reverse' }, (instance) => {
-    instance.isDummy = true;
-    instance.param.reverse = true;
-    return instance;
-  }));
-  container.addStrategyBox('btc_jpy', StrategyBox1.getCreator({ id: 'sb-1-threshold2' }, (instance) => {
-    instance.isDummy = true;
-    instance.param.threshold = 0.0002;
-    return instance;
-  }));
+  const params = [
+    { th: 2, rev: true, dummy: true },
+    { th: 3, rev: true, dummy: true },
+    { th: 4, rev: true, dummy: true },
+    { th: 5, rev: true, dummy: true },
+    { th: 2, rev: false, dummy: true },
+    { th: 3, rev: false, dummy: true },
+    { th: 4, rev: false, dummy: true },
+    { th: 5, rev: false, dummy: true },
+  ];
+  for (let param of params) {
+    const { th, rev, dummy } = param;
+    container.addStrategyBox('btc_jpy', StrategyBox1.getCreator({ id: `sb-1-th${th}${rev ? '-reverse' : ''}` }, (instance) => {
+      instance.isDummy = dummy;
+      instance.param.reverse = rev;
+      instance.param.threshold = 0.0001 * th;
+      return instance;
+    }))
+  }
   container.start();
 
 };
