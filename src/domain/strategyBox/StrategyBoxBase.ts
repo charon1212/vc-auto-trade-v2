@@ -69,7 +69,7 @@ export abstract class StrategyBoxBase<ContextType extends Object> {
   protected abstract tick(next: () => unknown): unknown;
 
   /** トレード */
-  public isDummy = false;
+  public isDummy = true;
   protected sendTrade(arg: ArgSendMyTrade) {
     this.isDummy ? sendMyTradeDummy(arg) : sendMyTrade(arg);
   }
