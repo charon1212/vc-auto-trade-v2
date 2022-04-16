@@ -18,6 +18,21 @@
   - interfaces: WebAPIを使って外部と通信する部分。typeormをここに入れてもよかったけど、別だし。
   - tradingLogic: ボリンジャーとか、MACDとか、基本的なトレーディングのロジック。
   - type: 型定義。あんまり使ってない。。。
-  - typeorm: TypeORMまわりの実装。
-  - index.ts: メイン処理のエントリーポイント
-  - debug.ts: デバッグ用のエントリーポイント
+  - typeorm: TypeORMまわりの実装。DB定義に対応するEntity定義まではここに記述する。
+  - index.ts: メイン処理のエントリーポイント。
+  - debug.ts: デバッグ用のエントリーポイント。
+
+## npm-scripts
+
+- `npm run start`
+  - command: `tsc && node dist/index.js`
+  - メインサーバーを起動する。サーバーが起動すると初期化処理が走り、トレードが開始する。
+- `npm run debug`
+  - command: `tsc && node dist/debug.js`
+  - サーバーをデバッグ実行する。デバッグ実行の内容は、[debug.ts](/src/debug.ts)に記載する。
+- `npm run start-server`
+  - command: `tsc && node dist/express/index.js`
+  - フロント用のWebサーバーを起動する。
+- `npm run build`
+  - command: `tsc`
+  - ビルドだけ実行する。

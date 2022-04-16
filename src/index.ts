@@ -2,6 +2,12 @@ import { startup } from "./startup";
 import { StrategyBox1 } from "./domain/strategyBox/strategyBox1/StrategyBox1";
 import { StrategyBoxContainer } from "./domain/strategyBoxContainer/strategyBoxContainer";
 
+/**
+ * メインサーバーを起動する。以下の処理を実施する。
+ *
+ * - startup処理を実施する。
+ * - StrategyBoxContainerにStrategyBoxを登録し、管理を開始する。
+ */
 const index = async () => {
 
   await startup();
