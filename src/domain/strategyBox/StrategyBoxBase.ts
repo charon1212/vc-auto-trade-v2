@@ -79,7 +79,7 @@ export abstract class StrategyBoxBase<ContextType extends Object> {
   protected abstract isContextType: (arg: any) => arg is ContextType;
   // コンテキストを設定する。
   protected setContext(setter: ContextType | ((before: ContextType) => ContextType)): void {
-    const newContext = (typeof setter === 'function') ? setter(this.context) : setter;
+    const newContext = !(typeof setter === 'object') ? setter(this.context) : setter; // [typeof setter === 'function]だと、エラーになる…
     const contextFilePath = this.getContextFilePath();
     this.context = newContext;
     fs.writeFileSync(contextFilePath, JSON.stringify(newContext));
