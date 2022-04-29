@@ -36,3 +36,18 @@
 - `npm run build`
   - command: `tsc`
   - ビルドだけ実行する。
+
+## リリース手順メモ
+
+毎年やる、AWSアカウント作り替え用。2022年度でやった手順を残す。
+
+- AWSアカウント作成＆セキュリティ設定等実施。
+- EC2とRDSを立ち上げる。
+- RDSのセキュリティグループ設定に、EC2からのmysqlアクセスを許可。
+- EC2で、以下の実施。
+  - [git-clone.sh](./batch/git-clone.sh)を参考に、gitをyumで入れて、cloneする。
+  - nodeをインストールする。
+    - 基本は、AWS公式の<https://docs.aws.amazon.com/ja_jp/sdk-for-javascript/v2/developer-guide/setting-up-node-on-ec2-instance.html>に従う。
+    - node v18をインストールしたら、エラーで使えなかったので、バージョンに注意する。
+  - 何かと使うので、mysqlをインストールする。(`sudo yum install mysql`)
+  - envファイルを更新する。
