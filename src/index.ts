@@ -10,6 +10,7 @@ import { StrategyBoxContainer } from "./domain/strategyBoxContainer/strategyBoxC
  */
 const index = async () => {
 
+  console.log('start vc-auto-trade-v2');
   await startup();
 
   const container = new StrategyBoxContainer();
@@ -33,6 +34,7 @@ const index = async () => {
     }))
   }
   container.start();
+  console.log('complete startup vc-auto-trade-v2');
 
 };
 

@@ -43,3 +43,14 @@ const canPutLog = (logLevel: LogLevel) => {
     return logLevel === 'ERROR' || logLevel === 'WARN' || logLevel === 'INFO' || logLevel === 'DEBUG';
   return true;
 };
+
+/**
+ * ログディレクトリの作成。環境変数のインポート後に実施すること。
+ */
+export const createLogDirectory = () => {
+  const logLevels: LogLevel[] = ['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'];
+  logLevels.forEach((logLevel) => {
+    const path = `${processEnv.LOG_PATH}/${logLevel}`;
+    if (!fs.existsSync(path)) fs.mkdirSync(path, { recursive: true });
+  });
+};
