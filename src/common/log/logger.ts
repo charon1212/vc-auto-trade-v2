@@ -3,6 +3,9 @@ import * as fs from 'fs';
 
 type LogLevel = 'ERROR' | 'WARN' | 'INFO' | 'DEBUG' | 'TRACE';
 
+/**
+ * ファイル出力のパスが必要なので、このロガーはdotenvのインポート後に使うこと。
+ */
 export const logger = {
   error: (...data: any[]) => log('ERROR', data),
   warn: (...data: any[]) => log('WARN', data),
@@ -48,9 +51,6 @@ const canPutLog = (logLevel: LogLevel) => {
  * ログディレクトリの作成。環境変数のインポート後に実施すること。
  */
 export const createLogDirectory = () => {
-  const logLevels: LogLevel[] = ['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'];
-  logLevels.forEach((logLevel) => {
-    const path = `${processEnv.LOG_PATH}/${logLevel}`;
-    if (!fs.existsSync(path)) fs.mkdirSync(path, { recursive: true });
-  });
+  if (!processEnv.LOG_PATH) return;
+  if (!fs.existsSync(processEnv.LOG_PATH)) fs.mkdirSync(processEnv.LOG_PATH, { recursive: true });
 };
