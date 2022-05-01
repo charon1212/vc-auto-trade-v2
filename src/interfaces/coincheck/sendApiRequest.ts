@@ -16,7 +16,7 @@ export type ApiRequestResult = { success: true, response: FetchResponse, respons
 
 const hostUrlCoincheck = 'https://coincheck.com';
 export const sendApiRequest = async (params: ApiRequestParam): Promise<ApiRequestResult> => {
-  logger.info(`SendApiRequest_Coincheck: ${JSON.stringify(params)}`);
+  logger.trace(`SendApiRequest_Coincheck: ${JSON.stringify(params)}`);
   const { uri, method, headers, requestParam, isPrivate, body } = params;
   let url = hostUrlCoincheck + uri;
   if (requestParam) {
@@ -34,16 +34,25 @@ export const sendApiRequest = async (params: ApiRequestParam): Promise<ApiReques
     });
     const responseBody = await getResponseBody(response);
     if (response.ok) {
+      logger.trace(`Success SendApiRequest_Coincheck. Response=${JSON.stringify(responseBody)}`);
       return { success: true, response, responseBody };
     } else {
+      logger.trace(`Fail SendApiRequest_Coincheck. Response=${JSON.stringify(responseBody)}`);
       return { success: false, response, responseBody };
     }
-
   } catch (e) {
+    logger.trace(`Fail SendApiRequest_Coincheck. Error=${JSON.stringify(e)}`);
     return { success: false, error: e };
   }
 };
 
+/**
+ * Private APIの実行に必要なHTTP認証ヘッダーを生成する。
+ *
+ * @param url リクエストURL
+ * @param body リクエスト本文
+ * @returns HTTPヘッダーのうち、認証で必要な部分。
+ */
 const getAuthorizationHeader = async (url: string, body: string) => {
   const nonce = (await getNounce()).toString();
   const message = `${nonce}${url}${body}`;
