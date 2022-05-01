@@ -12,6 +12,12 @@ export type ApiResultTicker = {
   volume: number,
   timestamp: number
 };
+/**
+ * /api/tickerにリクエストを送信し、ティッカー情報を取得する。
+ *
+ * @param pair 通貨ペア
+ * @returns 指定した通貨ペアのティッカー情報（最新の取引価格や、24hの最安/最高値）。
+ */
 export const apiTicker = async (pair: Pair) => {
   const requestResult = await sendApiRequest({
     uri: '/api/ticker',
