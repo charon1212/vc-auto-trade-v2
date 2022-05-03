@@ -40,7 +40,8 @@ export abstract class StrategyBoxBase<ContextType extends Object> {
     this.pair = pair;
     this.priceManager = priceManager;
     this.context = contextInit;
-    fs.mkdirSync(this.getContextDirPath(), { recursive: true });
+    const path = this.getContextDirPath();
+    if (!fs.existsSync(path)) fs.mkdirSync(path, { recursive: true });
   }
 
   /**
