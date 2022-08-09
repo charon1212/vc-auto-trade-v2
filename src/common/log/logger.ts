@@ -19,9 +19,9 @@ const log = (level: LogLevel, data: any) => {
   const dataStr = JSON.stringify(data);
   if (level === 'ERROR') console.error(dataStr);
   if (level === 'WARN') console.warn(dataStr);
-  if (level === 'INFO') console.info(dataStr);
-  if (level === 'DEBUG') console.debug(dataStr);
-  if (level === 'TRACE') console.trace(dataStr);
+  if (level === 'INFO') console.log(dataStr);
+  if (level === 'DEBUG') console.log(dataStr);
+  if (level === 'TRACE') console.log(dataStr);
   const path = getLogFilePath();
   if (path) fs.writeFileSync(path, `[${level}][${Date.now()}]${dataStr}\r\n`, { flag: 'a' });
 };
