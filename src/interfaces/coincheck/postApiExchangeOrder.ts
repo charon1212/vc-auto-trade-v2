@@ -8,18 +8,18 @@ export type Param = {
   side: 'buy' | 'sell', // 売り/買い
   orderType: 'limit' | 'market', // limit: 指値、market: 成行
   rate?: number, // 指値の取引レート。成行の場合は任意。
-  amount?: number, // 取引量(単位は仮想通貨)
-  amountMarketBuy?: number, // 取引量(単位は日本円)
+  amount?: number, // 注文量(単位は仮想通貨)。market_buy以外の時に有効。
+  amountMarketBuy?: number, // 注文量(単位は日本円)。market_buyの時のみ有効。
 };
 export type Result = {
   success: boolean, // 正常終了なので、true。
   id: number, // 新規注文ID
-  rate: string, // 注文のレート(1単位仮想通貨あたり何円)
-  amount: string, // 注文量(単位は仮想通貨)
+  rate?: string, // 注文のレート(1単位仮想通貨あたり何円)
+  amount?: string, // 注文量(単位は仮想通貨)。market_buy以外の時に有効。
   order_type: 'buy' | 'sell' | 'market_buy' | 'market_sell', // 注文のタイプ。売り買いと、成行/指値
   pair: Pair, // 取引ペア
   stop_loss_rate: unknown, // 逆指値レートとして、何が返却されるかよくわからん。
-  market_buy_amount: unknown, // 良くわからん。日本円でどの程度の量を買うか指定できる？
+  market_buy_amount?: string, // 注文量(単位は日本円)。market_buyの時のみ有効。
 };
 
 /**
