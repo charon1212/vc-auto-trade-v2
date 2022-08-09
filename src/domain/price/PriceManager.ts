@@ -3,7 +3,7 @@ import * as cron from 'node-cron';
 import { PriceHistory } from '../../typeorm/entity/PriceHistory'
 import { getConnection } from "../../typeorm/typeorm";
 import { logger } from "../../common/log/logger";
-import { apiTicker } from "../../interfaces/coincheck/apiTicker";
+import { ApiResultTicker, apiTicker } from "../../interfaces/coincheck/apiTicker";
 
 export type PriceHistoryData = { timestamp: number, price: number, lostData: boolean, };
 /**
@@ -13,6 +13,7 @@ export class PriceManager {
 
   // 10秒ごとの価格リスト
   public shortHistory: PriceHistoryData[] = [];
+  public lastTick: ApiResultTicker | undefined;
   /**
    * @param pair 取引ペア
    */
@@ -41,6 +42,7 @@ export class PriceManager {
       const timespan = 10000;
       const timestamp = Math.round(Date.now() / timespan) * timespan;
       if (ticker) {
+        this.lastTick = ticker;
         const price = ticker.last;
         this.shortHistory.push({ timestamp, price, lostData: false });
         await getConnection().manager.save(new PriceHistory({ timestamp: timestamp.toString(), price }));
