@@ -1,14 +1,11 @@
-import { loadDotEnv, processEnv } from "./common/dotenv/processEnv";
+import { processEnv } from "./common/dotenv/processEnv";
 import { createLogDirectory, logger } from "./common/log/logger";
-import { resetConnection } from "./typeorm/typeorm";
 import 'dotenv/config';
 
 // 初期化作業
-export const startup = async () => {
+export const startup = async (needLogDir: boolean) => {
 
-  await resetConnection();
   createLogDirectory();
-
   logger.info(`end startup function. processEnv:${JSON.stringify(processEnv)}`);
 
 };

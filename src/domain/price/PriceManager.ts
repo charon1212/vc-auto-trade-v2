@@ -1,9 +1,8 @@
 import { Pair } from "../../type/coincheck";
 import * as cron from 'node-cron';
 import { PriceHistory } from '../../typeorm/entity/PriceHistory'
-import { getConnection } from "../../typeorm/typeorm";
-import { logger } from "../../common/log/logger";
 import { ApiResultTicker, apiTicker } from "../../interfaces/coincheck/apiTicker";
+import { typeormDS } from "../../typeorm/typeorm";
 
 export type PriceHistoryData = { timestamp: number, price: number, lostData: boolean, };
 /**
@@ -45,7 +44,7 @@ export class PriceManager {
         this.lastTick = ticker;
         const price = ticker.last;
         this.shortHistory.push({ timestamp, price, lostData: false });
-        await getConnection().manager.save(new PriceHistory({ timestamp: timestamp.toString(), price }));
+        await typeormDS.manager.save(new PriceHistory({ timestamp: timestamp.toString(), price }));
       } else if (this.shortHistory.length > 0) { // 過去のデータがある場合、欠損データとして1個前のデータで登録
         this.shortHistory.push({ timestamp, price: this.shortHistory[this.shortHistory.length - 1].price, lostData: true });
       }

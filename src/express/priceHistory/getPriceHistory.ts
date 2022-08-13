@@ -1,6 +1,6 @@
 import express from 'express';
-import { getConnection, } from 'typeorm';
 import { PriceHistory } from '../../typeorm/entity/PriceHistory';
+import { typeormDS } from '../../typeorm/typeorm';
 import { getQueryParamString } from '../util';
 
 const maxPriceHistory = 10000;
@@ -31,7 +31,7 @@ export const addGetPriceHistory = (app: express.Express) => {
     const query = queries.join(' AND ');
 
     // get many
-    const result = await getConnection()
+    const result = await typeormDS
       .getRepository(PriceHistory)
       .createQueryBuilder('price_history')
       .where(query, { pair, startTimestamp, lastTimestamp })

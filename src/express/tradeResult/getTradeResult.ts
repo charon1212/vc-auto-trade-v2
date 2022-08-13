@@ -1,6 +1,6 @@
 import express from 'express';
-import { getConnection, } from 'typeorm';
 import { TradeResult } from '../../typeorm/entity/TradeResult';
+import { typeormDS } from '../../typeorm/typeorm';
 import { getQueryParamString } from '../util';
 
 /**
@@ -26,7 +26,7 @@ export const addGetTradeResult = (app: express.Express) => {
     const query = queries.join(' AND ');
 
     // get many
-    const result = await getConnection()
+    const result = await typeormDS
       .getRepository(TradeResult)
       .createQueryBuilder('trade_result')
       .where(query, { startTimestamp, lastTimestamp })

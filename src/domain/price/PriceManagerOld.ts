@@ -2,8 +2,7 @@ import { websocketTradeStart } from "../../interfaces/coincheck/wsTrade";
 import { Pair } from "../../type/coincheck";
 import * as cron from 'node-cron';
 import { PriceHistory } from '../../typeorm/entity/PriceHistory'
-import { connected, getConnection, resetConnection } from "../../typeorm/typeorm";
-import { logger } from "../../common/log/logger";
+import { typeormDS } from "../../typeorm/typeorm";
 
 export type PriceHistoryData = { timestamp: number, price: number };
 /**
@@ -49,7 +48,7 @@ export class PriceManagerOld {
       const saveData = this.shortHistory.filter((data: PriceHistoryData) => data.timestamp < before1h);
       if (saveData.length > 0) {
         const saveDataEntity = saveData.map(({ timestamp, price }) => new PriceHistory({ timestamp: timestamp.toString(), price }));
-        await getConnection().manager.save(saveDataEntity);
+        await typeormDS.manager.save(saveDataEntity);
       }
       this.shortHistory = this.shortHistory.filter((data: PriceHistoryData) => data.timestamp >= before1h);
     });

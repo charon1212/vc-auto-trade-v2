@@ -1,14 +1,11 @@
 import express from 'express';
-import { loadDotEnv } from '../common/dotenv/processEnv';
-import { resetConnection } from '../typeorm/typeorm';
+import { startup } from '../startup';
 import { addGetPriceHistory } from './priceHistory/getPriceHistory';
 import { addGetTradeResult } from './tradeResult/getTradeResult';
 
 const index = async () => {
 
-  loadDotEnv();
-  await resetConnection();
-
+  await startup(false);
   const app = express();
   app.use((req, res, next) => {
     console.log('**REQUEST**');

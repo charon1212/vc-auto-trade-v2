@@ -1,7 +1,7 @@
 import { logger } from "../../common/log/logger";
 import { apiTicker } from "../../interfaces/coincheck/apiTicker";
 import { TradeResult } from "../../typeorm/entity/TradeResult";
-import { getConnection } from "../../typeorm/typeorm";
+import { typeormDS } from "../../typeorm/typeorm";
 import { ArgSendMyTrade } from "./MyTrade";
 
 export const sendMyTradeDummy = (arg: ArgSendMyTrade) => {
@@ -17,7 +17,7 @@ export const sendMyTradeDummy = (arg: ArgSendMyTrade) => {
       if (ticker) {
         const rate = side === 'buy' ? ticker.ask : ticker.bid;
         const tr = new TradeResult({ type: 'market', side, amount, rate, orderTimestamp, isDummy: true, strategyBoxId });
-        await getConnection().manager.save(tr);
+        await typeormDS.manager.save(tr);
         if (onSuccess) onSuccess();
       } else {
         if (onFail) onFail();

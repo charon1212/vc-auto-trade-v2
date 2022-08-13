@@ -12,7 +12,7 @@ const index = async () => {
 
   console.log('start vc-auto-trade-v2');
   // 初期化処理
-  await startup();
+  await startup(true);
 
   // StrategyBoxContainer生成。
   const container = new StrategyBoxContainer();
