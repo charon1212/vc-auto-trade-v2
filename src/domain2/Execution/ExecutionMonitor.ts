@@ -22,4 +22,4 @@ class ExecutionMonitorClass {
   }
 }
 
-export const ExecutionMonitor = new ExecutionMonitorClass();
+export const executionMonitor = new ExecutionMonitorClass();
