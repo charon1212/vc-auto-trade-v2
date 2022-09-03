@@ -5,7 +5,7 @@ import { tradeManager } from '../Trade/TradeManager';
 const updateSpanSecond = 1;
 const updateSpanMs = updateSpanSecond * 1000;
 
-class ExecutionMonitorClass {
+class ExecutionMonitor {
   // 最終更新日時
   lastUpdateMs: number = 0;
   constructor() { };
@@ -22,4 +22,4 @@ class ExecutionMonitorClass {
   }
 }
 
-export const executionMonitor = new ExecutionMonitorClass();
+export const executionMonitor = new ExecutionMonitor();
