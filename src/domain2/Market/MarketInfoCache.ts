@@ -51,6 +51,3 @@ class MarketInfoCache {
 }
 
 const getTimestamp = () => Math.round(Date.now() / spanMs) * spanMs;
-
-// TODO: implementation
-const mockGetMarket = (timestamp: number, pair: Pair) => ({} as Market | undefined);
