@@ -5,7 +5,13 @@ import { Trade } from "../../../domain2/Trade/Trade";
 import { Pair } from "../../../type/coincheck";
 import { CoincheckGetTransactions } from "../apiTool/CoincheckGetTransactions";
 
-export const fetchExecutions = async (requestedTrades: DR<Trade[]>) => {
+/**
+ * 引数で指定した取引に関連する約定のうち、まだ取引の約定一覧に取り込んでいない約定の一覧を、取引所APIから取得する。
+ *
+ * @param requestedTrades 完全約定していない取引のリスト
+ * @returns 約定のリスト。
+ */
+export const fetchUnregisteredExecutions = async (requestedTrades: DR<Trade[]>) => {
   const transactions = await CoincheckGetTransactions.request({});
   if (!transactions) {
     throw new Error(''); // TODO:エラー処理
