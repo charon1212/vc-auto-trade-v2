@@ -1,9 +1,6 @@
 import { DR } from "../../common/typescript/deepreadonly";
 import { fetchOpenOrderIdList } from "../../lib/coincheck/interface/fetchOpenOrderIdList";
 import { postOrder } from "../../lib/coincheck/interface/postOrder";
-import { findTrade } from "../../lib/typeorm/repository/Trade/findTrade";
-import { insertTrade } from "../../lib/typeorm/repository/Trade/insertTrade";
-import { updateTrade } from "../../lib/typeorm/repository/Trade/updateTrade";
 import { Execution } from "../Execution/Execution";
 import { Trade, TradeStatus } from "./Trade";
 import { TradeCache } from "./TradeCache";
@@ -55,7 +52,7 @@ class TradeManager {
     return this.tradeCache.getCache().map(({ uid, apiId }) => ({ uid, apiId }));
   }
 
-  getTradeListByStrategyBoxId(strategyBoxId: string) {
+  getTradeListByStrategyBoxId(strategyBoxId: string): DR<Trade[]> {
     return this.tradeCache.getCache().filter((trade) => trade.strategyBoxId === strategyBoxId);
   };
 
