@@ -27,20 +27,28 @@ class TradeManager {
     await this.tradeCache.changeStatus(trade.uid, 'requested');
   };
 
-  async setExecution(execution: Execution) {
+  setExecution(execution: Execution) {
     const trade = this.tradeCache.getCache().find(({ uid }) => uid === execution.tradeUid);
-    if (!trade) return false;
-    trade.executions.push(execution);
-    // 約定量が注文量の99%以上の場合、未決済の注文一覧を確認し、そこにIDがなければexecutedとする。
-    const totalExecutedAmount = trade.executions.map(({ amount }) => amount).reduce((p, c) => p + c, 0);
-    if (trade.status === 'requested' && totalExecutedAmount > trade.tradeParam.amount * 0.99) {
-      const openOrderIdList = await fetchOpenOrderIdList();
-      if (!openOrderIdList) return false;
-      if (!openOrderIdList.includes(trade.apiId)) {
-        await this.tradeCache.changeStatus(trade.uid, 'executed');
-      }
+    trade?.executions.push(execution);
+  }
+
+  /**
+   * 約定待ちの取引が完全約定しているか調べ、ステータスを更新する。
+   * 完全約定の判断基準は、「合計約定量が注文量の99%以上」かつ「未決済の注文一覧に存在しない」こととする。
+   */
+  async checkRequestedTradeHasExecuted() {
+    const requestedTradeList = this.tradeCache.getCache('requested');
+    if (requestedTradeList.length === 0) return;
+    const openOrderIdList = await fetchOpenOrderIdList();
+    if (!openOrderIdList) {
+      throw new Error('') // TODO: エラー処理
     }
-    return true;
+    for (let trade of requestedTradeList) {
+      const totalExecutedAmount = trade.executions.map(({ amount }) => amount).reduce((p, c) => p + c, 0);
+      const executedOver99 = totalExecutedAmount > trade.tradeParam.amount * 0.99; // 99%以上が約定している
+      const notExistOpenOrderList = !openOrderIdList.includes(trade.apiId); // 未決済の注文一覧に存在しない
+      if (executedOver99 && notExistOpenOrderList) await this.tradeCache.changeStatus(trade.uid, 'executed');
+    }
   }
 
   getTradeIdMap() {
