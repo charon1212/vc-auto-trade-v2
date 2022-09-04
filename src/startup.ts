@@ -5,7 +5,7 @@ import 'dotenv/config';
 // 初期化作業
 export const startup = async (needLogDir: boolean) => {
 
-  createLogDirectory();
+  if (needLogDir) createLogDirectory();
   logger.info(`end startup function. processEnv:${JSON.stringify(processEnv)}`);
 
 };

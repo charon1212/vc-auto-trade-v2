@@ -1,6 +1,6 @@
 import { startup } from "./startup";
-import { StrategyBoxContainer } from "./src_old/domain/strategyBoxContainer/strategyBoxContainer";
-import { registerStrategyBox } from "./src_old/domain/strategyBoxContainer/registerStrategyBox";
+import { tradeManager } from "./domain2/Trade/TradeManager";
+import { strategyBoxContainer } from "./domain2/StrategyBoxContainer/StrategyBoxContainer";
 
 /**
  * メインサーバーを起動する。以下の処理を実施する。
@@ -14,12 +14,10 @@ const index = async () => {
   // 初期化処理
   await startup(true);
 
-  // StrategyBoxContainer生成。
-  const container = new StrategyBoxContainer();
-  // StrategyBoxを、containerに登録。
-  registerStrategyBox(container);
-  // 取引スタート
-  container.start();
+  // TradeManager初期化
+  tradeManager.setupCache();
+  // SBContainer初期化
+  strategyBoxContainer.startup();
 
   console.log('complete startup vc-auto-trade-v2');
 
