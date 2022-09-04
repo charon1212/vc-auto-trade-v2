@@ -1,6 +1,7 @@
 import { DR } from "../../common/typescript/deepreadonly";
 import { fetchOpenOrderIdList } from "../../lib/coincheck/interface/fetchOpenOrderIdList";
 import { postOrder } from "../../lib/coincheck/interface/postOrder";
+import { updateTrade } from "../../lib/typeorm/repository/Trade/updateTrade";
 import { Execution } from "../Execution/Execution";
 import { Trade, TradeStatus } from "./Trade";
 import { TradeCache } from "./TradeCache";
@@ -30,6 +31,7 @@ class TradeManager {
       throw new Error(''); // TODO: エラー処理
     }
     trade.apiId = apiId;
+    await updateTrade(trade);
     await this.tradeCache.changeStatus(trade.uid, 'requested');
   };
 
