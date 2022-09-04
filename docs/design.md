@@ -66,6 +66,12 @@ StrategyBoxを管理するオブジェクト。
 - オーダーされたTradeを元に、APIを実行する。
 - 各StrategyBoxのTrade一覧を取得するAPIを提供する。
 
+- I/F
+
+### TradeCache
+
+DB管理しているTradeを、自前でキャッシュしておく。
+
 ### ExecutionMonitor
 
 定期的に約定一覧を取得し、DBに反映する。Tradeの状態変更（requested -> executedの判定）もここが担当する。
