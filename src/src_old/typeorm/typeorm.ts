@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { processEnv } from "../common/dotenv/processEnv";
+import { processEnv } from "../../common/dotenv/processEnv";
 import { PriceHistory } from "./entity/PriceHistory";
 import { TradeResult } from "./entity/TradeResult";
 

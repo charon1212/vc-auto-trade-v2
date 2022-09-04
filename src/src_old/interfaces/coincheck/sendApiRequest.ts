@@ -1,8 +1,8 @@
 import AsyncLock from 'async-lock';
 import fetch, { Response as FetchResponse } from 'node-fetch';
-import { processEnv } from '../../common/dotenv/processEnv';
+import { processEnv } from '../../../common/dotenv/processEnv';
 import * as crypto from 'crypto';
-import { logger } from '../../common/log/logger';
+import { logger } from '../../../common/log/logger';
 
 export type ApiRequestParam = {
   uri: string,

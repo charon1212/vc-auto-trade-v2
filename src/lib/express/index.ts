@@ -1,5 +1,5 @@
 import express from 'express';
-import { startup } from '../startup';
+import { startup } from '../../startup';
 import { addGetPriceHistory } from './priceHistory/getPriceHistory';
 import { addGetTradeResult } from './tradeResult/getTradeResult';
 

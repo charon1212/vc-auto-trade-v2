@@ -1,4 +1,4 @@
-import { sendSlackMessage } from "../../interfaces/slack/sendSlackMessage";
+import { sendSlackMessage } from "../../lib/slack/sendSlackMessage";
 import { logger } from "../log/logger";
 
 export type ErrorParam = {

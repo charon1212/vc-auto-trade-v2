@@ -1,4 +1,4 @@
-import { calcMacd } from "../../../tradingLogic/macd";
+import { calcMacd } from "../../../../tradingLogic/macd";
 import { ParamStrategyBox1 } from "./StrategyBox1";
 
 export type Judge = 'keep' | 'rc' | 'vc';

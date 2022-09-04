@@ -1,6 +1,6 @@
 import { startup } from "./startup";
-import { StrategyBoxContainer } from "./domain/strategyBoxContainer/strategyBoxContainer";
-import { registerStrategyBox } from "./domain/strategyBoxContainer/registerStrategyBox";
+import { StrategyBoxContainer } from "./src_old/domain/strategyBoxContainer/strategyBoxContainer";
+import { registerStrategyBox } from "./src_old/domain/strategyBoxContainer/registerStrategyBox";
 
 /**
  * メインサーバーを起動する。以下の処理を実施する。

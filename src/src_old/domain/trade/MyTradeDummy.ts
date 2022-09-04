@@ -1,4 +1,4 @@
-import { logger } from "../../common/log/logger";
+import { logger } from "../../../common/log/logger";
 import { apiTicker } from "../../interfaces/coincheck/apiTicker";
 import { TradeResult } from "../../typeorm/entity/TradeResult";
 import { typeormDS } from "../../typeorm/typeorm";

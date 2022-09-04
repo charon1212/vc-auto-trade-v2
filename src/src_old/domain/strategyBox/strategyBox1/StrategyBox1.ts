@@ -1,4 +1,4 @@
-import { logger } from "../../../common/log/logger";
+import { logger } from "../../../../common/log/logger";
 import { StrategyBoxCreatorParams } from "../../strategyBoxContainer/strategyBoxContainer";
 import { StrategyBoxBase } from "../StrategyBoxBase";
 import { judgeStrategyBox1 } from "./judge";

@@ -1,4 +1,4 @@
-import { logger } from "../../common/log/logger";
+import { logger } from "../../../common/log/logger";
 import { Pair } from "../../type/coincheck";
 import { PriceManager } from "../price/PriceManager";
 import * as fs from 'fs';

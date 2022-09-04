@@ -1,6 +1,6 @@
 import express from 'express';
-import { TradeResult } from '../../typeorm/entity/TradeResult';
-import { typeormDS } from '../../typeorm/typeorm';
+import { TradeResult } from '../../../src_old/typeorm/entity/TradeResult';
+import { typeormDS } from '../../../src_old/typeorm/typeorm';
 import { getQueryParamString } from '../util';
 
 /**

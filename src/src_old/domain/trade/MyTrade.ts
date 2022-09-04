@@ -1,4 +1,4 @@
-import { logger } from "../../common/log/logger";
+import { logger } from "../../../common/log/logger";
 import { Pair } from "../../type/coincheck";
 
 export type TradeParams = {
