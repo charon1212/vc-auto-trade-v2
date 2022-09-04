@@ -1,5 +1,5 @@
 import fetch from "node-fetch";
-import { processEnv } from "../../../common/dotenv/processEnv";
+import { processEnv } from "../../common/dotenv/processEnv";
 
 const slacUrl = 'https://slack.com/api/';
 export const sendSlackMessage = async (text: string, isError: boolean) => {
