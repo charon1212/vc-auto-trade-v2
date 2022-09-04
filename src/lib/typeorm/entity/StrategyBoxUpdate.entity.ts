@@ -1,18 +1,16 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-export class StrategyBox {
+export class StrategyBoxUpdate {
 
-  @PrimaryColumn()
-  id: string = '';
+  @PrimaryGeneratedColumn('increment')
+  id: number = 0;
   @Column()
   strategyId: string = '';
   @Column()
   paramJson: string = '';
   @Column()
   contextJson: string = '';
-  @Column()
-  pair: string = '';
   @Column()
   delete: boolean = false;
 
