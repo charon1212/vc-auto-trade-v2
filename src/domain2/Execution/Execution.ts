@@ -1,5 +1,8 @@
 import { Pair } from "../Exchange/type";
 
+/**
+ * 約定
+ */
 export type Execution = {
   uid: string,
   apiId: string,

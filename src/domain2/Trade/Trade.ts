@@ -8,6 +8,9 @@ export type TradeStatus = 'requesting' // APIリクエストのレスポンス�
 export type TradeSide = 'buy' | 'sell';
 export type TradeType = 'limit' | 'market';
 
+/**
+ * 取引
+ */
 export type Trade<T extends TradeType = TradeType> = {
   uid: string,
   strategyId: string,

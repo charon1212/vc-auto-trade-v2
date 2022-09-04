@@ -5,15 +5,24 @@ import { Execution } from "../Execution/Execution";
 import { Trade, TradeStatus } from "./Trade";
 import { TradeCache } from "./TradeCache";
 
+/**
+ * 取引管理クラス。
+ */
 class TradeManager {
   private tradeCache = new TradeCache();
 
   constructor() { };
 
+  /**
+   * キャッシュを初期化する。
+   */
   async setupCache() {
     await this.tradeCache.setupCache();
   };
 
+  /**
+   * 新たに取引を追加する。
+   */
   async order(trade: Trade) {
     await this.tradeCache.add(trade);
     const apiId = await postOrder(trade);
@@ -24,6 +33,9 @@ class TradeManager {
     await this.tradeCache.changeStatus(trade.uid, 'requested');
   };
 
+  /**
+   * 取引に約定を追加する。
+   */
   setExecution(execution: Execution) {
     const trade = this.tradeCache.getCache().find(({ uid }) => uid === execution.tradeUid);
     trade?.executions.push(execution);
@@ -48,14 +60,25 @@ class TradeManager {
     }
   }
 
+  /**
+   * 本システムで裁判したUIDと、取引所APIで裁判したIDのマップを取得する。
+   */
   getTradeIdMap() {
     return this.tradeCache.getCache().map(({ uid, apiId }) => ({ uid, apiId }));
   }
 
+  /**
+   * 指定したStrategyBoxが発注した取引のリストを取得する。
+   * @param strategyBoxId StrategyBoxのUID
+   */
   getTradeListByStrategyBoxId(strategyBoxId: string): DR<Trade[]> {
     return this.tradeCache.getCache().filter((trade) => trade.strategyBoxId === strategyBoxId);
   };
 
+  /**
+   * キャッシュから取引のリストを取得する。
+   * @param status 指定すると、そのステータスの取引のリストを返却する。指定しないと、全てのステータスの取引のリストを返却する。
+   */
   getCache(status?: TradeStatus): DR<Trade[]> {
     return this.tradeCache.getCache(status);
   }
