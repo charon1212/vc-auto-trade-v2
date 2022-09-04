@@ -1,4 +1,4 @@
-import { Execution } from "../../../../domain2/Execution/Execution";
+import { Execution } from "../../../../domain/Execution/Execution";
 import { Execution as ExecutionEntity } from "../../entity/Execution.entity";
 import { typeormDS } from "../../typeorm";
 

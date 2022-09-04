@@ -1,5 +1,5 @@
 import { DR } from "../../../../common/typescript/deepreadonly";
-import { StrategyBox } from "../../../../domain2/StrategyBox/StrategyBox";
+import { StrategyBox } from "../../../../domain/StrategyBox/StrategyBox";
 import { StrategyBox as StrategyBoxEntity } from "../../entity/StrategyBox.entity";
 import { typeormDS } from "../../typeorm";
 

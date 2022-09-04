@@ -1,6 +1,6 @@
-import { Pair } from "../../../../domain2/Exchange/type";
-import { strategyList } from "../../../../domain2/Strategy/Strategy";
-import { StrategyBox as DomainStrategyBox } from "../../../../domain2/StrategyBox/StrategyBox";
+import { Pair } from "../../../../domain/Exchange/type";
+import { strategyList } from "../../../../domain/Strategy/Strategy";
+import { StrategyBox as DomainStrategyBox } from "../../../../domain/StrategyBox/StrategyBox";
 import { StrategyBox as StrategyBoxEntity } from "../../entity/StrategyBox.entity";
 import { typeormDS } from "../../typeorm";
 

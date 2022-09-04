@@ -1,6 +1,6 @@
 import { startup } from "./startup";
-import { tradeManager } from "./domain2/Trade/TradeManager";
-import { strategyBoxContainer } from "./domain2/StrategyBoxContainer/StrategyBoxContainer";
+import { tradeManager } from "./domain/Trade/TradeManager";
+import { strategyBoxContainer } from "./domain/StrategyBoxContainer/StrategyBoxContainer";
 
 /**
  * メインサーバーを起動する。以下の処理を実施する。

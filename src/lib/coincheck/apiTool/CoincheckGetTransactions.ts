@@ -1,4 +1,4 @@
-import { Pair } from "../../../domain2/Exchange/type";
+import { Pair } from "../../../domain/Exchange/type";
 import { CoincheckApiTool } from "./CoincheckApiTool";
 
 export type RequestParamGetTransactions = {};

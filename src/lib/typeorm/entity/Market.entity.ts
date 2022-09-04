@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { DR } from "../../../common/typescript/deepreadonly";
-import { Pair } from "../../../domain2/Exchange/type";
-import { Market as DomainMarket } from '../../../domain2/Market/Market'
+import { Pair } from "../../../domain/Exchange/type";
+import { Market as DomainMarket } from '../../../domain/Market/Market'
 
 @Entity()
 export class Market {
