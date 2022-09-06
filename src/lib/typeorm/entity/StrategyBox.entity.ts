@@ -14,6 +14,8 @@ export class StrategyBox {
   @Column()
   pair: string = '';
   @Column()
+  isForwardTest: boolean = true;
+  @Column()
   delete: boolean = false;
 
   constructor() { }

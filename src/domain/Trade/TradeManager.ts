@@ -18,7 +18,7 @@ class TradeManager {
    * キャッシュを初期化する。
    */
   async setupCache() {
-    await this.tradeCache.setupCache();
+    await this.tradeCache.setupCache(false);
   };
 
   /**

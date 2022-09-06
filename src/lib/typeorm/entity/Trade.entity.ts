@@ -28,6 +28,8 @@ export class Trade {
   type: string = '';
   @Column()
   rate: number | null = null;
+  @Column()
+  isForwardTest: boolean = false;
 
   constructor(trade?: DR<DomainTrade>) {
     if (trade) {
@@ -42,6 +44,7 @@ export class Trade {
       this.amount = trade.tradeParam.amount;
       this.type = trade.tradeParam.type;
       this.rate = trade.tradeParam.type === 'limit' ? trade.tradeParam.rate : null;
+      this.isForwardTest = trade.isForwardTest;
     }
   }
   decode(): DomainTrade {
@@ -60,6 +63,7 @@ export class Trade {
         rate: this.rate,
       } as TradeParam,
       executions: [],
+      isForwardTest: this.isForwardTest,
     };
 
   }

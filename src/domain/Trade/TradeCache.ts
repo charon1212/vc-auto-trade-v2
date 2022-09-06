@@ -8,8 +8,8 @@ export class TradeCache {
   private cache: { [status in TradeStatus]: Trade[] } = { requesting: [], requested: [], executed: [], cancel: [] };
 
   constructor() { };
-  async setupCache() {
-    const allTrade = await findTrade();
+  async setupCache(isForwardTest: boolean) {
+    const allTrade = await findTrade({ isForwardTest });
     this.cacheAll = allTrade;
     this.cache.requesting = allTrade.filter(({ status }) => status === 'requesting');
     this.cache.requested = allTrade.filter(({ status }) => status === 'requested');

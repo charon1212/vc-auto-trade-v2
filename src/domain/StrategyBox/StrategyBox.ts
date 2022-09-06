@@ -2,9 +2,11 @@ import { StrategyLogger } from '../../common/log/StrategyLogger';
 import { updateStrategyBox } from '../../lib/typeorm/repository/StrategyBox/updateStrategyBox';
 import { Pair } from "../Exchange/type";
 import { executionMonitor } from '../Execution/ExecutionMonitor';
+import { tradeManagerForwardTest } from '../ForwardTest/TradeManagerForwardTest';
 import { marketInfoCacheMap } from '../Market/MarketInfoCache';
 import { Strategy } from "../Strategy/Strategy";
 import { createTradeFactory } from '../Trade/createTradeFactory';
+import { ITradeManager } from '../Trade/ITradeManager';
 import { tradeManager } from '../Trade/TradeManager';
 
 export type StrategyBoxStatus = 'Running' | 'Sleep' | 'Error';
@@ -14,16 +16,21 @@ export class StrategyBox<StrategyParam, StrategyContext> {
   public status: StrategyBoxStatus = 'Running';
   public lastTickMs: number = 0; // 死活監視用の最終実行時刻
   private strategyLogger: StrategyLogger;
+  private tradeManager: ITradeManager;
 
   constructor(
     public strategyBoxId: string,
     public pair: Pair,
     public strategy: Strategy<StrategyParam, StrategyContext>,
     public param: StrategyParam,
+    public isForwardTest: boolean,
     initialContext: StrategyContext,
   ) {
+    if (!strategy.paramGuard(param)) throw new Error('StrategyParamの型が一致しません。'); // TODO: エラー処理
+    if (!strategy.contextGuard(initialContext)) throw new Error('StrategyContextの型が一致しません。'); // TODO: エラー処理
     this.context = initialContext;
     this.strategyLogger = new StrategyLogger(strategyBoxId);
+    this.tradeManager = isForwardTest ? tradeManagerForwardTest : tradeManager;
   };
 
   start() {
@@ -46,13 +53,13 @@ export class StrategyBox<StrategyParam, StrategyContext> {
   private async tick() {
     // ■入力情報取得
     const priceShortHistory = marketInfoCacheMap[this.pair]?.shortHistory.priceHistory || [];
-    const tradeList = tradeManager.getTradeListByStrategyBoxId(this.strategyBoxId);
-    const tradeFactory = createTradeFactory(this.strategyBoxId, this.pair);
+    const tradeList = this.tradeManager.getTradeListByStrategyBoxId(this.strategyBoxId);
+    const tradeFactory = createTradeFactory(this);
 
     // ■事前準備
     if (tradeList.filter(({ status }) => status === 'requested').length !== 0) {
       await executionMonitor.update();
-      await tradeManager.checkRequestedTradeHasExecuted();
+      await this.tradeManager.checkRequestedTradeHasExecuted();
     }
 
     // ■戦略の実行
@@ -71,6 +78,6 @@ export class StrategyBox<StrategyParam, StrategyContext> {
     const { newTradeList, context } = strategyResult;
     this.context = context;
     await updateStrategyBox(this);
-    for (let newTrade of newTradeList) await tradeManager.order(newTrade);
+    for (let newTrade of newTradeList) await this.tradeManager.order(newTrade);
   };
 };

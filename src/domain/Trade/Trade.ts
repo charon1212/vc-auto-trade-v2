@@ -21,6 +21,7 @@ export type Trade<T extends TradeType = TradeType> = {
   lastUpdateStatusMs: number, // ステータスの最終更新日（エポックミリ秒）
   tradeParam: TradeParam<T>,
   executions: Execution[],
+  isForwardTest: boolean,
 };
 
 export type TradeParam<T extends TradeType = TradeType> = TradeParamMarket<T> | TradeParamLimit<T>;

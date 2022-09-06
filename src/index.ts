@@ -1,6 +1,7 @@
 import { startup } from "./startup";
 import { tradeManager } from "./domain/Trade/TradeManager";
 import { strategyBoxContainer } from "./domain/StrategyBoxContainer/StrategyBoxContainer";
+import { tradeManagerForwardTest } from "./domain/ForwardTest/TradeManagerForwardTest";
 
 /**
  * メインサーバーを起動する。以下の処理を実施する。
@@ -15,9 +16,10 @@ const index = async () => {
   await startup(true);
 
   // TradeManager初期化
-  tradeManager.setupCache();
+  await tradeManager.setupCache();
+  await tradeManagerForwardTest.setupCache();
   // SBContainer初期化
-  strategyBoxContainer.startup();
+  await strategyBoxContainer.startup();
 
   console.log('complete startup vc-auto-trade-v2');
 

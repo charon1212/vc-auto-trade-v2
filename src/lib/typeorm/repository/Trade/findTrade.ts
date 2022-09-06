@@ -6,11 +6,12 @@ import { typeormDS } from "../../typeorm";
 type FindParam = {
   status?: TradeStatus,
   apiId?: string,
+  isForwardTest?: boolean,
 };
 
 export const findTrade = async (param?: FindParam): Promise<Trade[]> => {
-  const { status, apiId } = param || {};
-  const list = await typeormDS.getRepository(TradeEntity).find({ where: { status, apiId } });
+  const { status, apiId, isForwardTest } = param || {};
+  const list = await typeormDS.getRepository(TradeEntity).find({ where: { status, apiId, isForwardTest } });
   if (list.length === 0) return [];
   const listExecution = await typeormDS
     .getRepository(ExecutionEntity)
