@@ -37,14 +37,14 @@ class MarketInfoCache {
       if (market) {
         this.shortHistory.priceHistory.push(market.price);
         this.lackData.push(false);
-        await insertMarket(market);
+        await insertMarket(this.pair, market);
         execMarketInfoSubscriptions(market);
       } else {
         const lastPrice = this.getLastPrice();
         if (lastPrice !== undefined) {
           this.shortHistory.priceHistory.push(lastPrice);
           this.lackData.push(true);
-          execMarketInfoSubscriptions({ pair: this.pair, timestamp, price: lastPrice });
+          execMarketInfoSubscriptions({ timestamp, price: lastPrice });
         }
       }
     });

@@ -13,10 +13,10 @@ export class Market {
   @Column()
   price: number = 0;
 
-  constructor(market?: DR<DomainMarket>) {
-    if (market) {
+  constructor(pair?: Pair, market?: DR<DomainMarket>) {
+    if (pair && market) {
       this.timestamp = `${market.timestamp}`;
-      this.pair = market.pair;
+      this.pair = pair;
       this.price = market.price;
     }
   }
@@ -24,7 +24,6 @@ export class Market {
   decode(): DomainMarket {
     return {
       timestamp: +this.timestamp,
-      pair: this.pair as Pair,
       price: this.price,
     };
   }

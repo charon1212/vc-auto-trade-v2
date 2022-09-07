@@ -4,7 +4,6 @@ import { Pair } from "../Exchange/type";
  * 市場情報
  */
 export type Market = {
-  pair: Pair,
   timestamp: number,
   price: number,
 };
