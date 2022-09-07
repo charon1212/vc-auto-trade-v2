@@ -1,6 +1,6 @@
 import * as cron from 'node-cron';
 import { findInitStrategyBox } from "../../lib/typeorm/repository/StrategyBox/findInitStrategyBox";
-import { addPairToMarketInfoCacheList, marketInfoCacheMap } from '../Market/MarketInfoCache';
+import { marketMonitor } from '../Market/MarketMonitor';
 import { StrategyBox } from "../StrategyBox/StrategyBox";
 
 class StrategyBoxContainer {
@@ -9,8 +9,8 @@ class StrategyBoxContainer {
   async startup() {
     const initStrategyBoxList = await findInitStrategyBox();
     this.strategyBoxList.push(...initStrategyBoxList);
-    // MarketInfoCache初期化
-    this.strategyBoxList.forEach((sb) => addPairToMarketInfoCacheList(sb.pair));
+    // MarketMonitor初期化
+    this.strategyBoxList.forEach((sb) => marketMonitor.addPair(sb.pair));
 
     // TODO: 1分おきに監視し、3分以上応答がなければエラー扱いとする。
     cron.schedule('0 */1 * * * *', async () => { });

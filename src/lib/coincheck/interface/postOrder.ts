@@ -1,6 +1,6 @@
 import { DR } from "../../../common/typescript/deepreadonly";
 import { Pair } from "../../../domain/Exchange/type";
-import { marketInfoCacheMap } from "../../../domain/Market/MarketInfoCache";
+import { marketCache } from "../../../domain/Market/MarketCache";
 import { Trade } from "../../../domain/Trade/Trade";
 import { CoincheckPostOrder } from "../apiTool/CoincheckPostOrder";
 
@@ -24,7 +24,7 @@ export const postOrder = async (trade: DR<Trade>) => {
 };
 
 const calcAmountMarketBuy = (pair: Pair, amount: number) => {
-  const lastPrice = marketInfoCacheMap[pair]?.getLastPrice();
+  const lastPrice = marketCache.getLastHistory(pair)?.price;
   if (lastPrice === undefined) throw new Error(''); // TODO: エラー処理
   return lastPrice * amount;
 };

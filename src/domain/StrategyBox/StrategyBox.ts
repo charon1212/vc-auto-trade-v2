@@ -3,7 +3,7 @@ import { updateStrategyBox } from '../../lib/typeorm/repository/StrategyBox/upda
 import { Pair } from "../Exchange/type";
 import { executionMonitor } from '../Execution/ExecutionMonitor';
 import { tradeManagerForwardTest } from '../ForwardTest/TradeManagerForwardTest';
-import { marketInfoCacheMap } from '../Market/MarketInfoCache';
+import { marketCache } from '../Market/MarketCache';
 import { Strategy } from "../Strategy/Strategy";
 import { createTradeFactory } from '../Trade/createTradeFactory';
 import { ITradeManager } from '../Trade/ITradeManager';
@@ -52,7 +52,7 @@ export class StrategyBox<StrategyParam, StrategyContext> {
 
   private async tick() {
     // ■入力情報取得
-    const priceShortHistory = marketInfoCacheMap[this.pair]?.shortHistory.priceHistory || [];
+    const priceShortHistory = marketCache.getPriceHistory(this.pair)?.map(({ price }) => price) || [];
     const tradeList = this.tradeManager.getTradeListByStrategyBoxId(this.strategyBoxId);
     const tradeFactory = createTradeFactory(this);
 
