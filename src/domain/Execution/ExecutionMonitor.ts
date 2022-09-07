@@ -10,6 +10,7 @@ class ExecutionMonitor {
   lastUpdateMs: number = 0;
   constructor() { };
 
+  // TODO: できれば単一Nodeで実行したい。
   async update() {
     if (Date.now() - this.lastUpdateMs < updateSpanMs) return; // 前回実行からの経過時間がアップデートスパンより短い場合は更新しない。
     this.lastUpdateMs = Date.now();
