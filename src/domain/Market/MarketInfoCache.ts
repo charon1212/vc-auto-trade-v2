@@ -12,6 +12,11 @@ export const addPairToMarketInfoCacheList = (pair: Pair) => {
   if (!marketInfoCacheMap[pair]) marketInfoCacheMap[pair] = new MarketInfoCache(pair);
 };
 
+export type MarketInfoSubscription = (market: Market) => void;
+const marketInfoSubscriptions: MarketInfoSubscription[] = [];
+export const addMarketInfoSubscription = (subscription: MarketInfoSubscription) => marketInfoSubscriptions.push(subscription);
+const execMarketInfoSubscriptions = (market: Market) => marketInfoSubscriptions.forEach((sub) => sub(market));
+
 class MarketInfoCache {
 
   public shortHistory: ShortHistory;
@@ -33,17 +38,19 @@ class MarketInfoCache {
         this.shortHistory.priceHistory.push(market.price);
         this.lackData.push(false);
         await insertMarket(market);
+        execMarketInfoSubscriptions(market);
       } else {
         const lastPrice = this.getLastPrice();
         if (lastPrice !== undefined) {
           this.shortHistory.priceHistory.push(lastPrice);
           this.lackData.push(true);
+          execMarketInfoSubscriptions({ pair: this.pair, timestamp, price: lastPrice });
         }
       }
     });
     // 1時間ごとに、3時間以上前の履歴を削除する。
     cron.schedule('0 0 * * * *', async () => {
-      const max = this.shortHistory.priceHistory.length - (3 * 60 * 60) / marketInfoCacheSpanSecond
+      const max = this.shortHistory.priceHistory.length - (3 * 60 * 60) / marketInfoCacheSpanSecond // FIXME: バグってそう。なんか変。
       this.shortHistory.priceHistory = this.shortHistory.priceHistory.filter((_, i) => i < max);
       this.lackData = this.lackData.filter((_, i) => i < max);
     });
