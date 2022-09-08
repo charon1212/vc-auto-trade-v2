@@ -7,7 +7,7 @@ const updateSpanMs = updateSpanSecond * 1000;
 
 class ExecutionMonitor {
   // 最終更新日時
-  lastUpdateMs: number = 0;
+  private lastUpdateMs: number = 0;
   constructor() { };
 
   // TODO: できれば単一Nodeで実行したい。
