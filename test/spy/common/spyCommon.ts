@@ -1,6 +1,6 @@
-import { processEnv } from '../../src/common/dotenv/processEnv';
-import * as handleError from '../../src/common/error/handleError';
-import { logger } from '../../src/common/log/logger';
+import { processEnv } from '../../../src/common/dotenv/processEnv';
+import * as handleError from '../../../src/common/error/handleError';
+import { logger } from '../../../src/common/log/logger';
 
 export type SpyCommonParams = {
   mockProcessEnv?: Partial<typeof processEnv>,

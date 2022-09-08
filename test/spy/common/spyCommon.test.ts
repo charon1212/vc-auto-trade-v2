@@ -1,4 +1,4 @@
-import { handleError } from "../../src/common/error/handleError";
+import { handleError } from "../../../src/common/error/handleError";
 import { spyCommon } from "./spyCommon";
 
 describe('spyCommon', () => {
