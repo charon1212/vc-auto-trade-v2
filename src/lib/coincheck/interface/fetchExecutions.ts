@@ -27,7 +27,7 @@ export const fetchUnregisteredExecutions = async (requestedTrades: DR<Trade[]>) 
       uid: v4(),
       apiId: transactionId,
       pair: transaction.pair as Pair,
-      amount: +transaction.funds.btc, // TODO: 'btc_jpy'前提の書き方
+      amount: Math.abs(+transaction.funds.btc), // TODO: 'btc_jpy'前提の書き方
       rate: +transaction.rate,
       createdAtMs: (new Date(transaction.created_at)).getTime(),
       tradeUid: trade.uid,
