@@ -1,7 +1,7 @@
 import { Trade, TradeStatus } from "../../../../domain/Trade/Trade";
 import { Execution as ExecutionEntity } from "../../entity/Execution.entity";
 import { Trade as TradeEntity } from "../../entity/Trade.entity";
-import { typeormDS } from "../../typeorm";
+import { getTypeormRepository } from "../../typeorm";
 
 type FindParam = {
   status?: TradeStatus,
@@ -11,10 +11,9 @@ type FindParam = {
 
 export const findTrade = async (param?: FindParam): Promise<Trade[]> => {
   const { status, apiId, isForwardTest } = param || {};
-  const list = await typeormDS.getRepository(TradeEntity).find({ where: { status, apiId, isForwardTest } });
+  const list = await getTypeormRepository(TradeEntity).find({ where: { status, apiId, isForwardTest } });
   if (list.length === 0) return [];
-  const listExecution = await typeormDS
-    .getRepository(ExecutionEntity)
+  const listExecution = await getTypeormRepository(ExecutionEntity)
     .createQueryBuilder('execution')
     .where('execution.uid in (:...uids)', { uids: list.map(({ uid }) => uid) })
     .getMany();

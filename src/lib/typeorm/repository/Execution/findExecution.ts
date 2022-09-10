@@ -1,10 +1,9 @@
 import { Execution } from "../../../../domain/Execution/Execution";
 import { Execution as ExecutionEntity } from "../../entity/Execution.entity";
-import { typeormDS } from "../../typeorm";
+import { getTypeormRepository } from "../../typeorm";
 
 export const findExecutionByApiIdList = async (apiIdList: string[]): Promise<Execution[]> => {
-  const entityList = await typeormDS
-    .getRepository(ExecutionEntity)
+  const entityList = await getTypeormRepository(ExecutionEntity)
     .createQueryBuilder('execution')
     .where('execution.apiId in (:...apiIdList)', { apiIdList })
     .getMany();

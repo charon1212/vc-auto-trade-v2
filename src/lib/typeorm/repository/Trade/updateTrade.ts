@@ -1,10 +1,10 @@
 import { DR } from "../../../../common/typescript/deepreadonly";
 import { Trade } from "../../../../domain/Trade/Trade";
 import { Trade as TradeEntity } from "../../entity/Trade.entity";
-import { typeormDS } from "../../typeorm";
+import { getTypeormRepository } from "../../typeorm";
 
 export const updateTrade = async (trade: DR<Trade>) => {
-  const rep = typeormDS.getRepository(TradeEntity);
+  const rep = getTypeormRepository(TradeEntity);
   const tradeEntity = await rep.findOne({ where: { uid: trade.uid } });
   if (!tradeEntity) return;
   tradeEntity.strategyId = trade.strategyId;

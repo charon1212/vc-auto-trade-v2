@@ -2,10 +2,10 @@ import { Pair } from "../../../../domain/Exchange/type";
 import { strategyList } from "../../../../domain/Strategy/Strategy";
 import { StrategyBox as DomainStrategyBox } from "../../../../domain/StrategyBox/StrategyBox";
 import { StrategyBox as StrategyBoxEntity } from "../../entity/StrategyBox.entity";
-import { typeormDS } from "../../typeorm";
+import { getTypeormRepository } from "../../typeorm";
 
 export const findInitStrategyBox = async (): Promise<DomainStrategyBox<any, any>[]> => {
-  const list = await typeormDS.getRepository(StrategyBoxEntity).find({ where: { delete: false, } });
+  const list = await getTypeormRepository(StrategyBoxEntity).find({ where: { delete: false, } });
   const result = [] as DomainStrategyBox<any, any>[];
   for (let { id, pair, paramJson, contextJson, strategyId, isForwardTest } of list) {
     const strategy = strategyList.find(({ id }) => id === strategyId);
