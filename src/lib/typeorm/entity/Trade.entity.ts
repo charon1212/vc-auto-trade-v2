@@ -26,7 +26,7 @@ export class Trade {
   amount: number = 0;
   @Column()
   type: string = '';
-  @Column()
+  @Column({ nullable: true, type: 'int' })
   rate: number | null = null;
   @Column()
   isForwardTest: boolean = false;
