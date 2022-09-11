@@ -8,9 +8,12 @@ import { A_obj } from '../../../testutil/myAssertion/myAssertion';
 import { createTestStrategy } from './createTestStrategy';
 import { registerTradeCache } from './registerTradeCache';
 import { StrategyBox } from '../../../../src/lib/typeorm/entity/StrategyBox.entity';
+import { spyCommon } from '../../../spy/common/spyCommon';
 
 describe('StrategyBox.tick', () => {
   it('test1', async () => {
+    // prepare - spy common
+    spyCommon();
     // prepare - strategy
     const strategy = createTestStrategy('test-strategy-1',
       ({ param, context, priceShortHistory, tradeList }) => {
