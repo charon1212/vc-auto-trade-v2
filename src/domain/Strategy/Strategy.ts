@@ -4,7 +4,7 @@ import { createTradeFactory } from "../Trade/createTradeFactory";
 import { Trade } from "../Trade/Trade";
 import { strategySample } from "./sample/strategySample";
 
-type StrategyFunctionArgs<Param, Context> = {
+export type StrategyFunctionArgs<Param, Context> = {
   param: Param,
   context: Context,
   priceShortHistory: number[],
@@ -12,7 +12,7 @@ type StrategyFunctionArgs<Param, Context> = {
   tradeFactory: ReturnType<typeof createTradeFactory>,
   logger: StrategyLogger,
 };
-type StrategyFunctionResult<Context> = {
+export type StrategyFunctionResult<Context> = {
   context: Context,
   newTradeList: Trade[],
 };
