@@ -24,4 +24,9 @@ describe('sample', () => {
     expect(result.length).toBe(1);
   });
 
+  it('sample test Date.now()', () => {
+    jest.spyOn(Date, 'now').mockReturnValue(123456789);
+    expect(Date.now()).toBe(123456789);
+  });
+
 });
