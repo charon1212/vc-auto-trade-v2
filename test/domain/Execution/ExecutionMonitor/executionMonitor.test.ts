@@ -28,7 +28,7 @@ describe('executionMonitor', () => {
     const { date: date2 } = makeTestDate(2);
     const { date: date3 } = makeTestDate(3);
     const { date: date4 } = makeTestDate(4);
-    const spy3 = spyCoincheckGetTransactions(true, [
+    const spy3 = spyCoincheckGetTransactions(true, () => [
       { id: 20001, order_id: 10001, pair: 'btc_jpy', funds: { btc: '31', jpy: '-31' }, rate: '99991', created_at: date1.toISOString(), },
       { id: 20002, order_id: 10001, pair: 'btc_jpy', funds: { btc: '32', jpy: '-32' }, rate: '99992', created_at: date2.toISOString(), },
       { id: 20003, order_id: 10002, pair: 'btc_jpy', funds: { btc: '-33', jpy: '33' }, rate: '99993', created_at: date3.toISOString(), },

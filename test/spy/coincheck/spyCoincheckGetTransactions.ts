@@ -17,9 +17,11 @@ const defaultTransaction: Transaction = {
   side: 'buy',
 };
 
-export const spyCoincheckGetTransactions = (mockSuccess: boolean, mockReturnTransactions: Partial<Transaction>[]) => {
-  return jest.spyOn(CoincheckGetTransactions, 'request').mockReturnValue(Promise.resolve({
-    success: mockSuccess,
-    transactions: mockReturnTransactions.map((v) => ({ ...defaultTransaction, ...v, })),
-  }));
+export const spyCoincheckGetTransactions = (mockSuccess: boolean, mockReturnTransactions: () => Partial<Transaction>[]) => {
+  return jest.spyOn(CoincheckGetTransactions, 'request').mockImplementation(async () => {
+    return {
+      success: mockSuccess,
+      transactions: mockReturnTransactions().map((v) => ({ ...defaultTransaction, ...v, })),
+    }
+  });
 };
