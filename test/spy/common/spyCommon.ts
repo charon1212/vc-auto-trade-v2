@@ -10,7 +10,11 @@ export const spyCommon = (param?: SpyCommonParams) => {
   // processEnv
   for (let k in mockProcessEnv) (processEnv as any)[k] = (mockProcessEnv as any)[k];
   // handleError
-  const spyHandleError = jest.spyOn(handleError, 'handleError').mockImplementation();
+  const spyHandleError = jest.spyOn(handleError, 'handleError').mockImplementation(
+    () => {
+      throw new Error('');
+    }
+  );
   // logger
   const error = jest.spyOn(logger, 'error').mockImplementation();
   const warn = jest.spyOn(logger, 'warn').mockImplementation();
