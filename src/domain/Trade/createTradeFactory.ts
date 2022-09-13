@@ -9,6 +9,7 @@ export const createTradeFactory = <P, C>(strategyBox: StrategyBox<P, C>) => {
     return {
       uid, strategyId, strategyBoxId, tradeParam, pair, isForwardTest,
       apiId: '',
+      orderAtMs: Date.now(),
       status: 'requesting',
       lastUpdateStatusMs: Date.now(),
       executions: [],

@@ -16,6 +16,7 @@ export type Trade<T extends TradeType = TradeType> = {
   strategyId: string,
   strategyBoxId: string,
   apiId: string,
+  orderAtMs: number,
   pair: Pair,
   status: TradeStatus,
   lastUpdateStatusMs: number, // ステータスの最終更新日（エポックミリ秒）

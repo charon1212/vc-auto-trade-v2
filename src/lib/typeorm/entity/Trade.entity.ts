@@ -14,6 +14,8 @@ export class Trade {
   strategyBoxId: string = '';
   @Column()
   apiId: string = '';
+  @Column({ type: "bigint" })
+  orderAtMs: string = '0';
   @Column()
   pair: string = '';
   @Column()
@@ -37,6 +39,7 @@ export class Trade {
       this.strategyId = trade.strategyId;
       this.strategyBoxId = trade.strategyBoxId;
       this.apiId = trade.apiId;
+      this.orderAtMs = `${trade.orderAtMs}`;
       this.pair = trade.pair;
       this.status = trade.status;
       this.lastUpdateStatusMs = `${trade.lastUpdateStatusMs}`;
@@ -53,6 +56,7 @@ export class Trade {
       strategyId: this.strategyId,
       strategyBoxId: this.strategyBoxId,
       apiId: this.apiId,
+      orderAtMs: +this.orderAtMs,
       pair: this.pair as Pair,
       status: this.status as TradeStatus,
       lastUpdateStatusMs: +this.lastUpdateStatusMs,
