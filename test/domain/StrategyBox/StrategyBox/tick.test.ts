@@ -5,7 +5,7 @@ import { getTypeormRepository } from '../../../../src/lib/typeorm/typeorm';
 import { createTestStrategyBox } from '../../../testutil/createTestData/createTestStrategyBox';
 import { createTestTrade } from '../../../testutil/createTestData/createTestTrade';
 import { A_obj } from '../../../testutil/myAssertion/myAssertion';
-import { createTestStrategy } from './createTestStrategy';
+import { createTestStrategy } from '../../../testutil/createTestData/createTestStrategy';
 import { registerTradeCache } from './registerTradeCache';
 import { StrategyBox } from '../../../../src/lib/typeorm/entity/StrategyBox.entity';
 import { spyCommon } from '../../../spy/common/spyCommon';
