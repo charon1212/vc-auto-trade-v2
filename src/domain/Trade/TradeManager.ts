@@ -32,6 +32,7 @@ class TradeManager {
     }
     trade.apiId = apiId;
     await updateTrade(trade);
+    trade.lastUpdateStatusMs = Date.now();
     await this.tradeCache.changeStatus(trade.uid, 'requested');
   };
 
@@ -58,7 +59,10 @@ class TradeManager {
       const totalExecutedAmount = trade.executions.map(({ amount }) => amount).reduce((p, c) => p + c, 0);
       const executedOver99 = totalExecutedAmount > trade.tradeParam.amount * 0.99; // 99%以上が約定している
       const notExistOpenOrderList = !openOrderIdList.includes(trade.apiId); // 未決済の注文一覧に存在しない
-      if (executedOver99 && notExistOpenOrderList) await this.tradeCache.changeStatus(trade.uid, 'executed');
+      if (executedOver99 && notExistOpenOrderList) {
+        trade.lastUpdateStatusMs = Date.now();
+        await this.tradeCache.changeStatus(trade.uid, 'executed');
+      }
     }
   }
 
