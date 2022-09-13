@@ -5,6 +5,7 @@ const defaultTrade = (id: number): Trade => ({
   strategyId: `trade-strategyId-${id}`,
   strategyBoxId: `trade-strategyBoxId-${id}`,
   apiId: `${id}`,
+  orderAtMs: 0,
   pair: 'btc_jpy',
   status: 'requested',
   lastUpdateStatusMs: 0,
