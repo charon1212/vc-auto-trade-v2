@@ -24,6 +24,7 @@ export const initializeTypeorm = async () => {
 
 export const releaseTypeorm = async () => {
   await queryRunner?.release();
+  await typeormDS.destroy();
 };
 
 export const getTypeormRepository = <Entity extends ObjectLiteral>(args: EntityTarget<Entity>) => {
