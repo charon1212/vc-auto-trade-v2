@@ -25,6 +25,8 @@ export type Trade<T extends TradeType = TradeType> = {
   isForwardTest: boolean,
 };
 
+export const tradeTypeGuard = <T extends TradeType>(trade: Trade, type: T): trade is Trade<T> => trade.tradeParam.type === type;
+
 export type TradeParam<T extends TradeType = TradeType> = TradeParamMarket<T> | TradeParamLimit<T>;
 
 type TradeParamMarket<T extends TradeType> = T extends 'market' ? { type: 'market', side: TradeSide, amount: number, } : never;
