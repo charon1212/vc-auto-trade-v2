@@ -6,11 +6,11 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  await getQueryRunnerForTest()?.startTransaction();
+  await getQueryRunnerForTest()!.startTransaction();
 });
 
 afterEach(async () => {
-  await getQueryRunnerForTest()?.rollbackTransaction();
+  await getQueryRunnerForTest()!.rollbackTransaction();
 });
 
 afterAll(async () => {
