@@ -1,15 +1,11 @@
-import { StrategyLogger } from "../../common/log/StrategyLogger";
-import { DR } from "../../common/typescript/deepreadonly";
-import { createTradeFactory } from "../Trade/createTradeFactory";
-import { Trade } from "../Trade/Trade";
-import { strategySample } from "./sample/strategySample";
+import { DR, StrategyLogger, Trade, TradeFactory } from './StrategyType';
 
 export type StrategyFunctionArgs<Param, Context> = {
   param: Param,
   context: Context,
   priceShortHistory: number[],
   tradeList: DR<Trade[]>,
-  tradeFactory: ReturnType<typeof createTradeFactory>,
+  tradeFactory: TradeFactory,
   logger: StrategyLogger,
 };
 export type StrategyFunctionResult<Context> = {
@@ -26,6 +22,3 @@ export type Strategy<Param, Context> = {
   contextGuard: StrategyContextGuard<Context>,
   func: StrategyFunction<Param, Context>,
 };
-
-export const strategyList: Strategy<any, any>[] = [];
-strategyList.push(strategySample);
