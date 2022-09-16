@@ -2,6 +2,7 @@ import { startup } from "./startup";
 import { tradeManager } from "./domain/Trade/TradeManager";
 import { strategyBoxContainer } from "./domain/StrategyBoxContainer/StrategyBoxContainer";
 import { tradeManagerForwardTest } from "./domain/ForwardTest/TradeManagerForwardTest";
+import { marketMonitor } from "./domain/Market/MarketMonitor";
 
 /**
  * メインサーバーを起動する。以下の処理を実施する。
@@ -15,6 +16,8 @@ const index = async () => {
   // 初期化処理
   await startup(true);
 
+  // marketMonitor初期化
+  marketMonitor.setup();
   // TradeManager初期化
   await tradeManager.setupCache();
   await tradeManagerForwardTest.setupCache();

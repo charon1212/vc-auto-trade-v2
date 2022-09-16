@@ -9,7 +9,8 @@ export type MarketSubscription = (pair: Pair, market?: Market) => void;
 class MarketMonitor {
   private pairList: Pair[] = [];
   private subscriptions: MarketSubscription[] = [];
-  constructor() {
+  constructor() { }
+  setup() {
     cron.schedule(`*/10 * * * * *`, this.scheduleAddMarket); // 19秒ごと
     cron.schedule(`0 0 * * * *`, this.scheduleRemoveMarket); // 1時間ごと
   }
