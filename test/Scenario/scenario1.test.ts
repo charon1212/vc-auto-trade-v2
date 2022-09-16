@@ -3,6 +3,12 @@ import { price1 } from "./PriceCalculator/price1";
 import { strategy1 } from "./ScenarioStrategy/strategy1";
 import { ScenarioTest } from "./ScenarioTest";
 
+/**
+ * シナリオ1
+ * Price: 標準的な三角波の価格
+ * Strategy: 指定値段での成行売買
+ * StrategyBox: 特になし
+ */
 describe('scenario1', () => {
   it('scenario1', async () => {
     const { strategyBox: sb1 } = createTestStrategyBox({
