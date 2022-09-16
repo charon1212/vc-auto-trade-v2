@@ -8,7 +8,7 @@
     "debug": "tsc && node dist/debug.js",
     "start-server": "tsc && node dist/lib/express/index.js",
     "build": "tsc",
-    "test": "jest"
+    "test": "jest --runInBand"
   },
   "repository": {
     "type": "git",
