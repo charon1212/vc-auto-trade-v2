@@ -1,14 +1,16 @@
-import { app } from "../app";
-import { addGetPriceHistory } from "../old/priceHistory/getPriceHistory";
 import { getTest } from "../resource/test/getTest";
-import { addGetTradeResult } from "../old/tradeResult/getTradeResult";
+import { getOpenOrder } from "../resource/vcat2/v2/executeApi/openOrder/getOpenOrder";
+import { postOrder } from "../resource/vcat2/v2/executeApi/order/postOrder";
+import { getTransaction } from "../resource/vcat2/v2/executeApi/transaction/getTransaction";
 
 export const route = () => {
 
-  // GET:/vcat2/v1/pair/:pair/price-history
-  addGetPriceHistory(app);
-  // GET:/vcat2/v1/trade-result
-  addGetTradeResult(app);
+  // GET:/vcat2/v2/execute-api/open-order
+  getOpenOrder();
+  // GET:/vcat2/v2/execute-api/transaction
+  getTransaction();
+  // POST:/vcat2/v2/execute-api/order
+  postOrder();
 
   // GET:/test
   getTest();
