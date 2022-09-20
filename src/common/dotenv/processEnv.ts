@@ -11,4 +11,5 @@ export const processEnv = {
   SLACK_BOT_AUTH_TOKEN: process.env['SLACK_BOT_AUTH_TOKEN'] || '',
   SLACK_CHANNEL_INFO: process.env['SLACK_CHANNEL_INFO'] || '',
   SLACK_CHANNEL_ERROR: process.env['SLACK_CHANNEL_ERROR'] || '',
+  EXPRESS_AUTH_TOKEN: process.env['EXPRESS_AUTH_TOKEN'] || '',
 };
