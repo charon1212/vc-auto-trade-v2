@@ -1,4 +1,5 @@
 import { insertMarket } from "../../lib/typeorm/repository/Market/insertMarket";
+import { getPairs } from "../Exchange/pair";
 import { Pair } from "../Exchange/type";
 import { Market } from "./Market";
 
@@ -6,10 +7,9 @@ export type MarketHistory = (Market & { lack?: boolean })[];
 
 class MarketCache {
   private marketHistoryCacheMap: { [pair in Pair]?: MarketHistory } = {};
-  constructor() { };
-  registerPair(pair: Pair) {
-    if (!this.marketHistoryCacheMap[pair]) this.marketHistoryCacheMap[pair] = [];
-  }
+  constructor() {
+    getPairs().forEach((pair) => this.marketHistoryCacheMap[pair] = []);
+  };
   getPriceHistory(pair: Pair) {
     return this.marketHistoryCacheMap[pair];
   };

@@ -9,8 +9,6 @@ class StrategyBoxContainer {
   async startup() {
     const initStrategyBoxList = await findInitStrategyBox();
     this.strategyBoxList.push(...initStrategyBoxList);
-    // MarketMonitor初期化
-    this.strategyBoxList.forEach((sb) => marketMonitor.addPair(sb.pair));
 
     // TODO: 1分おきに監視し、3分以上応答がなければエラー扱いとする。
     cron.schedule('0 */1 * * * *', async () => { });
