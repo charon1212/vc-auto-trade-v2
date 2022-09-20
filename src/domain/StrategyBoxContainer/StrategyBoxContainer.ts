@@ -1,6 +1,5 @@
 import * as cron from 'node-cron';
 import { findInitStrategyBox } from "../../lib/typeorm/repository/StrategyBox/findInitStrategyBox";
-import { marketMonitor } from '../Market/MarketMonitor';
 import { StrategyBox } from "../StrategyBox/StrategyBox";
 
 class StrategyBoxContainer {
