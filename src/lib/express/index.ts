@@ -1,7 +1,7 @@
 import { startup } from '../../startup';
 import { app } from './app';
-import { commonSetting } from './commonSetting';
-import { route } from './route';
+import { commonSetting } from './common/commonSetting';
+import { route } from './common/route';
 
 const index = async () => {
 

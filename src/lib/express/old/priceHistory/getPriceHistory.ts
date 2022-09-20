@@ -1,7 +1,7 @@
 import express from 'express';
-import { PriceHistory } from '../../../src_old/typeorm/entity/PriceHistory';
-import { typeormDS } from '../../../src_old/typeorm/typeorm';
-import { getQueryParamString } from '../util';
+import { PriceHistory } from '../../../../src_old/typeorm/entity/PriceHistory';
+import { typeormDS } from '../../../../src_old/typeorm/typeorm';
+import { getQueryParamString } from '../../common/util';
 
 const maxPriceHistory = 10000;
 

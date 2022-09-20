@@ -1,7 +1,7 @@
 import express from 'express';
-import { TradeResult } from '../../../src_old/typeorm/entity/TradeResult';
-import { typeormDS } from '../../../src_old/typeorm/typeorm';
-import { getQueryParamString } from '../util';
+import { TradeResult } from '../../../../src_old/typeorm/entity/TradeResult';
+import { typeormDS } from '../../../../src_old/typeorm/typeorm';
+import { getQueryParamString } from '../../common/util';
 
 /**
  * GET: /vcat2/v1/trade-result
