@@ -1,6 +1,6 @@
+import 'dotenv/config';
 import { processEnv } from "./common/dotenv/processEnv";
 import { createLogDirectory, logger } from "./common/log/logger";
-import 'dotenv/config';
 import { initializeTypeorm } from "./lib/typeorm/typeorm";
 
 // 初期化作業
