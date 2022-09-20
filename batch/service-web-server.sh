@@ -11,4 +11,4 @@ cd ../
 npm run build
 
 # サービススタート
-forever start ./dist/express/index.js
+forever start ./dist/lib/express/index.js
