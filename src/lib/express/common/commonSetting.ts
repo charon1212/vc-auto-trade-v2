@@ -1,14 +1,13 @@
 import express from 'express';
 import { app } from "../app";
-import * as crypto from 'crypto';
 import { processEnv } from '../../../common/dotenv/processEnv';
 
 export const commonSetting = () => {
 
   useLog();
+  useCors();
   useJson();
   useAuth();
-  useCors();
 
 };
 
@@ -34,8 +33,6 @@ const useLog = () => app.use((req, _, next) => {
  */
 const useJson = () => app.use(express.json());
 
-
-let authCounter = 0;
 /**
  * 独自認証
  */
@@ -46,18 +43,13 @@ const useAuth = () => {
       res.statusCode = 400;
       res.send({ message: '不正なリクエスト' });
     };
-    const headerAuthTimestamp = req.header('AUTH-TIMESTAMP');
-    if (!headerAuthTimestamp) return invalidResponse('[Express API認証エラー]AUTH-TIMESTAMPがない。');
-    if (isNaN(+headerAuthTimestamp)) return invalidResponse('[Express API認証エラー]AUTH-TIMESTAMPが数値ではない。');
     const headerAuthToken = req.header('AUTH-TOKEN');
     if (!headerAuthToken) return invalidResponse('[Express API認証エラー]AUTH-TOKENがない。');
-    if (+headerAuthTimestamp <= authCounter) return invalidResponse('[Express API認証エラー]AUTH-TIMESTAMPが古い。');
 
-    const validToken = crypto.createHmac('sha256', processEnv.EXPRESS_AUTH_TOKEN).update(headerAuthTimestamp).digest('hex');
+    const validToken = processEnv.EXPRESS_AUTH_TOKEN;
     if (headerAuthToken !== validToken) return invalidResponse('[Express API認証エラー]tokenが一致しません。');
 
     // Authorization Success
-    authCounter = +headerAuthTimestamp;
     next();
   });
 };
@@ -65,7 +57,13 @@ const useAuth = () => {
 /**
  * CORS設定
  */
-const useCors = () => app.use((_, res, next) => {
+const useCors = () => app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
-  next();
+  res.header('Access-Control-Allow-Methods', 'GET,POST');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, auth-token, access_token');
+  if (req.method === 'OPTIONS') {
+    res.send(200);
+  } else {
+    next();
+  }
 });
