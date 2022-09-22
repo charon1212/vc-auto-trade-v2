@@ -14,7 +14,7 @@ export const expressGet = <RequestParam extends { [key: string]: string }, Respo
     // RequestParam Check
     const param = req.params;
     const paramGuardResult = paramGuard(param);
-    if (paramGuardResult) {
+    if (paramGuardResult.length !== 0) {
       res.statusCode = 400;
       res.send(JSON.stringify(createFailureResponse(paramGuardResult)));
       return;
