@@ -6,3 +6,4 @@ package-lock.json
 vcat-2.log
 logs/
 files/*/
+*.memo
