@@ -2,6 +2,7 @@ import { getTest } from "../resource/test/getTest";
 import { getOpenOrder } from "../resource/vcat2/v2/executeApi/openOrder/getOpenOrder";
 import { postOrder } from "../resource/vcat2/v2/executeApi/order/postOrder";
 import { getTransaction } from "../resource/vcat2/v2/executeApi/transaction/getTransaction";
+import { getPriceHistory } from "../resource/vcat2/v2/priceHistory/getPriceHistory";
 
 export const route = () => {
 
@@ -11,6 +12,9 @@ export const route = () => {
   getTransaction();
   // POST:/vcat2/v2/execute-api/order
   postOrder();
+
+  // GET:/vcat2/v2/price-history
+  getPriceHistory();
 
   // GET:/test
   getTest();
