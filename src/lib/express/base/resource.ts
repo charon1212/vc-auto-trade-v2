@@ -12,7 +12,7 @@ export const expressGet = <RequestParam extends { [key: string]: string }, Respo
   const { url, handler, paramGuard } = args;
   app.get(url, async (req, res) => {
     // RequestParam Check
-    const param = req.params;
+    const param = req.query;
     const paramGuardResult = paramGuard(param);
     if (paramGuardResult.length !== 0) {
       res.statusCode = 400;
@@ -46,7 +46,7 @@ export const expressPost = <RequestParam extends { [key: string]: string }, Requ
   const { url, handler, paramGuard, bodyGuard } = args;
   app.get(url, async (req, res) => {
     // RequestParam Check
-    const param = req.params;
+    const param = req.query;
     const paramGuardResult = paramGuard(param);
     if (paramGuardResult.length !== 0) {
       res.statusCode = 400;
