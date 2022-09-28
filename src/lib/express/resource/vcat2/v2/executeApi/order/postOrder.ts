@@ -19,10 +19,11 @@ export const postOrder = () => {
     url: '/vcat2/v2/execute-api/order',
     paramGuard: () => [], // accept any request param.
     bodyGuard: (body) => {
+      console.log(body);
       const list = [] as string[];
       if (body['pair'] !== 'btc_jpy') list.push('pairが"btc_jpy"ではありません。');
-      if (body['side'] !== 'buy' || body['side'] !== 'sell') list.push('sideがbuy,sellではありません。');
-      if (body['type'] !== 'limit' || body['type'] !== 'market') list.push('typeがlimit,marketではありません。');
+      if (body['side'] !== 'buy' && body['side'] !== 'sell') list.push('sideがbuy,sellではありません。');
+      if (body['type'] !== 'limit' && body['type'] !== 'market') list.push('typeがlimit,marketではありません。');
       if (body['type'] === 'limit') {
         if (typeof body['rate'] !== 'number') list.push('指値注文で「rate」は必須です。');
         if (typeof body['amount'] !== 'number') list.push('指値注文で「amount」は必須です。');
