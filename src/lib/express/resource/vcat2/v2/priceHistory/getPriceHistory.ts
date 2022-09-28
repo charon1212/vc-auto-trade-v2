@@ -20,7 +20,7 @@ export const getPriceHistory = () => {
       const startTimestamp = param['start-timestamp'] ? +param['start-timestamp'] : undefined;
       const lastTimestamp = param['last-timestamp'] ? +param['last-timestamp'] : undefined;
 
-      const args = { pair, startTimestamp, lastTimestamp };
+      const args = { pair, startTimestamp, lastTimestamp, limit: 10000 };
       const marketList = await findMarket(args);
 
       return createSuccessResponse({ priceList: marketList });
