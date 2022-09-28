@@ -44,7 +44,7 @@ export type ExpressPostArgs<RequestParam extends { [key: string]: string }, Requ
 
 export const expressPost = <RequestParam extends { [key: string]: string }, RequestBody extends object, ResponseData extends object>(args: ExpressPostArgs<RequestParam, RequestBody, ResponseData>) => {
   const { url, handler, paramGuard, bodyGuard } = args;
-  app.get(url, async (req, res) => {
+  app.post(url, async (req, res) => {
     // RequestParam Check
     const param = req.query;
     const paramGuardResult = paramGuard(param);

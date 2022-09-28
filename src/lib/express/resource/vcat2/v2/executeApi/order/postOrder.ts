@@ -27,7 +27,7 @@ export const postOrder = () => {
         if (typeof body['rate'] !== 'number') list.push('指値注文で「rate」は必須です。');
         if (typeof body['amount'] !== 'number') list.push('指値注文で「amount」は必須です。');
       }
-      if (body['type'] === 'limit') {
+      if (body['type'] === 'market') {
         if (body['side'] === 'buy' && typeof body['amountMarketBuy'] !== 'number') list.push('成行の買い注文で「amountMarketBuy」は必須です。');
         if (body['side'] === 'sell' && typeof body['amount'] !== 'number') list.push('成行の売り注文で「amount」は必須です。');
       }
