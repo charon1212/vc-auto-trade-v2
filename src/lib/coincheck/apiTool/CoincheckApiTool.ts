@@ -7,7 +7,7 @@ import { handleError } from "../../../common/error/handleError";
 
 export type CoincheckApiToolParam<RequestParam, ErrorResponse> = {
   isPrivate: boolean,
-  method: 'GET' | 'POST',
+  method: 'GET' | 'POST' | 'DELETE',
   createRequest: (param: RequestParam) => {
     uri: string,
     headers?: { [key: string]: string },
