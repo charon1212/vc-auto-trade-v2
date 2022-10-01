@@ -1,9 +1,10 @@
 import { Pair } from "../../../../../../../domain/Exchange/type";
 import { CoincheckGetOpenOrder } from "../../../../../../coincheck/apiTool/CoincheckGetOpenOrder";
-import { expressGet } from "../../../../../base/resource";
+import { expressResource } from "../../../../../base/resource";
 import { createFailureResponse, createSuccessResponse } from "../../../../../base/response";
 
-type RequestParam = {};
+type RequestParam = never;
+type RequestBody = never;
 type ResponseData = { orders: OpenOrder[], };
 type OpenOrder = {
   id: number,
@@ -17,7 +18,8 @@ type OpenOrder = {
 };
 
 export const getOpenOrder = () => {
-  expressGet<RequestParam, ResponseData>({
+  expressResource<'GET', RequestParam, RequestBody, ResponseData>({
+    method: 'GET',
     url: '/vcat2/v2/execute-api/open-order',
     paramGuard: () => [],
     handler: async () => {

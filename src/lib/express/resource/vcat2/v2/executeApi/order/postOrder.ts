@@ -1,9 +1,9 @@
 import { Pair } from "../../../../../../../domain/Exchange/type";
 import { CoincheckPostOrder } from "../../../../../../coincheck/apiTool/CoincheckPostOrder";
-import { expressPost } from "../../../../../base/resource";
+import { expressResource } from "../../../../../base/resource";
 import { createFailureResponse, createSuccessResponse } from "../../../../../base/response";
 
-type RequestParam = {};
+type RequestParam = never;
 type RequestBody = {
   pair: Pair,
   side: 'buy' | 'sell',
@@ -15,7 +15,8 @@ type RequestBody = {
 type ResponseData = { orderId: string, };
 
 export const postOrder = () => {
-  expressPost<RequestParam, RequestBody, ResponseData>({
+  expressResource<'POST', RequestParam, RequestBody, ResponseData>({
+    method: 'POST',
     url: '/vcat2/v2/execute-api/order',
     paramGuard: () => [], // accept any request param.
     bodyGuard: (body) => {

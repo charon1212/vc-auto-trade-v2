@@ -1,13 +1,15 @@
 import { Pair } from "../../../../../../domain/Exchange/type";
 import { findMarket } from "../../../../../typeorm/repository/Market/findMarket";
-import { expressGet } from "../../../../base/resource";
+import { expressResource } from "../../../../base/resource";
 import { createSuccessResponse } from "../../../../base/response";
 
 type RequestParam = { pair: Pair, 'start-timestamp'?: string, 'last-timestamp'?: string, };
+type RequestBody = never;
 type ResponseData = { priceList: { timestamp: number, price: number }[], };
 
 export const getPriceHistory = () => {
-  expressGet<RequestParam, ResponseData>({
+  expressResource<'GET', RequestParam, RequestBody, ResponseData>({
+    method: 'GET',
     url: '/vcat2/v2/price-history',
     paramGuard: (param) => {
       const errors = [] as string[];

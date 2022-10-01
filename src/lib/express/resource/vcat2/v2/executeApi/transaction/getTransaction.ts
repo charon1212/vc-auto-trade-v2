@@ -1,9 +1,10 @@
 import { Pair } from "../../../../../../../domain/Exchange/type";
 import { CoincheckGetTransactions } from "../../../../../../coincheck/apiTool/CoincheckGetTransactions";
-import { expressGet } from "../../../../../base/resource";
+import { expressResource } from "../../../../../base/resource";
 import { createFailureResponse, createSuccessResponse } from "../../../../../base/response";
 
-type RequestParam = {};
+type RequestParam = never;
+type RequestBody = never;
 type ResponseData = { transactions: Transaction[], };
 type Transaction = {
   id: number,
@@ -22,7 +23,8 @@ type Transaction = {
 };
 
 export const getTransaction = () => {
-  expressGet<RequestParam, ResponseData>({
+  expressResource<'GET', RequestParam, RequestBody, ResponseData>({
+    method: 'GET',
     url: '/vcat2/v2/execute-api/transaction',
     paramGuard: () => [],
     handler: async () => {

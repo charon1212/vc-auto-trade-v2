@@ -1,6 +1,6 @@
-export type ExpressResponse<ResponseData extends object> = ExpressSuccessResponse<ResponseData> | ExpressFailureResponse;
+export type ExpressResponse<ResponseData> = ExpressSuccessResponse<ResponseData> | ExpressFailureResponse;
 
-export type ExpressSuccessResponse<ResponseData extends object> = {
+export type ExpressSuccessResponse<ResponseData> = {
   success: true,
   data: ResponseData,
 };
@@ -10,5 +10,5 @@ export type ExpressFailureResponse = {
   message: string[],
 };
 
-export const createSuccessResponse = <ResponseData extends object>(data: ResponseData): ExpressSuccessResponse<ResponseData> => ({ success: true, data })
+export const createSuccessResponse = <ResponseData>(data: ResponseData): ExpressSuccessResponse<ResponseData> => ({ success: true, data })
 export const createFailureResponse = (message: string[]): ExpressFailureResponse => ({ success: false, message });
