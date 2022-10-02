@@ -93,14 +93,11 @@ const getResponseBody = async (response: FetchResponse) => {
  * リクエストごとに増加する正の整数を割り振る必要がある。
  */
 const locker = new AsyncLock();
-let requestNonce = 0; // リクエストごとに増加する必要のある正の整数。
+let preNounce = 0;
 const getNounce = async () => {
   return locker.acquire('coincheck-nounce', () => {
-    if (requestNonce === 0) {
-      requestNonce = Date.now();
-    } else {
-      requestNonce++;
-    }
-    return requestNonce;
+    let nounce = Date.now();
+    if (nounce <= preNounce) nounce = preNounce + 1;
+    return preNounce = nounce;
   });
 };
