@@ -2,7 +2,8 @@ import { startup } from "./startup";
 import { tradeManager } from "./domain/Trade/TradeManager";
 import { strategyBoxContainer } from "./domain/StrategyBoxContainer/StrategyBoxContainer";
 import { tradeManagerForwardTest } from "./domain/ForwardTest/TradeManagerForwardTest";
-import { marketMonitor } from "./domain/Market/MarketMonitor";
+import { marketPolling } from "./domain/Market/MarketPolling";
+import { marketCache } from "./domain/Market/MarketCache";
 
 /**
  * メインサーバーを起動する。以下の処理を実施する。
@@ -16,8 +17,10 @@ const index = async () => {
   // 初期化処理
   await startup('vcat2-main');
 
-  // marketMonitor初期化
-  marketMonitor.setup();
+  // marketPolling初期化
+  marketPolling.setup();
+  // marketCache初期化
+  marketCache.setup();
   // TradeManager初期化
   await tradeManager.setupCache();
   await tradeManagerForwardTest.setupCache();

@@ -2,7 +2,7 @@ import { DR } from "../../common/typescript/deepreadonly";
 import { insertExecution } from "../../lib/typeorm/repository/Execution/insertExecution";
 import { updateTrade } from "../../lib/typeorm/repository/Trade/updateTrade";
 import { marketCache } from "../Market/MarketCache";
-import { marketMonitor } from "../Market/MarketMonitor";
+import { marketPolling } from "../Market/MarketPolling";
 import { Trade, tradeTypeGuard } from "../Trade/Trade";
 import { TradeCache } from "../Trade/TradeCache";
 import { createExecutionForwardTest } from "./createExecutionForwardTest";
@@ -16,7 +16,7 @@ class TradeManagerForwardTest {
   private executedList: Trade[] = [];
 
   constructor() {
-    marketMonitor.addSubscription((pair, market) => {
+    marketPolling.addSubscription((pair, market) => {
       if (!market) return;
       this.tradeCache.getCache('requested').forEach((trade) => {
         if (trade.pair !== pair) return;

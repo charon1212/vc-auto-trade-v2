@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "tsc && node dist/index.js",
-    "debug": "tsc && node dist/debug.js",
-    "start-server": "tsc && node dist/lib/express/index.js",
+    "start-main": "tsc && node dist/index.js",
+    "start-market": "tsc && node dist/indexMarketMonitor.js",
+    "start-debug": "tsc && node dist/debug.js",
+    "start-express": "tsc && node dist/lib/express/index.js",
     "build": "tsc",
     "test": "jest --runInBand"
   },
