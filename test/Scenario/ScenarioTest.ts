@@ -1,5 +1,4 @@
 import { StrategyBox } from '../../src/domain/StrategyBox/StrategyBox';
-import { marketMonitor } from '../../src/domain/Market/MarketMonitor';
 import { Pair } from "../../src/domain/Exchange/type";
 import { DummyCoincheck } from './DummyCoincheck';
 import { Execution as ExecutionEntity } from '../../src/lib/typeorm/entity/Execution.entity';
@@ -12,6 +11,9 @@ import { FindOptionsWhere } from 'typeorm';
 import { RequestParamPostOrder } from '../../src/lib/coincheck/apiTool/CoincheckPostOrder';
 import { spyCommon } from '../spy/common/spyCommon';
 import { clearDbData } from '../testutil/clearDbData';
+import { marketPolling } from '../../src/domain/Market/MarketPolling';
+import { insertMarket } from '../../src/lib/typeorm/repository/Market/insertMarket';
+import { marketCache } from '../../src/domain/Market/MarketCache';
 
 export class ScenarioTest {
   public dummyCoincheck: DummyCoincheck;
@@ -23,20 +25,21 @@ export class ScenarioTest {
     public pairList: Pair[],
   ) {
     this.dummyCoincheck = new DummyCoincheck(price, initialTime);
-    pairList.forEach((pair) => marketMonitor.addPair(pair));
     spyCommon();
   };
   async setup() {
     await clearDbData(ExecutionEntity, MarketEntity, StrategyBoxEntity, TradeEntity);
+    marketCache.setup();
   }
   private getTime(index: number) {
     return this.initialTime + this.tickSpan * index;
   };
-  async tickMarketMonitor(index: number) {
+  async tickMarketPolling(index: number) {
     const t = this.getTime(index);
     jest.spyOn(Date, 'now').mockReturnValue(t);
     this.dummyCoincheck.spent(t);
-    await (marketMonitor as any).scheduleAddMarket();
+    await Promise.all(this.pairList.map(async (pair) => insertMarket(pair, { timestamp: t, price: this.price(pair, t) })));
+    await (marketPolling as any).schedulePolling();
   };
   async tickStrategyBox(index: number, id: string) {
     const t = this.getTime(index);
@@ -84,7 +87,7 @@ const assertDbObj = <T extends object>(message: string, expect: Partial<T>, actu
     .desc(message)
     .isNonNullable()
     .toBe((act) => {
-      for (let key in act) {
+      for (let key in expect) {
         if (expect[key] !== undefined && expect[key] !== act[key]) return false;
       }
       return true;

@@ -22,7 +22,7 @@ describe('scenario1', () => {
     const scenarioTest = new ScenarioTest(0, 10000, [sb1], (_, t) => price(t), ['btc_jpy']);
     await scenarioTest.setup();
 
-    await scenarioTest.tickMarketMonitor(1); // 10000ms - 150円
+    await scenarioTest.tickMarketPolling(1); // 10000ms - 150円
     await scenarioTest.tickStrategyBox(1, 'test-strategy-box-1'); // 150円で購入する。
     await scenarioTest.assertOrder([{ pair: 'btc_jpy', side: 'buy', type: 'market', amountMarketBuy: 1500, }]);
     await scenarioTest.assertDbTrade('Trade[1]',
@@ -30,7 +30,7 @@ describe('scenario1', () => {
       { pair: 'btc_jpy', amount: 10, side: 'buy', status: 'requested', strategyId: 'test-strategy-1', type: 'market', isForwardTest: false, lastUpdateStatusMs: '10000', },
     );
 
-    await scenarioTest.tickMarketMonitor(2); // 20000ms - 200円
+    await scenarioTest.tickMarketPolling(2); // 20000ms - 200円
     await scenarioTest.tickStrategyBox(2, 'test-strategy-box-1');
     await scenarioTest.assertOrder([]);
     const trade1 = await scenarioTest.assertDbTrade('Trade[1]',
@@ -39,11 +39,11 @@ describe('scenario1', () => {
     );
     await scenarioTest.assertDbExecution('Execution[1]', { tradeUid: trade1!.uid }, { amount: 10, rate: 150, pair: 'btc_jpy', });
 
-    await scenarioTest.tickMarketMonitor(3); // 30000ms - 250円
+    await scenarioTest.tickMarketPolling(3); // 30000ms - 250円
     await scenarioTest.tickStrategyBox(3, 'test-strategy-box-1');
     await scenarioTest.assertOrder([]);
 
-    await scenarioTest.tickMarketMonitor(4); // 40000ms - 300円
+    await scenarioTest.tickMarketPolling(4); // 40000ms - 300円
     await scenarioTest.tickStrategyBox(4, 'test-strategy-box-1');
     await scenarioTest.assertOrder([{ pair: 'btc_jpy', side: 'sell', type: 'market', amount: 10, }]);
     await scenarioTest.assertDbTrade('Trade[2]',
@@ -51,7 +51,7 @@ describe('scenario1', () => {
       { pair: 'btc_jpy', amount: 10, side: 'sell', status: 'requested', strategyId: 'test-strategy-1', type: 'market', isForwardTest: false, lastUpdateStatusMs: '40000', },
     );
 
-    await scenarioTest.tickMarketMonitor(5); // 50000ms - 350円
+    await scenarioTest.tickMarketPolling(5); // 50000ms - 350円
     await scenarioTest.tickStrategyBox(5, 'test-strategy-box-1');
     await scenarioTest.assertOrder([]);
     const trade2 = await scenarioTest.assertDbTrade('Trade[2]',
@@ -60,15 +60,15 @@ describe('scenario1', () => {
     );
     await scenarioTest.assertDbExecution('Execution[1]', { tradeUid: trade2!.uid }, { amount: 10, rate: 300, pair: 'btc_jpy', });
 
-    await scenarioTest.tickMarketMonitor(6); // 60000ms - 300円
+    await scenarioTest.tickMarketPolling(6); // 60000ms - 300円
     await scenarioTest.tickStrategyBox(6, 'test-strategy-box-1');
     await scenarioTest.assertOrder([]);
 
-    await scenarioTest.tickMarketMonitor(7); // 70000ms - 250円
+    await scenarioTest.tickMarketPolling(7); // 70000ms - 250円
     await scenarioTest.tickStrategyBox(7, 'test-strategy-box-1');
     await scenarioTest.assertOrder([]);
 
-    await scenarioTest.tickMarketMonitor(8); // 80000ms - 200円
+    await scenarioTest.tickMarketPolling(8); // 80000ms - 200円
     await scenarioTest.tickStrategyBox(8, 'test-strategy-box-1');
     await scenarioTest.assertOrder([{ pair: 'btc_jpy', side: 'buy', type: 'market', amountMarketBuy: 2000, }]);
     await scenarioTest.assertDbTrade('Trade[3]',
@@ -76,7 +76,7 @@ describe('scenario1', () => {
       { pair: 'btc_jpy', amount: 10, side: 'buy', status: 'requested', strategyId: 'test-strategy-1', type: 'market', isForwardTest: false, lastUpdateStatusMs: '80000', },
     );
 
-    await scenarioTest.tickMarketMonitor(9); // 90000ms - 150円
+    await scenarioTest.tickMarketPolling(9); // 90000ms - 150円
     await scenarioTest.tickStrategyBox(9, 'test-strategy-box-1');
     await scenarioTest.assertOrder([]);
     const trade3 = await scenarioTest.assertDbTrade('Trade[3]',
@@ -85,7 +85,7 @@ describe('scenario1', () => {
     );
     await scenarioTest.assertDbExecution('Execution[1]', { tradeUid: trade3!.uid }, { amount: 10, rate: 200, pair: 'btc_jpy', });
 
-    await scenarioTest.tickMarketMonitor(10); //100000ms -  100円
+    await scenarioTest.tickMarketPolling(10); //100000ms -  100円
     await scenarioTest.tickStrategyBox(10, 'test-strategy-box-1');
     await scenarioTest.assertOrder([]);
 
