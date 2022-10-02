@@ -35,22 +35,26 @@ export class Result<T, E, S extends boolean = boolean>{
   }
 };
 
-export const e = <T extends (...args: any) => any>(filename: string, f: T): Result<ReturnType<T>, Vcat2Error> => {
-  try {
-    const result = f();
-    return Result.success(result);
-  } catch (e) {
-    if (Vcat2Error.is(e)) return Result.error(e);
-    return Result.error(new Vcat2Error(filename, e));
-  }
+export const e = <A extends unknown[], R>(filename: string, f: (...args: A) => R): ((...args: A) => Result<R, Vcat2Error>) => {
+  return (...args: A) => {
+    try {
+      const result = f(...args);
+      return Result.success(result);
+    } catch (e) {
+      if (Vcat2Error.is(e)) return Result.error(e);
+      return Result.error(new Vcat2Error(filename, e));
+    }
+  };
 };
 
-export const ea = async <T extends (...args: any) => PromiseLike<any>>(filename: string, f: T): Promise<Result<Awaited<ReturnType<T>>, Vcat2Error>> => {
-  try {
-    const result = await f();
-    return Result.success(result);
-  } catch (e) {
-    if (Vcat2Error.is(e)) return Result.error(e);
-    return Result.error(new Vcat2Error(filename, e));
-  }
+export const ea = <A extends unknown[], R>(filename: string, f: (...args: A) => PromiseLike<R>): ((...args: A) => Promise<Result<Awaited<R>, Vcat2Error>>) => {
+  return async (...args: A) => {
+    try {
+      const result = await f(...args);
+      return Result.success(result);
+    } catch (e) {
+      if (Vcat2Error.is(e)) return Result.error(e);
+      return Result.error(new Vcat2Error(filename, e));
+    }
+  };
 };
