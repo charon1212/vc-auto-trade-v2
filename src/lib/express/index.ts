@@ -5,7 +5,7 @@ import { route } from './common/route';
 
 const index = async () => {
 
-  await startup(false);
+  await startup('vcat2-express');
   commonSetting();
 
   app.listen(3000, () => { console.log('start on port 3000.'); });

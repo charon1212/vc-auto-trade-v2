@@ -14,7 +14,7 @@ const index = async () => {
 
   console.log('start vc-auto-trade-v2');
   // 初期化処理
-  await startup(true);
+  await startup('vcat2-main');
 
   // marketMonitor初期化
   marketMonitor.setup();
