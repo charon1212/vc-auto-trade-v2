@@ -12,7 +12,7 @@ import { CoincheckGetTransactions } from "../apiTool/CoincheckGetTransactions";
  * @returns 約定のリスト。
  */
 export const fetchUnregisteredExecutions = async (requestedTrades: DR<Trade[]>) => {
-  const transactions = await CoincheckGetTransactions.request({});
+  const transactions = (await CoincheckGetTransactions.request({}))._();
   if (!transactions) {
     throw new Error(''); // TODO:エラー処理
   }

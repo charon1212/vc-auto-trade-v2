@@ -23,12 +23,11 @@ export const getOpenOrder = () => {
     url: '/vcat2/v2/execute-api/open-order',
     paramGuard: () => [],
     handler: async () => {
-      const response = await CoincheckGetOpenOrder.request({});
-      if (response) {
-        return createSuccessResponse({ orders: response.orders });
-      } else {
-        return createFailureResponse(['']);
-      }
+      const requestResult = await CoincheckGetOpenOrder.request({});
+      return requestResult.on({
+        onSuccess: (response) => createSuccessResponse({ orders: response.orders }),
+        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      });
     },
   });
 };

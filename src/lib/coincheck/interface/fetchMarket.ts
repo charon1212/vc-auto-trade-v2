@@ -3,7 +3,7 @@ import { Market } from "../../../domain/Market/Market";
 import { CoincheckGetTicker } from "../apiTool/CoincheckGetTicker";
 
 export const fetchMarket = async (timestamp: number, pair: Pair) => {
-  const body = await CoincheckGetTicker.request({ pair });
+  const body = (await CoincheckGetTicker.request({ pair }))._();
   if (!body) return undefined;
   return { pair, timestamp, price: body.last } as Market;
 };

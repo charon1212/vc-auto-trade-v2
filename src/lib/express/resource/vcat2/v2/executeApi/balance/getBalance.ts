@@ -14,12 +14,11 @@ export const getGetBalance = () => {
     url: '/vcat2/v2/execute-api/balance',
     paramGuard: () => [],
     handler: async () => {
-      const response = await CoincheckGetBalance.request({});
-      if (response) {
-        return createSuccessResponse(response);
-      } else {
-        return createFailureResponse(['CoincheckAPIリクエストでエラー']);
-      }
+      const requestResult = await CoincheckGetBalance.request({});
+      return requestResult.on({
+        onSuccess: (response) => createSuccessResponse(response),
+        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      });
     },
   });
 };

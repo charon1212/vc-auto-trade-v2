@@ -3,9 +3,10 @@ import fetch, { Response as FetchResponse } from 'node-fetch';
 import { processEnv } from "../../../common/dotenv/processEnv";
 import * as crypto from 'crypto';
 import { logger } from '../../../common/log/logger';
-import { handleError } from "../../../common/error/handleError";
+import { Result } from "../../../common/error/Result";
+import { Vcat2Error, Vcat2ErrorCoincheckApi } from "../../../common/error/Vcat2Error";
 
-export type CoincheckApiToolParam<RequestParam, ErrorResponse> = {
+export type CoincheckApiToolParam<RequestParam> = {
   isPrivate: boolean,
   method: 'GET' | 'POST' | 'DELETE',
   createRequest: (param: RequestParam) => {
@@ -13,15 +14,14 @@ export type CoincheckApiToolParam<RequestParam, ErrorResponse> = {
     headers?: { [key: string]: string },
     requestParam?: { [key: string]: string },
     body?: string,
-  },
-  handleError?: (param: { response?: FetchResponse, responseBody?: unknown, error?: unknown }) => ErrorResponse,
+  }
 };
 
-export class CoincheckApiTool<RequestParam, ResponseBodyType, ErrorResponse = undefined>{
+export class CoincheckApiTool<RequestParam, ResponseBodyType>{
 
-  constructor(private param: CoincheckApiToolParam<RequestParam, ErrorResponse>) { }
+  constructor(private param: CoincheckApiToolParam<RequestParam>) { }
 
-  async request(param: RequestParam): Promise<ResponseBodyType | ErrorResponse | undefined> {
+  async request(param: RequestParam): Promise<Result<ResponseBodyType, Vcat2Error>> {
     logger.trace(`CoincheckApiTool_StartRequest: ${JSON.stringify(param)}`);
     const { uri, body, headers, requestParam } = this.param.createRequest(param);
     const url = createRequestUrl(uri, requestParam || {});
@@ -36,24 +36,12 @@ export class CoincheckApiTool<RequestParam, ResponseBodyType, ErrorResponse = un
       const responseBody = await getResponseBody(response);
       if (response.ok) {
         logger.trace(`[CoincheckApiTool_Success] Response=${JSON.stringify(responseBody)}`);
-        return responseBody as ResponseBodyType;
+        return Result.success(responseBody as ResponseBodyType);
       } else {
-        if (this.param.handleError) {
-          return this.param.handleError({ response, responseBody, });
-        } else {
-          logger.error(`[CoincheckApiTool_Error] Info=${JSON.stringify({ param: loggingParam, responseBody })}`);
-          handleError({ __filename, method: 'request', args: { param } });
-          return undefined;
-        }
+        return Result.error(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: true, param: loggingParam, responseBody }));
       }
-    } catch (e) {
-      if (this.param.handleError) {
-        return this.param.handleError({ error: e });
-      } else {
-        logger.error(`[CoincheckApiTool_Error] Info=${JSON.stringify({ param: loggingParam, error: e })}`);
-        handleError({ __filename, method: 'request', args: { param } });
-        return undefined;
-      }
+    } catch (error) {
+      return Result.error(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: false, param: loggingParam, error }));
     }
   }
 

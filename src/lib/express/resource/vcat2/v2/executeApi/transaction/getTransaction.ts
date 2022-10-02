@@ -28,12 +28,11 @@ export const getTransaction = () => {
     url: '/vcat2/v2/execute-api/transaction',
     paramGuard: () => [],
     handler: async () => {
-      const response = await CoincheckGetTransactions.request({});
-      if (response) {
-        return createSuccessResponse({ transactions: response.transactions });
-      } else {
-        return createFailureResponse(['']);
-      }
+      const requestResult = await CoincheckGetTransactions.request({});
+      return requestResult.on({
+        onSuccess: (response) => createSuccessResponse({ transactions: response.transactions }),
+        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      });
     },
   });
 };

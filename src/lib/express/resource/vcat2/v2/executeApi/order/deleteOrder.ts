@@ -16,12 +16,11 @@ export const deleteOrder = () => {
     },
     handler: async (param) => {
       const { id } = param;
-      const response = await CoincheckDeleteOrder.request({ orderId: +id });
-      if (response) {
-        return createSuccessResponse({ id: response.id });
-      } else {
-        return createFailureResponse(['CoincheckAPIリクエストでエラー']);
-      }
+      const requestResult = await CoincheckDeleteOrder.request({ orderId: +id });
+      return requestResult.on({
+        onSuccess: (response) => createSuccessResponse({ id: response.id }),
+        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      });
     },
   });
 };

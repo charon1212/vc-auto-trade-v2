@@ -10,7 +10,7 @@ export const postOrder = async (trade: DR<Trade>) => {
   const rate = tradeParam.type === 'limit' ? tradeParam.rate : undefined;
   const amount = (tradeParam.type === 'market' && tradeParam.side == 'buy') ? undefined : tradeParam.amount;
   const amountMarketBuy = (tradeParam.type === 'market' && tradeParam.side == 'buy') ? calcAmountMarketBuy(pair, tradeParam.amount) : undefined;
-  const result = await CoincheckPostOrder.request({ pair, side, type, rate, amount, amountMarketBuy });
+  const result = (await CoincheckPostOrder.request({ pair, side, type, rate, amount, amountMarketBuy }))._();
   return result?.id.toString();
 };
 

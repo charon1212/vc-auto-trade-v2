@@ -36,12 +36,11 @@ export const postOrder = () => {
       return list;
     },
     handler: async (_, body,) => {
-      const response = await CoincheckPostOrder.request(body);
-      if (response) { // success
-        return createSuccessResponse({ orderId: `${response.id}` });
-      } else { // fail
-        return createFailureResponse(['CoincheckAPIのRequestでエラー。']);
-      }
+      const requestResult = await CoincheckPostOrder.request(body);
+      return requestResult.on({
+        onSuccess: (response) => createSuccessResponse({ orderId: `${response.id}` }),
+        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      });
     },
   });
 };
