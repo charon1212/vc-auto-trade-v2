@@ -3,7 +3,7 @@ import { Pair } from "../Exchange/type";
 import { Market } from "./Market";
 import { marketPolling } from "./MarketPolling";
 import { MyDate } from 'util-charon1212/build/main/MyDate';
-import * as cron from 'node-cron';
+import { cronSchedule } from "../../common/cron/cronSchedule";
 
 export type MarketHistory = (Market & { lack?: boolean })[];
 
@@ -16,7 +16,7 @@ class MarketCache {
     marketPolling.addSubscription((pair, market) => {
       this.marketHistoryCacheMap[pair]?.push(market);
     });
-    cron.schedule(`0 0 * * * *`, this.scheduleRemoveMarketHistory);
+    cronSchedule.everyHour()(this.scheduleRemoveMarketHistory);
   }
   getPriceHistory(pair: Pair) {
     return this.marketHistoryCacheMap[pair];

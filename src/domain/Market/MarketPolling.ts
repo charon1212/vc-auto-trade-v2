@@ -1,8 +1,8 @@
 import { Pair } from "../Exchange/type";
 import { Market } from "./Market";
-import * as cron from 'node-cron';
 import { findMarket } from "../../lib/typeorm/repository/Market/findMarket";
 import { getPairs } from "../Exchange/pair";
+import { cronSchedule } from "../../common/cron/cronSchedule";
 
 export type MarketSubscription = (pair: Pair, market: Market) => void;
 
@@ -10,7 +10,7 @@ class MarketPolling {
   private subscriptions: MarketSubscription[] = [];
   constructor() { };
   setup() {
-    cron.schedule(`* * * * * *`, this.schedulePolling); // 毎秒DBを監視して、新規があったらSubscriptionを動かす。
+    cronSchedule.everySecond()(this.schedulePolling); // 毎秒DBを監視して、新規があったらSubscriptionを動かす。
   };
   addSubscription(sub: MarketSubscription) {
     this.subscriptions.push(sub);
