@@ -29,9 +29,9 @@ export const getTransaction = () => {
     paramGuard: () => [],
     handler: async () => {
       const requestResult = await CoincheckGetTransactions.request({});
-      return requestResult.on({
-        onSuccess: (response) => createSuccessResponse({ transactions: response.transactions }),
-        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      return requestResult.match({
+        ok: (response) => createSuccessResponse({ transactions: response.transactions }),
+        er: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
       });
     },
   });

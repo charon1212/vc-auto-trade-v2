@@ -1,48 +1,54 @@
 import { Vcat2Error } from "./Vcat2Error";
 
 export class Result<T, E, S extends boolean = boolean>{
-  private constructor(public s: S, private t: T, private e: E,) { };
+  private constructor(private s: S, private t: T, private e: E,) { };
 
-  static success<T, E>(t: T): Result<T, E, true> {
+  static ok<T, E>(t: T): Result<T, E, true> {
     return new Result(true, t, undefined as unknown as E);
-  }
-  static error<T, E>(e: E): Result<T, E, false> {
+  };
+  static er<T, E>(e: E): Result<T, E, false> {
     return new Result(false, undefined as unknown as T, e);
-  }
-  _() {
+  };
+  unwrap() {
     if (this.s) return this.t;
     throw this.e;
-  }
-  on<P, Q>(handler: { onSuccess: (t: T) => P, onError: (e: E) => Q }): P | Q {
-    const { onSuccess, onError } = handler;
+  };
+  match<P, Q>(handler: { ok: (t: T) => P, er: (e: E) => Q }): P | Q {
+    const { ok, er } = handler;
     if (this.s) {
-      return onSuccess(this.t);
+      return ok(this.t);
     } else {
-      return onError(this.e);
+      return er(this.e);
     }
-  }
-  isSuccess(): this is Result<T, E, true> {
-    return this.s;
-  }
-  isError(): this is Result<T, E, false> {
-    return !this.s;
-  }
-  getSuccess(): [S] extends [true] ? T : never {
-    return this.t as any;
-  }
-  getError(): [S] extends [false] ? E : never {
-    return this.e as any;
-  }
+  };
+  handleOk<P>(handler: (t: T) => P): Result<P, E, S> {
+    if (this.s) {
+      return Result.ok(handler(this.t)) as Result<P, E, S>;
+    } else {
+      return Result.er(this.e) as Result<P, E, S>;
+    }
+  };
+  handleEr<P>(handler: (e: E) => P): Result<T, P, S> {
+    if (this.s) {
+      return Result.ok(this.t) as Result<T, P, S>;
+    } else {
+      return Result.er(handler(this.e)) as Result<T, P, S>;
+    }
+  };
+  isOk(): this is Result<T, E, true> { return this.s; };
+  isEr(): this is Result<T, E, false> { return !this.s; };
+  ok(): [S] extends [true] ? T : never { return this.t as any; };
+  er(): [S] extends [false] ? E : never { return this.e as any; };
 };
 
 export const e = <A extends unknown[], R>(filename: string, f: (...args: A) => R): ((...args: A) => Result<R, Vcat2Error>) => {
   return (...args: A) => {
     try {
       const result = f(...args);
-      return Result.success(result);
+      return Result.ok(result);
     } catch (e) {
-      if (Vcat2Error.is(e)) return Result.error(e);
-      return Result.error(new Vcat2Error(filename, e));
+      if (Vcat2Error.is(e)) return Result.er(e);
+      return Result.er(new Vcat2Error(filename, e));
     }
   };
 };
@@ -51,10 +57,10 @@ export const ea = <A extends unknown[], R>(filename: string, f: (...args: A) => 
   return async (...args: A) => {
     try {
       const result = await f(...args);
-      return Result.success(result);
+      return Result.ok(result);
     } catch (e) {
-      if (Vcat2Error.is(e)) return Result.error(e);
-      return Result.error(new Vcat2Error(filename, e));
+      if (Vcat2Error.is(e)) return Result.er(e);
+      return Result.er(new Vcat2Error(filename, e));
     }
   };
 };

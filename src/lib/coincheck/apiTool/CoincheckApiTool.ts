@@ -36,12 +36,12 @@ export class CoincheckApiTool<RequestParam, ResponseBodyType>{
       const responseBody = await getResponseBody(response);
       if (response.ok) {
         logger.trace(`[CoincheckApiTool_Success] Response=${JSON.stringify(responseBody)}`);
-        return Result.success(responseBody as ResponseBodyType);
+        return Result.ok(responseBody as ResponseBodyType);
       } else {
-        return Result.error(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: true, param: loggingParam, responseBody }));
+        return Result.er(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: true, param: loggingParam, responseBody }));
       }
     } catch (error) {
-      return Result.error(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: false, param: loggingParam, error }));
+      return Result.er(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: false, param: loggingParam, error }));
     }
   }
 

@@ -11,10 +11,8 @@ class MarketMonitor {
   private async scheduleAddMarket() {
     await Promise.all(getPairs().map(async (pair) => {
       const timestamp = Math.round(Date.now() / 10000) * 10000;
-      const market = await fetchMarket(timestamp, pair);
-      if (market) {
-        await insertMarket(pair, market);
-      }
+      const market = (await fetchMarket(timestamp, pair)).unwrap(); // TODO: エラー処理
+      await insertMarket(pair, market);
     }));
   };
 };

@@ -15,7 +15,7 @@ class ExecutionMonitor {
     if (Date.now() - this.lastUpdateMs < updateSpanMs) return; // 前回実行からの経過時間がアップデートスパンより短い場合は更新しない。
     this.lastUpdateMs = Date.now();
     const requestedTradeList = tradeManager.getCache('requested');
-    const executions = await fetchUnregisteredExecutions(requestedTradeList);
+    const executions = (await fetchUnregisteredExecutions(requestedTradeList)).unwrap(); // TODO: エラー処理
     for (let execution of executions) {
       await insertExecution(execution);
       tradeManager.setExecution(execution);

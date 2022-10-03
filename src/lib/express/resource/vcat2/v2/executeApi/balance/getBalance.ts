@@ -15,9 +15,9 @@ export const getGetBalance = () => {
     paramGuard: () => [],
     handler: async () => {
       const requestResult = await CoincheckGetBalance.request({});
-      return requestResult.on({
-        onSuccess: (response) => createSuccessResponse(response),
-        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      return requestResult.match({
+        ok: (response) => createSuccessResponse(response),
+        er: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
       });
     },
   });

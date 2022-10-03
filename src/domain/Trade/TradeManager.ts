@@ -26,7 +26,7 @@ class TradeManager {
    */
   async order(trade: Trade) {
     await this.tradeCache.add(trade);
-    const apiId = await postOrder(trade);
+    const apiId = (await postOrder(trade)).unwrap();
     if (apiId === undefined) {
       throw new Error(''); // TODO: エラー処理
     }
@@ -51,10 +51,7 @@ class TradeManager {
   async checkRequestedTradeHasExecuted() {
     const requestedTradeList = this.tradeCache.getCache('requested');
     if (requestedTradeList.length === 0) return;
-    const openOrderIdList = await fetchOpenOrderIdList();
-    if (!openOrderIdList) {
-      throw new Error('') // TODO: エラー処理
-    }
+    const openOrderIdList = (await fetchOpenOrderIdList()).unwrap();// TODO: エラー処理
     for (let trade of requestedTradeList) {
       const totalExecutedAmount = trade.executions.map(({ amount }) => amount).reduce((p, c) => p + c, 0);
       const executedOver99 = totalExecutedAmount > trade.tradeParam.amount * 0.99; // 99%以上が約定している

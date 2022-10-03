@@ -1,6 +1,8 @@
 import { CoincheckGetOpenOrder } from "../apiTool/CoincheckGetOpenOrder";
 
 export const fetchOpenOrderIdList = async () => {
-  const openOrderList = (await CoincheckGetOpenOrder.request({}))._();
-  return openOrderList && openOrderList.orders.map(({ id }) => `${id}`);
+  const result = await CoincheckGetOpenOrder.request({});
+  return result.handleOk((openOrderList) => {
+    return openOrderList.orders.map(({ id }) => `${id}`);
+  });
 };

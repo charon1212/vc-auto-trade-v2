@@ -24,9 +24,9 @@ export const getOpenOrder = () => {
     paramGuard: () => [],
     handler: async () => {
       const requestResult = await CoincheckGetOpenOrder.request({});
-      return requestResult.on({
-        onSuccess: (response) => createSuccessResponse({ orders: response.orders }),
-        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      return requestResult.match({
+        ok: (response) => createSuccessResponse({ orders: response.orders }),
+        er: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
       });
     },
   });
