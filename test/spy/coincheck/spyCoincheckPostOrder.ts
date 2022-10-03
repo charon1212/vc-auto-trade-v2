@@ -1,4 +1,4 @@
-import { Result } from '../../../src/common/error/Result';
+import { ok } from '../../../src/common/error/Result';
 import { CoincheckPostOrder, RequestParamPostOrder } from '../../../src/lib/coincheck/apiTool/CoincheckPostOrder';
 
 export const spyCoincheckPostOrder = (getId: (param: RequestParamPostOrder) => number) => {
@@ -6,7 +6,7 @@ export const spyCoincheckPostOrder = (getId: (param: RequestParamPostOrder) => n
     const id = getId(param);
     const { pair, side, type, rate, amount, amountMarketBuy } = param;
     const order_type = (type === 'market' ? 'market_' : '') + side;
-    return Result.success({
+    return ok({
       success: true,
       id,
       rate: `${rate}`,

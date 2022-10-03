@@ -1,4 +1,4 @@
-import { Result } from '../../../src/common/error/Result';
+import { ok } from '../../../src/common/error/Result';
 import { CoincheckGetOpenOrder, ResponseBodyGetOpenOrder } from '../../../src/lib/coincheck/apiTool/CoincheckGetOpenOrder';
 
 type OpenOrder = ResponseBodyGetOpenOrder['orders'][number];
@@ -15,7 +15,7 @@ const defaultOpenOrder: OpenOrder = {
 
 export const spyCoincheckGetOpenOrder = (mockSuccess: boolean, mockReturnOpenOrders: () => Partial<OpenOrder>[]) => {
   return jest.spyOn(CoincheckGetOpenOrder, 'request').mockImplementation(async () => {
-    return Result.success({
+    return ok({
       success: mockSuccess,
       orders: mockReturnOpenOrders().map((v) => ({ ...defaultOpenOrder, ...v })),
     });

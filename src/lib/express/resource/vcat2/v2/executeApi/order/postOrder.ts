@@ -37,9 +37,9 @@ export const postOrder = () => {
     },
     handler: async (_, body,) => {
       const requestResult = await CoincheckPostOrder.request(body);
-      return requestResult.on({
-        onSuccess: (response) => createSuccessResponse({ orderId: `${response.id}` }),
-        onError: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
+      return requestResult.match({
+        ok: (response) => createSuccessResponse({ orderId: `${response.id}` }),
+        er: (err) => createFailureResponse([`CoincheckAPIリクエストでエラー: ${JSON.stringify(err)}`]),
       });
     },
   });

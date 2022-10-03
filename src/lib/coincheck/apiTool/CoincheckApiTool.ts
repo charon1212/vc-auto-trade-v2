@@ -3,7 +3,7 @@ import fetch, { Response as FetchResponse } from 'node-fetch';
 import { processEnv } from "../../../common/dotenv/processEnv";
 import * as crypto from 'crypto';
 import { logger } from '../../../common/log/logger';
-import { Result } from "../../../common/error/Result";
+import { er, ok, Result } from "../../../common/error/Result";
 import { Vcat2Error, Vcat2ErrorCoincheckApi } from "../../../common/error/Vcat2Error";
 
 export type CoincheckApiToolParam<RequestParam> = {
@@ -36,12 +36,12 @@ export class CoincheckApiTool<RequestParam, ResponseBodyType>{
       const responseBody = await getResponseBody(response);
       if (response.ok) {
         logger.trace(`[CoincheckApiTool_Success] Response=${JSON.stringify(responseBody)}`);
-        return Result.ok(responseBody as ResponseBodyType);
+        return ok(responseBody as ResponseBodyType);
       } else {
-        return Result.er(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: true, param: loggingParam, responseBody }));
+        return er(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: true, param: loggingParam, responseBody }));
       }
     } catch (error) {
-      return Result.er(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: false, param: loggingParam, error }));
+      return er(new Vcat2ErrorCoincheckApi(__filename, { isApiResponseError: false, param: loggingParam, error }));
     }
   }
 

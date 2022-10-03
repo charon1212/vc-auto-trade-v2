@@ -1,4 +1,4 @@
-import { Result } from '../../../src/common/error/Result';
+import { ok } from '../../../src/common/error/Result';
 import { CoincheckGetTransactions, ResponseBodyGetTransactions } from '../../../src/lib/coincheck/apiTool/CoincheckGetTransactions';
 
 type Transaction = ResponseBodyGetTransactions['transactions'][number];
@@ -20,7 +20,7 @@ const defaultTransaction: Transaction = {
 
 export const spyCoincheckGetTransactions = (mockSuccess: boolean, mockReturnTransactions: () => Partial<Transaction>[]) => {
   return jest.spyOn(CoincheckGetTransactions, 'request').mockImplementation(async () => {
-    return Result.success({
+    return ok({
       success: mockSuccess,
       transactions: mockReturnTransactions().map((v) => ({ ...defaultTransaction, ...v, })),
     });
