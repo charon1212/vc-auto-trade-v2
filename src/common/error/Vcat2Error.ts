@@ -25,7 +25,7 @@ export class Vcat2ErrorCoincheckApi extends Vcat2Error<ErrorContentCoincheckApi>
   };
   isEconresetError() {
     if (this.errorContent.isApiResponseError) return false;
-    const error = this.errorContent.error as any;
+    const error = (this.errorContent as any).error as any; // なぜかts-jest@29.0.1でこのコンパイルが通らない（1個上のif文Narrowingが効かない）ので、苦肉の策。
     return error
       && error['errno'] === 'ECONNRESET'
       && error['code'] === 'ECONNRESET';
