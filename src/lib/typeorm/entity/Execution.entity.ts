@@ -1,7 +1,6 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { DR } from "../../../common/typescript/deepreadonly";
-import { Pair } from "../../../domain/Exchange/type";
-import { Execution as DomainExecution } from '../../../domain/Execution/Execution';
+import { Execution as DomainExecution, Pair } from "../../../domain/BaseType";
 
 @Entity()
 export class Execution {

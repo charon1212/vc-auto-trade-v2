@@ -1,4 +1,4 @@
-import { Currency } from "../../../../../../../domain/Exchange/type";
+import { Currency } from "../../../../../../../domain/BaseType";
 import { CoincheckGetBalance, } from "../../../../../../coincheck/apiTool/CoincheckGetBalance";
 import { expressResource } from "../../../../../base/resource";
 import { createFailureResponse, createSuccessResponse } from "../../../../../base/response";

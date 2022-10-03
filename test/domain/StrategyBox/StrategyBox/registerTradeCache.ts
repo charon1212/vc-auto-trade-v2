@@ -1,4 +1,4 @@
-import { Trade } from "../../../../src/domain/Trade/Trade";
+import { Trade } from "../../../../src/domain/BaseType";
 import { tradeManager } from "../../../../src/domain/Trade/TradeManager";
 
 export const registerTradeCache = (tradeList: Trade[]) => {

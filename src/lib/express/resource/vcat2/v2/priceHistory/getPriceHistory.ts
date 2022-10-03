@@ -1,4 +1,4 @@
-import { Pair } from "../../../../../../domain/Exchange/type";
+import { Pair } from "../../../../../../domain/BaseType";
 import { findMarket } from "../../../../../typeorm/repository/Market/findMarket";
 import { expressResource } from "../../../../base/resource";
 import { createSuccessResponse } from "../../../../base/response";

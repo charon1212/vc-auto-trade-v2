@@ -1,7 +1,7 @@
 import { findTrade } from "../../lib/typeorm/repository/Trade/findTrade";
 import { insertTrade } from "../../lib/typeorm/repository/Trade/insertTrade";
 import { updateTrade } from "../../lib/typeorm/repository/Trade/updateTrade";
-import { Trade, TradeStatus } from "./Trade";
+import { Trade, TradeStatus } from "../BaseType";
 
 export class TradeCache {
   private cacheAll: Trade[] = [];

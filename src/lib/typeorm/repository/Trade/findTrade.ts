@@ -1,4 +1,4 @@
-import { Trade, TradeStatus } from "../../../../domain/Trade/Trade";
+import { Trade, TradeStatus } from "../../../../domain/BaseType";
 import { Execution as ExecutionEntity } from "../../entity/Execution.entity";
 import { Trade as TradeEntity } from "../../entity/Trade.entity";
 import { getTypeormRepository } from "../../typeorm";

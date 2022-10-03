@@ -1,7 +1,6 @@
 import { Vcat2ErrorCoincheckApi } from "../../../common/error/Vcat2Error";
 import { logger } from "../../../common/log/logger";
-import { Pair } from "../../../domain/Exchange/type";
-import { Market } from "../../../domain/Market/Market";
+import { Market, Pair } from "../../../domain/BaseType";
 import { CoincheckGetTicker } from "../apiTool/CoincheckGetTicker";
 
 export const fetchMarket = async (timestamp: number, pair: Pair) => {

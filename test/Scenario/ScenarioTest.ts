@@ -1,5 +1,5 @@
 import { StrategyBox } from '../../src/domain/StrategyBox/StrategyBox';
-import { Pair } from "../../src/domain/Exchange/type";
+import { Pair } from "../../src/domain/BaseType";
 import { DummyCoincheck } from './DummyCoincheck';
 import { Execution as ExecutionEntity } from '../../src/lib/typeorm/entity/Execution.entity';
 import { Market as MarketEntity } from '../../src/lib/typeorm/entity/Market.entity';

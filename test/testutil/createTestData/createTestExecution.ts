@@ -1,4 +1,4 @@
-import { Execution } from "../../../src/domain/Execution/Execution";
+import { Execution } from "../../../src/domain/BaseType";
 
 const defaultExecution = (id: number): Execution => ({
   uid: `uid-${id}`,

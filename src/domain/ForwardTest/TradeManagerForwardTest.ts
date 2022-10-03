@@ -3,7 +3,8 @@ import { insertExecution } from "../../lib/typeorm/repository/Execution/insertEx
 import { updateTrade } from "../../lib/typeorm/repository/Trade/updateTrade";
 import { marketCache } from "../Market/MarketCache";
 import { marketPolling } from "../Market/MarketPolling";
-import { Trade, tradeTypeGuard } from "../Trade/Trade";
+import { Trade, } from "../BaseType";
+import { tradeTypeGuard } from '../Trade/tradeTypeGurad';
 import { TradeCache } from "../Trade/TradeCache";
 import { createExecutionForwardTest } from "./createExecutionForwardTest";
 

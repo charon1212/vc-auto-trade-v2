@@ -1,6 +1,5 @@
 import { DR } from "../../../../common/typescript/deepreadonly";
-import { Pair } from "../../../../domain/Exchange/type";
-import { Market as DomainMarket } from "../../../../domain/Market/Market";
+import { Market as DomainMarket, Pair } from "../../../../domain/BaseType";
 import { Market as MarketEntity } from "../../entity/Market.entity";
 import { getTypeormRepository } from "../../typeorm";
 

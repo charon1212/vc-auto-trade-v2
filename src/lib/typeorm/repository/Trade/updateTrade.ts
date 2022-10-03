@@ -1,5 +1,5 @@
 import { DR } from "../../../../common/typescript/deepreadonly";
-import { Trade } from "../../../../domain/Trade/Trade";
+import { Trade } from "../../../../domain/BaseType";
 import { Trade as TradeEntity } from "../../entity/Trade.entity";
 import { getTypeormRepository } from "../../typeorm";
 

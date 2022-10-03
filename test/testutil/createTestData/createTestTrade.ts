@@ -1,4 +1,4 @@
-import { Trade } from '../../../src/domain/Trade/Trade';
+import { Trade } from '../../../src/domain/BaseType';
 
 const defaultTrade = (id: number): Trade => ({
   uid: `trade-uid-${id}`,

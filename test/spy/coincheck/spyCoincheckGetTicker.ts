@@ -1,5 +1,5 @@
 import { CoincheckGetTicker } from '../../../src/lib/coincheck/apiTool/CoincheckGetTicker';
-import { Pair } from '../../../src/domain/Exchange/type';
+import { Pair } from '../../../src/domain/BaseType';
 import { ok } from '../../../src/common/error/Result';
 
 export const spyCoincheckGetTicker = (arg: (pair: Pair) => number) => {

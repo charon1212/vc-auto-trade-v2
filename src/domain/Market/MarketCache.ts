@@ -1,6 +1,5 @@
 import { getPairs } from "../Exchange/pair";
-import { Pair } from "../Exchange/type";
-import { Market } from "./Market";
+import { Pair, Market } from "../BaseType";
 import { marketPolling } from "./MarketPolling";
 import { MyDate } from 'util-charon1212/build/main/MyDate';
 import { cronSchedule } from "../../common/cron/cronSchedule";

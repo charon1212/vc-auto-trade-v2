@@ -1,5 +1,4 @@
-import { Pair } from "../Exchange/type";
-import { Market } from "./Market";
+import { Market, Pair } from "../BaseType";
 import { findMarket } from "../../lib/typeorm/repository/Market/findMarket";
 import { getPairs } from "../Exchange/pair";
 import { cronSchedule } from "../../common/cron/cronSchedule";

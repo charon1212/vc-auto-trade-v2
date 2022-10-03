@@ -1,7 +1,6 @@
 import { DR } from "../../../common/typescript/deepreadonly";
-import { Pair } from "../../../domain/Exchange/type";
+import { Pair, Trade } from "../../../domain/BaseType";
 import { marketCache } from "../../../domain/Market/MarketCache";
-import { Trade } from "../../../domain/Trade/Trade";
 import { CoincheckPostOrder } from "../apiTool/CoincheckPostOrder";
 
 export const postOrder = async (trade: DR<Trade>) => {

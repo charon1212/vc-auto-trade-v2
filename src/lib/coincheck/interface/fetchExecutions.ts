@@ -1,8 +1,6 @@
 import { v4 } from "uuid";
 import { DR } from "../../../common/typescript/deepreadonly";
-import { Pair } from "../../../domain/Exchange/type";
-import { Execution } from "../../../domain/Execution/Execution";
-import { Trade } from "../../../domain/Trade/Trade";
+import { Execution, Pair, Trade } from "../../../domain/BaseType";
 import { CoincheckGetTransactions } from "../apiTool/CoincheckGetTransactions";
 
 /**

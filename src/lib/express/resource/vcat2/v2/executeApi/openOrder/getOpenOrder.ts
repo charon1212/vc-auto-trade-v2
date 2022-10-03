@@ -1,4 +1,4 @@
-import { Pair } from "../../../../../../../domain/Exchange/type";
+import { Pair } from "../../../../../../../domain/BaseType";
 import { CoincheckGetOpenOrder } from "../../../../../../coincheck/apiTool/CoincheckGetOpenOrder";
 import { expressResource } from "../../../../../base/resource";
 import { createFailureResponse, createSuccessResponse } from "../../../../../base/response";

@@ -1,4 +1,4 @@
-import { Currency } from "../../../domain/Exchange/type";
+import { Currency } from "../../../domain/BaseType";
 import { CoincheckApiTool } from "./CoincheckApiTool";
 
 export type RequestParamGetBalance = {};

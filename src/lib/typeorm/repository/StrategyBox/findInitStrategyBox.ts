@@ -1,4 +1,4 @@
-import { Pair } from "../../../../domain/Exchange/type";
+import { Pair } from "../../../../domain/BaseType";
 import { strategyList } from "../../../../strategy/bridge";
 import { StrategyBox as DomainStrategyBox } from "../../../../domain/StrategyBox/StrategyBox";
 import { StrategyBox as StrategyBoxEntity } from "../../entity/StrategyBox.entity";

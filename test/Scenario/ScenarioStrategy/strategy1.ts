@@ -1,5 +1,5 @@
 import { Strategy, StrategyFunctionArgs } from '../../../src/strategy/Strategy';
-import { Trade } from '../../../src/domain/Trade/Trade';
+import { Trade } from '../../../src/domain/BaseType';
 
 type Param = { buy: number, sell: number, amount: number };
 type Context = { side: 'buy' | 'sell' };

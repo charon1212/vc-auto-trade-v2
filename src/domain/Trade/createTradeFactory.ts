@@ -1,6 +1,6 @@
 import { v4 } from "uuid";
 import { StrategyBox } from "../StrategyBox/StrategyBox";
-import { Trade, TradeParam } from "./Trade";
+import { Trade, TradeParam } from "../BaseType";
 
 export type TradeFactory = ReturnType<typeof createTradeFactory>;
 

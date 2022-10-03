@@ -1,4 +1,4 @@
-import { Execution } from "../../../../domain/Execution/Execution";
+import { Execution } from "../../../../domain/BaseType";
 import { Execution as ExecutionEntity } from "../../entity/Execution.entity";
 import { getTypeormRepository } from "../../typeorm";
 

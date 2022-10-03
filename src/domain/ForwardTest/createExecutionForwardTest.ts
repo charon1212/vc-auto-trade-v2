@@ -1,6 +1,5 @@
 import { DR } from "../../common/typescript/deepreadonly";
-import { Execution } from "../Execution/Execution";
-import { Trade } from "../Trade/Trade";
+import { Execution, Trade } from "../BaseType";
 import * as uuid from 'uuid';
 
 /**

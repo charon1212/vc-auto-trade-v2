@@ -1,6 +1,6 @@
 import { StrategyLogger } from '../../common/log/StrategyLogger';
 import { updateStrategyBox } from '../../lib/typeorm/repository/StrategyBox/updateStrategyBox';
-import { Pair } from "../Exchange/type";
+import { Pair } from "../BaseType";
 import { executionMonitor } from '../Execution/ExecutionMonitor';
 import { tradeManagerForwardTest } from '../ForwardTest/TradeManagerForwardTest';
 import { marketCache } from '../Market/MarketCache';

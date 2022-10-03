@@ -1,4 +1,4 @@
-import { Pair } from "../../src/domain/Exchange/type";
+import { Pair } from "../../src/domain/BaseType";
 import { spyCoincheckGetOpenOrder } from "../spy/coincheck/spyCoincheckGetOpenOrder";
 import { spyCoincheckGetTicker } from "../spy/coincheck/spyCoincheckGetTicker";
 import { spyCoincheckGetTransactions } from "../spy/coincheck/spyCoincheckGetTransactions";

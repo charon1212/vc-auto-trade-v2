@@ -1,7 +1,6 @@
 import { Column, Entity, PrimaryColumn } from "typeorm";
 import { DR } from "../../../common/typescript/deepreadonly";
-import { Pair } from "../../../domain/Exchange/type";
-import { Trade as DomainTrade, TradeParam, TradeStatus } from "../../../domain/Trade/Trade";
+import { Pair, Trade as DomainTrade, TradeParam, TradeStatus } from "../../../domain/BaseType";
 
 @Entity()
 export class Trade {
