@@ -1,5 +1,5 @@
 import { Pair } from "../../../../domain/Exchange/type";
-import { strategyList } from "../../../../domain/Strategy/strategyList";
+import { strategyList } from "../../../../strategy/bridge";
 import { StrategyBox as DomainStrategyBox } from "../../../../domain/StrategyBox/StrategyBox";
 import { StrategyBox as StrategyBoxEntity } from "../../entity/StrategyBox.entity";
 import { getTypeormRepository } from "../../typeorm";

@@ -1,5 +1,5 @@
-import { Trade } from "../../Trade/Trade";
-import { Strategy } from "../Strategy";
+import { Trade } from "../../bridge";
+import { Strategy } from "../../Strategy";
 
 export type StrategyParamSample = {};
 export type StrategyContextSample = {};

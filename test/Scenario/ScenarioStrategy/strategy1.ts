@@ -1,4 +1,4 @@
-import { Strategy, StrategyFunctionArgs } from '../../../src/domain/Strategy/Strategy';
+import { Strategy, StrategyFunctionArgs } from '../../../src/strategy/Strategy';
 import { Trade } from '../../../src/domain/Trade/Trade';
 
 type Param = { buy: number, sell: number, amount: number };

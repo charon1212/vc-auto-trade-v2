@@ -4,7 +4,7 @@ import { Pair } from "../Exchange/type";
 import { executionMonitor } from '../Execution/ExecutionMonitor';
 import { tradeManagerForwardTest } from '../ForwardTest/TradeManagerForwardTest';
 import { marketCache } from '../Market/MarketCache';
-import { Strategy } from "../Strategy/Strategy";
+import { Strategy } from "../../strategy/Strategy";
 import { createTradeFactory } from '../Trade/createTradeFactory';
 import { ITradeManager } from '../Trade/ITradeManager';
 import { tradeManager } from '../Trade/TradeManager';

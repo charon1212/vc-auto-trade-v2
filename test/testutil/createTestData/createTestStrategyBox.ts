@@ -1,5 +1,5 @@
 import { StrategyLogger } from "../../../src/common/log/StrategyLogger";
-import { Strategy } from "../../../src/domain/Strategy/Strategy";
+import { Strategy } from "../../../src/strategy/Strategy";
 import { StrategyBox } from "../../../src/domain/StrategyBox/StrategyBox";
 
 type Args = { id: string, strategy: Strategy<any, any>, param: any, initialContext: any, isForwardTest: boolean };

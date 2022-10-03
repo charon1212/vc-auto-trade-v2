@@ -1,4 +1,4 @@
-import { DR, StrategyLogger, Trade, TradeFactory } from './StrategyType';
+import { DR, StrategyLogger, Trade, TradeFactory } from './bridge';
 
 export type StrategyFunctionArgs<Param, Context> = {
   param: Param,
