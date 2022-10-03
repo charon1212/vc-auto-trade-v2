@@ -23,4 +23,11 @@ export class Vcat2ErrorCoincheckApi extends Vcat2Error<ErrorContentCoincheckApi>
   static is(e: any): e is Vcat2ErrorCoincheckApi {
     return e && e.__brand_vcat2_error === '__brand_vcat2_error' && e.type === typeVcat2ErrorCoincheckApi;
   };
+  isEconresetError() {
+    if (this.errorContent.isApiResponseError) return false;
+    const error = this.errorContent.error as any;
+    return error
+      && error['errno'] === 'ECONNRESET'
+      && error['code'] === 'ECONNRESET';
+  }
 };
