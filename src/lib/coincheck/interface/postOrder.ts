@@ -1,9 +1,10 @@
+import { ea } from "../../../common/error/Result";
 import { DR } from "../../../common/typescript/deepreadonly";
 import { Pair, Trade } from "../../../domain/BaseType";
 import { marketCache } from "../../../domain/Market/MarketCache";
 import { CoincheckPostOrder } from "../apiTool/CoincheckPostOrder";
 
-export const postOrder = async (trade: DR<Trade>) => {
+export const postOrder = ea(__filename, async (trade: DR<Trade>) => {
   const { pair, tradeParam } = trade;
   const { side, type } = tradeParam;
   const rate = tradeParam.type === 'limit' ? tradeParam.rate : undefined;
@@ -13,7 +14,7 @@ export const postOrder = async (trade: DR<Trade>) => {
   return result.handleOk((body) => {
     return body.id.toString();
   });
-};
+});
 
 const calcAmountMarketBuy = (pair: Pair, amount: number) => {
   const lastPrice = marketCache.getLastHistory(pair)?.price;

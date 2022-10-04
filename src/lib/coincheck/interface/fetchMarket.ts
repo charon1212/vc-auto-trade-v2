@@ -1,9 +1,10 @@
+import { ea } from "../../../common/error/Result";
 import { Vcat2ErrorCoincheckApi } from "../../../common/error/Vcat2Error";
 import { logger } from "../../../common/log/logger";
 import { Market, Pair } from "../../../domain/BaseType";
 import { CoincheckGetTicker } from "../apiTool/CoincheckGetTicker";
 
-export const fetchMarket = async (timestamp: number, pair: Pair) => {
+export const fetchMarket = ea(__filename, async (timestamp: number, pair: Pair) => {
   const result = await redo({
     func: () => CoincheckGetTicker.request({ pair }),
     accept: (result) => {
@@ -23,7 +24,7 @@ export const fetchMarket = async (timestamp: number, pair: Pair) => {
   return result.handleOk((body) => {
     return { pair, timestamp, price: body.last } as Market;
   });
-};
+});
 
 type RedoArg<T> = { func: () => Promise<T>, accept: (result: T) => boolean, maxCount: number, intervalMs?: number };
 /**

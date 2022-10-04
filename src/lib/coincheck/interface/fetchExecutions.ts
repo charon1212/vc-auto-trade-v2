@@ -1,4 +1,5 @@
 import { v4 } from "uuid";
+import { ea } from "../../../common/error/Result";
 import { DR } from "../../../common/typescript/deepreadonly";
 import { Execution, Pair, Trade } from "../../../domain/BaseType";
 import { CoincheckGetTransactions } from "../apiTool/CoincheckGetTransactions";
@@ -9,7 +10,7 @@ import { CoincheckGetTransactions } from "../apiTool/CoincheckGetTransactions";
  * @param requestedTrades 完全約定していない取引のリスト
  * @returns 約定のリスト。
  */
-export const fetchUnregisteredExecutions = async (requestedTrades: DR<Trade[]>) => {
+export const fetchUnregisteredExecutions = ea(__filename, async (requestedTrades: DR<Trade[]>) => {
   const result = await CoincheckGetTransactions.request({});
   return result.handleOk((transactions) => {
     const result = [] as Execution[];
@@ -32,4 +33,4 @@ export const fetchUnregisteredExecutions = async (requestedTrades: DR<Trade[]>) 
     }
     return result;
   });
-};
+});
