@@ -10,6 +10,7 @@ const defaultTrade = (id: number): Trade => ({
   status: 'requested',
   lastUpdateStatusMs: 0,
   tradeParam: { side: 'buy', type: 'limit', amount: 1, rate: 1 },
+  tradeRequestParam: {},
   executions: [],
   isForwardTest: false,
 });
