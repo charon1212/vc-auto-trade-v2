@@ -1,6 +1,7 @@
 export class Vcat2Error<Content = unknown> {
   private readonly __brand_vcat2_error = '__brand_vcat2_error';
-  constructor(public filename: string, public errorContent: Content, protected readonly type = '') { };
+  protected readonly type: string = '';
+  constructor(public filename: string, public errorContent: Content) { };
   static is(e: any): e is Vcat2Error {
     return typeof e === 'object' && e.__brand_vcat2_error === '__brand_vcat2_error';
   };
@@ -15,10 +16,12 @@ export type ErrorContentCoincheckApi = {
   param: object,
   error: unknown,
 };
+
 const typeVcat2ErrorCoincheckApi = 'Vcat2ErrorCoincheckApi';
 export class Vcat2ErrorCoincheckApi extends Vcat2Error<ErrorContentCoincheckApi> {
+  protected readonly type: string = 'Vcat2ErrorCoincheckApi';
   constructor(filename: string, errorContent: ErrorContentCoincheckApi) {
-    super(filename, errorContent, typeVcat2ErrorCoincheckApi);
+    super(filename, errorContent);
   };
   static is(e: any): e is Vcat2ErrorCoincheckApi {
     return e && e.__brand_vcat2_error === '__brand_vcat2_error' && e.type === typeVcat2ErrorCoincheckApi;
