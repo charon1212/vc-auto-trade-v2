@@ -17,6 +17,8 @@ export class Execution {
   rate: number = 0;
   @Column()
   amount: number = 0;
+  @Column()
+  amountJp: number = 0;
   @Column({ type: "bigint" })
   createdAtMs: string = '0';
 
@@ -28,6 +30,7 @@ export class Execution {
       this.pair = execution.pair;
       this.rate = execution.rate;
       this.amount = execution.amount;
+      this.amountJp = execution.amountJp;
       this.createdAtMs = `${execution.createdAtMs}`;
     }
   }
@@ -39,6 +42,7 @@ export class Execution {
       pair: this.pair as Pair,
       rate: this.rate,
       amount: this.amount,
+      amountJp: this.amountJp,
       createdAtMs: +this.createdAtMs,
     };
   }

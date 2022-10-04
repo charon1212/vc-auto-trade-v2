@@ -25,6 +25,7 @@ export const fetchUnregisteredExecutions = ea(__filename, async (requestedTrades
         apiId: transactionId,
         pair: transaction.pair as Pair,
         amount: Math.abs(+transaction.funds.btc), // TODO: 'btc_jpy'前提の書き方
+        amountJp: Math.abs(+transaction.funds.jpy),
         rate: +transaction.rate,
         createdAtMs: (new Date(transaction.created_at)).getTime(),
         tradeUid: trade.uid,

@@ -15,6 +15,7 @@ export const createTradeFactory = <P, C>(strategyBox: StrategyBox<P, C>) => {
       status: 'requesting',
       lastUpdateStatusMs: Date.now(),
       executions: [],
+      tradeRequestParam: {},
     };
   };
 };

@@ -14,6 +14,7 @@ export const createExecutionForwardTest = (trade: DR<Trade>, executedPrice?: num
   const rate = tradeParam.type === 'limit' ? tradeParam.rate : executedPrice;
   if (rate === undefined) throw new Error('成行注文でexecutedPriceが指定されていません。');
   const { uid, pair, tradeParam: { amount, }, } = trade;
+  const amountJp = amount * rate;
   const execution: Execution = {
     uid: uuid.v4(),
     apiId: `forwardtest`,
@@ -21,6 +22,7 @@ export const createExecutionForwardTest = (trade: DR<Trade>, executedPrice?: num
     pair,
     rate,
     amount,
+    amountJp,
     createdAtMs: Date.now(),
   };
   return execution;

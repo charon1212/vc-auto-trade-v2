@@ -12,7 +12,11 @@ export const postOrder = ea(__filename, async (trade: DR<Trade>) => {
   const amountMarketBuy = (tradeParam.type === 'market' && tradeParam.side == 'buy') ? calcAmountMarketBuy(pair, tradeParam.amount) : undefined;
   const result = await CoincheckPostOrder.request({ pair, side, type, rate, amount, amountMarketBuy });
   return result.handleOk((body) => {
-    return body.id.toString();
+    return {
+      id: body.id.toString(),
+      amount,
+      amountBuyMarket: amountMarketBuy,
+    };
   });
 });
 

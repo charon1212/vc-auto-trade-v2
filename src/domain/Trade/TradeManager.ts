@@ -25,11 +25,12 @@ class TradeManager {
    */
   async order(trade: Trade) {
     await this.tradeCache.add(trade);
-    const apiId = (await postOrder(trade)).unwrap();
-    if (apiId === undefined) {
+    const { id, amount, amountBuyMarket } = (await postOrder(trade)).unwrap();
+    if (id === undefined) {
       throw new Error(''); // TODO: エラー処理
     }
-    trade.apiId = apiId;
+    trade.apiId = id;
+    trade.tradeRequestParam = { amount, amountBuyMarket };
     await updateTrade(trade);
     trade.lastUpdateStatusMs = Date.now();
     await this.tradeCache.changeStatus(trade.uid, 'requested');

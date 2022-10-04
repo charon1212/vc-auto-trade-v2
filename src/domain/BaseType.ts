@@ -12,6 +12,7 @@ export type Execution = {
   pair: Pair,
   rate: number,
   amount: number,
+  amountJp: number,
   createdAtMs: number
 };
 
@@ -39,6 +40,7 @@ export type Trade<T extends TradeType = TradeType> = {
   status: TradeStatus,
   lastUpdateStatusMs: number,
   tradeParam: TradeParam<T>,
+  tradeRequestParam: TradeRequestParam,
   executions: Execution[],
   isForwardTest: boolean,
 };
@@ -54,3 +56,8 @@ export type TradeType = 'limit' | 'market';
 export type TradeParam<T extends TradeType = TradeType> = TradeParamMarket<T> | TradeParamLimit<T>;
 type TradeParamMarket<T extends TradeType> = T extends 'market' ? { type: 'market', side: TradeSide, amount: number, } : never;
 type TradeParamLimit<T extends TradeType> = T extends 'limit' ? { type: 'limit', rate: number, side: TradeSide, amount: number, } : never;
+
+type TradeRequestParam = {
+  amount?: number,
+  amountBuyMarket?: number,
+};

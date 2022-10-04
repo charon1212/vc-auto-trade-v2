@@ -17,6 +17,8 @@ export const updateTrade = async (trade: DR<Trade>) => {
   tradeEntity.amount = trade.tradeParam.amount;
   tradeEntity.type = trade.tradeParam.type;
   tradeEntity.rate = trade.tradeParam.type === 'limit' ? trade.tradeParam.rate : null;
+  tradeEntity.requestAmount = trade.tradeRequestParam.amount ?? null;
+  tradeEntity.requestAmountBuyMarket = trade.tradeRequestParam.amountBuyMarket ?? null;
   await rep.save(tradeEntity);
   return trade;
 };

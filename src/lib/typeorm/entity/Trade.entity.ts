@@ -29,6 +29,10 @@ export class Trade {
   type: string = '';
   @Column({ nullable: true, type: 'int' })
   rate: number | null = null;
+  @Column({ nullable: true, type: 'int' })
+  requestAmount: number | null = null;
+  @Column({ nullable: true, type: 'int' })
+  requestAmountBuyMarket: number | null = null;
   @Column()
   isForwardTest: boolean = false;
 
@@ -46,6 +50,8 @@ export class Trade {
       this.amount = trade.tradeParam.amount;
       this.type = trade.tradeParam.type;
       this.rate = trade.tradeParam.type === 'limit' ? trade.tradeParam.rate : null;
+      this.requestAmount = trade.tradeRequestParam.amount ?? null;
+      this.requestAmountBuyMarket = trade.tradeRequestParam.amountBuyMarket ?? null;
       this.isForwardTest = trade.isForwardTest;
     }
   }
@@ -65,6 +71,10 @@ export class Trade {
         type: this.type,
         rate: this.rate,
       } as TradeParam,
+      tradeRequestParam: {
+        amount: this.requestAmount ?? undefined,
+        amountBuyMarket: this.requestAmountBuyMarket ?? undefined,
+      },
       executions: [],
       isForwardTest: this.isForwardTest,
     };
