@@ -1,6 +1,6 @@
 import { cronSchedule } from '../../common/cron/cronSchedule';
 import { findInitStrategyBox } from "../../lib/typeorm/repository/StrategyBox/findInitStrategyBox";
-import { StrategyBox } from "../StrategyBox/StrategyBox";
+import { StrategyBox, StrategyBoxStatus } from "../StrategyBox/StrategyBox";
 
 class StrategyBoxContainer {
   private strategyBoxList: StrategyBox<any, any>[] = [];
@@ -16,6 +16,14 @@ class StrategyBoxContainer {
 
     // StrategyBox運用開始
     this.strategyBoxList.forEach((sb) => sb.start());
+  }
+  changeStatus(status: StrategyBoxStatus, strategyBoxId?: string) {
+    if (strategyBoxId === undefined) {
+      this.strategyBoxList.forEach((sb) => sb.status = status);
+    } else {
+      const sb = this.strategyBoxList.find((sb) => sb.strategyBoxId === strategyBoxId);
+      if (sb) sb.status = status;
+    }
   }
 };
 

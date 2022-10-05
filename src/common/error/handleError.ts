@@ -1,3 +1,4 @@
+import { Penalty } from "../../domain/PenaltyCounter/Penalty";
 import { sendSlackMessage } from "../../lib/slack/sendSlackMessage";
 import { logger } from "../log/logger";
 
@@ -28,4 +29,9 @@ export const handleError = async (param: ErrorParam) => {
   logger.error(output);
   await sendSlackMessage(output, true);
 
+};
+
+export const handleErrorByMessage = async (logMessage: string, slackMessage: string) => {
+  logger.error(logMessage);
+  await sendSlackMessage(slackMessage, true);
 };
