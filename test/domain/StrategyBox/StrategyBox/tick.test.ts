@@ -9,6 +9,7 @@ import { createTestStrategy } from '../../../testutil/createTestData/createTestS
 import { registerTradeCache } from './registerTradeCache';
 import { StrategyBox } from '../../../../src/lib/typeorm/entity/StrategyBox.entity';
 import { spyCommon } from '../../../spy/common/spyCommon';
+import { okVoid } from '../../../../src/common/error/Result';
 
 describe('StrategyBox.tick', () => {
   it('test1', async () => {
@@ -47,10 +48,10 @@ describe('StrategyBox.tick', () => {
     const tradeList = createTestTrade([]);
     registerTradeCache(tradeList);
     // prepare - trade manager
-    const spy1 = jest.spyOn(tradeManager, 'checkRequestedTradeHasExecuted').mockReturnValue(Promise.resolve());
+    const spy1 = jest.spyOn(tradeManager, 'checkRequestedTradeHasExecuted').mockReturnValue(Promise.resolve(okVoid()));
     const spy3 = jest.spyOn(tradeManager, 'order');
     // prepare - execution monitor
-    const spy2 = jest.spyOn(executionMonitor, 'update').mockReturnValue(Promise.resolve());
+    const spy2 = jest.spyOn(executionMonitor, 'update').mockReturnValue(Promise.resolve(okVoid()));
 
     // exec
     await (strategyBox as any).tick();
