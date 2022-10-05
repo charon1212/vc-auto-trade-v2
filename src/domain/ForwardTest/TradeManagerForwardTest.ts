@@ -7,11 +7,13 @@ import { Trade, } from "../BaseType";
 import { tradeTypeGuard } from '../Trade/tradeTypeGurad';
 import { TradeCache } from "../Trade/TradeCache";
 import { createExecutionForwardTest } from "./createExecutionForwardTest";
+import { ITradeManager } from "../Trade/ITradeManager";
+import { okVoid } from "../../common/error/Result";
 
 /**
  * 取引管理クラス。
  */
-class TradeManagerForwardTest {
+class TradeManagerForwardTest implements ITradeManager {
   private tradeCache = new TradeCache();
 
   private executedList: Trade[] = [];
@@ -64,6 +66,7 @@ class TradeManagerForwardTest {
       trade.lastUpdateStatusMs = Date.now();
     }
     await this.tradeCache.add(trade);
+    return okVoid();
   };
 
   async checkRequestedTradeHasExecuted() {
@@ -79,6 +82,7 @@ class TradeManagerForwardTest {
         await updateTrade(trade);
       }
     }));
+    return okVoid();
   }
 
   /**

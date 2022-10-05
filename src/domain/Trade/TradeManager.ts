@@ -1,14 +1,16 @@
+import { okVoid } from "../../common/error/Result";
 import { DR } from "../../common/typescript/deepreadonly";
 import { fetchOpenOrderIdList } from "../../lib/coincheck/interface/fetchOpenOrderIdList";
 import { postOrder } from "../../lib/coincheck/interface/postOrder";
 import { updateTrade } from "../../lib/typeorm/repository/Trade/updateTrade";
 import { Execution, Trade, TradeStatus } from "../BaseType";
+import { ITradeManager } from "./ITradeManager";
 import { TradeCache } from "./TradeCache";
 
 /**
  * 取引管理クラス。
  */
-class TradeManager {
+class TradeManager implements ITradeManager {
   private tradeCache = new TradeCache();
 
   constructor() { };
@@ -25,15 +27,14 @@ class TradeManager {
    */
   async order(trade: Trade) {
     await this.tradeCache.add(trade);
-    const { id, amount, amountBuyMarket } = (await postOrder(trade)).unwrap();
-    if (id === undefined) {
-      throw new Error(''); // TODO: エラー処理
-    }
-    trade.apiId = id;
-    trade.tradeRequestParam = { amount, amountBuyMarket };
-    await updateTrade(trade);
-    trade.lastUpdateStatusMs = Date.now();
-    await this.tradeCache.changeStatus(trade.uid, 'requested');
+    const result = await postOrder(trade);
+    return result.handleOk(async ({ id, amount, amountBuyMarket }) => {
+      trade.apiId = id;
+      trade.tradeRequestParam = { amount, amountBuyMarket };
+      await updateTrade(trade);
+      trade.lastUpdateStatusMs = Date.now();
+      await this.tradeCache.changeStatus(trade.uid, 'requested');
+    }).await();
   };
 
   /**
@@ -50,14 +51,16 @@ class TradeManager {
    */
   async checkRequestedTradeHasExecuted() {
     const requestedTradeList = this.tradeCache.getCache('requested');
-    if (requestedTradeList.length === 0) return;
-    const openOrderIdList = (await fetchOpenOrderIdList()).unwrap();// TODO: エラー処理
-    for (let trade of requestedTradeList) {
-      if (!openOrderIdList.includes(trade.apiId) && this.judgeTradeHasExecuted(trade)) {
-        trade.lastUpdateStatusMs = Date.now();
-        await this.tradeCache.changeStatus(trade.uid, 'executed');
+    if (requestedTradeList.length === 0) return okVoid();
+    const result = await fetchOpenOrderIdList();
+    return result.handleOk(async (openOrderIdList) => {
+      for (let trade of requestedTradeList) {
+        if (!openOrderIdList.includes(trade.apiId) && this.judgeTradeHasExecuted(trade)) {
+          trade.lastUpdateStatusMs = Date.now();
+          await this.tradeCache.changeStatus(trade.uid, 'executed');
+        }
       }
-    }
+    }).await();
   };
 
   /** 取引が完了しているかどうかを取引量で判断する。リクエストした注文の99%に達していたらtrueとする。 */

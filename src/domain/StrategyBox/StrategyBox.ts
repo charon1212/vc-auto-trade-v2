@@ -8,6 +8,7 @@ import { Strategy } from "../../strategy/Strategy";
 import { createTradeFactory } from '../Trade/createTradeFactory';
 import { ITradeManager } from '../Trade/ITradeManager';
 import { tradeManager } from '../Trade/TradeManager';
+import { penaltyCounter } from '../PenaltyCounter/PenaltyCounter';
 
 export type StrategyBoxStatus = 'Running' | 'Sleep' | 'Error';
 
@@ -58,8 +59,12 @@ export class StrategyBox<StrategyParam, StrategyContext> {
 
     // ■事前準備
     if (tradeList.filter(({ status }) => status === 'requested').length !== 0) {
-      await executionMonitor.update();
-      await this.tradeManager.checkRequestedTradeHasExecuted();
+      const update = await executionMonitor.update();
+      if (update.isEr)
+        return await penaltyCounter.addYellowCard(this.strategyBoxId, 'fail executionMonitor.update()');
+      const checkRequestedTradeHasExecuted = await this.tradeManager.checkRequestedTradeHasExecuted();
+      if (checkRequestedTradeHasExecuted.isEr)
+        return await penaltyCounter.addYellowCard(this.strategyBoxId, 'fail this.tradeManager.checkRequestedTradeHasExecuted()');
     }
 
     // ■戦略の実行
@@ -78,6 +83,9 @@ export class StrategyBox<StrategyParam, StrategyContext> {
     const { newTradeList, context } = strategyResult;
     this.context = context;
     await updateStrategyBox(this);
-    for (let newTrade of newTradeList) await this.tradeManager.order(newTrade);
+    for (let newTrade of newTradeList) {
+      const result = await this.tradeManager.order(newTrade);
+      if (result.isEr) await penaltyCounter.addRedCard(this.strategyBoxId, `fail this.tradeManager.order(newTrade). trade=${JSON.stringify(newTrade)}`);
+    }
   };
 };
