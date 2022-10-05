@@ -1,4 +1,4 @@
-import { ea } from "../../../common/error/Result";
+import { ea } from "../../../common/error/Vcat2Result";
 import { CoincheckGetOpenOrder } from "../apiTool/CoincheckGetOpenOrder";
 
 export const fetchOpenOrderIdList = ea(__filename, async () => {

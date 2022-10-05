@@ -1,4 +1,4 @@
-import { ea } from "../../../common/error/Result";
+import { ea } from "../../../common/error/Vcat2Result";
 import { DR } from "../../../common/typescript/deepreadonly";
 import { Pair, Trade } from "../../../domain/BaseType";
 import { marketCache } from "../../../domain/Market/MarketCache";

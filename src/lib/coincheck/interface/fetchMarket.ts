@@ -1,4 +1,4 @@
-import { ea } from "../../../common/error/Result";
+import { ea } from "../../../common/error/Vcat2Result";
 import { Vcat2ErrorCoincheckApi } from "../../../common/error/Vcat2Error";
 import { logger } from "../../../common/log/logger";
 import { Market, Pair } from "../../../domain/BaseType";
