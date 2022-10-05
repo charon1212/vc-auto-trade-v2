@@ -47,8 +47,16 @@ class TradeManagerForwardTest {
   async order(trade: Trade) {
     trade.apiId = 'forwardtest';
     trade.status = 'requested';
+    const lastPrice = marketCache.getLastHistory(trade.pair)?.price;
+    if (!lastPrice) {
+      throw new Error('最終価格が取得できません。') // TODO:エラー処理
+    }
+    if (trade.tradeParam.type === 'market' && trade.tradeParam.side === 'buy') {
+      trade.tradeRequestParam.amountBuyMarket = trade.tradeParam.amount * lastPrice;
+    } else {
+      trade.tradeRequestParam.amount = trade.tradeParam.amount;
+    }
     if (tradeTypeGuard(trade, 'market')) {
-      const lastPrice = marketCache.getLastHistory(trade.pair)?.price;
       const execution = createExecutionForwardTest(trade, lastPrice);
       await insertExecution(execution);
       trade.executions.push(execution);

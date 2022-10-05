@@ -27,9 +27,9 @@ describe('scenario2', () => {
     await scenarioTest.assertOrder([]);
     const trade1 = await scenarioTest.assertDbTrade('Trade[1]',
       { strategyBoxId: 'test-strategy-box-1', orderAtMs: '10000' },
-      { pair: 'btc_jpy', amount: 10, side: 'buy', status: 'executed', strategyId: 'test-strategy-1', type: 'market', isForwardTest: true, lastUpdateStatusMs: '10000', },
+      { pair: 'btc_jpy', amount: 10, side: 'buy', status: 'executed', strategyId: 'test-strategy-1', type: 'market', isForwardTest: true, lastUpdateStatusMs: '10000', requestAmountBuyMarket: 1500, },
     );
-    await scenarioTest.assertDbExecution('Execution[1]', { tradeUid: trade1!.uid }, { amount: 10, rate: 150, pair: 'btc_jpy', });
+    await scenarioTest.assertDbExecution('Execution[1]', { tradeUid: trade1!.uid }, { amount: 10, amountJp: 1500, rate: 150, pair: 'btc_jpy', });
 
     await scenarioTest.tickMarketPolling(2); // 20000ms - 200円
     await scenarioTest.tickStrategyBox(2, 'test-strategy-box-1');
@@ -44,9 +44,9 @@ describe('scenario2', () => {
     await scenarioTest.assertOrder([]);
     const trade2 = await scenarioTest.assertDbTrade('Trade[2]',
       { strategyBoxId: 'test-strategy-box-1', orderAtMs: '40000' },
-      { pair: 'btc_jpy', amount: 10, side: 'sell', status: 'executed', strategyId: 'test-strategy-1', type: 'market', isForwardTest: true, lastUpdateStatusMs: '40000', },
+      { pair: 'btc_jpy', amount: 10, side: 'sell', status: 'executed', strategyId: 'test-strategy-1', type: 'market', isForwardTest: true, lastUpdateStatusMs: '40000', requestAmount: 10, },
     );
-    await scenarioTest.assertDbExecution('Execution[2]', { tradeUid: trade2!.uid }, { amount: 10, rate: 300, pair: 'btc_jpy', });
+    await scenarioTest.assertDbExecution('Execution[2]', { tradeUid: trade2!.uid }, { amount: 10, amountJp: 3000, rate: 300, pair: 'btc_jpy', });
 
     await scenarioTest.tickMarketPolling(5); // 50000ms - 350円
     await scenarioTest.tickStrategyBox(5, 'test-strategy-box-1');
@@ -65,9 +65,9 @@ describe('scenario2', () => {
     await scenarioTest.assertOrder([]);
     const trade3 = await scenarioTest.assertDbTrade('Trade[3]',
       { strategyBoxId: 'test-strategy-box-1', orderAtMs: '80000' },
-      { pair: 'btc_jpy', amount: 10, side: 'buy', status: 'executed', strategyId: 'test-strategy-1', type: 'market', isForwardTest: true, lastUpdateStatusMs: '80000', },
+      { pair: 'btc_jpy', amount: 10, side: 'buy', status: 'executed', strategyId: 'test-strategy-1', type: 'market', isForwardTest: true, lastUpdateStatusMs: '80000', requestAmountBuyMarket: 2000, },
     );
-    await scenarioTest.assertDbExecution('Execution[3]', { tradeUid: trade3!.uid }, { amount: 10, rate: 200, pair: 'btc_jpy', });
+    await scenarioTest.assertDbExecution('Execution[3]', { tradeUid: trade3!.uid }, { amount: 10, amountJp: 2000, rate: 200, pair: 'btc_jpy', });
 
     await scenarioTest.tickMarketPolling(9); // 90000ms - 150円
     await scenarioTest.tickStrategyBox(9, 'test-strategy-box-1');
