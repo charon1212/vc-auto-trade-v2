@@ -53,15 +53,25 @@ class TradeManager {
     if (requestedTradeList.length === 0) return;
     const openOrderIdList = (await fetchOpenOrderIdList()).unwrap();// TODO: エラー処理
     for (let trade of requestedTradeList) {
-      const totalExecutedAmount = trade.executions.map(({ amount }) => amount).reduce((p, c) => p + c, 0);
-      const executedOver99 = totalExecutedAmount > trade.tradeParam.amount * 0.99; // 99%以上が約定している
-      const notExistOpenOrderList = !openOrderIdList.includes(trade.apiId); // 未決済の注文一覧に存在しない
-      if (executedOver99 && notExistOpenOrderList) {
+      if (!openOrderIdList.includes(trade.apiId) && this.judgeTradeHasExecuted(trade)) {
         trade.lastUpdateStatusMs = Date.now();
         await this.tradeCache.changeStatus(trade.uid, 'executed');
       }
     }
-  }
+  };
+
+  /** 取引が完了しているかどうかを取引量で判断する。リクエストした注文の99%に達していたらtrueとする。 */
+  private judgeTradeHasExecuted(trade: Trade,) {
+    if (trade.tradeRequestParam.amount) {
+      const totalExecutedAmount = trade.executions.map(({ amount }) => amount).reduce((p, c) => p + c, 0);
+      return totalExecutedAmount > trade.tradeRequestParam.amount * 0.99;
+    } else if (trade.tradeRequestParam.amountBuyMarket) {
+      const totalExecutedAmountJp = trade.executions.map(({ amountJp }) => amountJp).reduce((p, c) => p + c, 0);
+      return totalExecutedAmountJp > trade.tradeRequestParam.amountBuyMarket * 0.99;
+    } else {
+      throw new Error('TradeRequestParamについて、amountとamountBuyMarketが両方undefinedです。') // TODO:エラー処理。
+    }
+  };
 
   /**
    * 本システムで裁判したUIDと、取引所APIで裁判したIDのマップを取得する。
