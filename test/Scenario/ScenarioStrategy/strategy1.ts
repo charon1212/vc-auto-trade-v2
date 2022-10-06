@@ -4,7 +4,7 @@ import { Report } from '../../../src/strategy/bridge';
 
 type Param = { buy: number, sell: number, amount: number };
 type Context = { side: 'buy' | 'sell' };
-export const strategy1CallHistory = [] as StrategyFunctionArgs<Param, Context>[];
+export const strategy1CallHistory = [] as StrategyFunctionArgs<Param, Context, Report>[];
 export const strategy1: Strategy<Param, Context, Report> = {
   id: 'test-strategy-1',
   func: (args) => {
