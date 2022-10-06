@@ -2,7 +2,7 @@ import { Strategy } from "../Strategy";
 import { ReportSample, strategySample } from "./sample/strategySample";
 
 export const strategyList: Strategy<any, any, Report>[] = [];
-strategyList.push(strategySample);
+strategyList.push(strategySample as Strategy<any, any, Report>);
 
 export type StrategyId = 'strategy-sample' | 'strategy-sample-2';
 

@@ -10,6 +10,7 @@ import { ITradeManager } from '../Trade/ITradeManager';
 import { tradeManager } from '../Trade/TradeManager';
 import { penaltyCounter } from '../PenaltyCounter/PenaltyCounter';
 import { Report } from '../../strategy/bridge';
+import { reportManager } from '../Report/ReportManager';
 
 export type StrategyBoxStatus = 'Running' | 'Sleep' | 'Error';
 
@@ -57,6 +58,7 @@ export class StrategyBox<StrategyParam, StrategyContext> {
     const priceShortHistory = marketCache.getPriceHistory(this.pair)?.map(({ price }) => price) || [];
     const tradeList = this.tradeManager.getTradeListByStrategyBoxId(this.strategyBoxId);
     const tradeFactory = createTradeFactory(this);
+    const report = reportManager.getLastReport(this.strategy.id, this.pair);
 
     // ■事前準備
     if (tradeList.filter(({ status }) => status === 'requested').length !== 0) {
@@ -77,6 +79,7 @@ export class StrategyBox<StrategyParam, StrategyContext> {
       priceShortHistory,
       tradeList,
       logger: this.strategyLogger,
+      report,
     });
     this.strategyLogger.log(`end:${JSON.stringify(strategyResult)}`);
 
