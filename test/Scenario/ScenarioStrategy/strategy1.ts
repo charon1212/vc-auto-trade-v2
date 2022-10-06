@@ -1,10 +1,11 @@
 import { Strategy, StrategyFunctionArgs } from '../../../src/strategy/Strategy';
 import { Trade } from '../../../src/domain/BaseType';
+import { Report } from '../../../src/strategy/bridge';
 
 type Param = { buy: number, sell: number, amount: number };
 type Context = { side: 'buy' | 'sell' };
 export const strategy1CallHistory = [] as StrategyFunctionArgs<Param, Context>[];
-export const strategy1: Strategy<Param, Context> = {
+export const strategy1: Strategy<Param, Context, Report> = {
   id: 'test-strategy-1',
   func: (args) => {
     strategy1CallHistory.push(args);
