@@ -4,6 +4,7 @@ import { strategyBoxContainer } from "./domain/StrategyBoxContainer/StrategyBoxC
 import { tradeManagerForwardTest } from "./domain/ForwardTest/TradeManagerForwardTest";
 import { marketPolling } from "./domain/Market/MarketPolling";
 import { marketCache } from "./domain/Market/MarketCache";
+import { reportManager } from "./domain/Report/ReportManager";
 
 /**
  * メインサーバーを起動する。以下の処理を実施する。
@@ -21,6 +22,8 @@ const index = async () => {
   marketPolling.setup();
   // marketCache初期化
   marketCache.setup();
+  // reportManager初期化
+  reportManager.setup();
   // TradeManager初期化
   await tradeManager.setupCache();
   await tradeManagerForwardTest.setupCache();

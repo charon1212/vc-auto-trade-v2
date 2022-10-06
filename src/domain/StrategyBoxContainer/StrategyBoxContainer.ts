@@ -1,5 +1,6 @@
 import { cronSchedule } from '../../common/cron/cronSchedule';
 import { findInitStrategyBox } from "../../lib/typeorm/repository/StrategyBox/findInitStrategyBox";
+import { reportManager } from '../Report/ReportManager';
 import { StrategyBox, StrategyBoxStatus } from "../StrategyBox/StrategyBox";
 
 class StrategyBoxContainer {
@@ -13,6 +14,11 @@ class StrategyBoxContainer {
     cronSchedule.everyMinute()(async () => { });
     // TODO: 5分おきに、DBを確認し、StrategyBoxをUpdateする。
     cronSchedule.everyMinute(5)(async () => { });
+
+    // 運用中のStrategyBoxを、reportManagerに登録する。
+    initStrategyBoxList.forEach((sb) => {
+      reportManager.registerCache(sb.strategy.id, sb.pair);
+    });
 
     // StrategyBox運用開始
     this.strategyBoxList.forEach((sb) => sb.start());

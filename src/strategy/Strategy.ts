@@ -1,3 +1,4 @@
+import { ReportDefinition } from '../domain/BaseType';
 import { DR, StrategyLogger, Trade, TradeFactory } from './bridge';
 
 export type StrategyFunctionArgs<Param, Context> = {
@@ -16,9 +17,10 @@ type StrategyFunction<Param, Context> = (args: StrategyFunctionArgs<Param, Conte
 type StrategyParamGuard<Param> = (param: any) => param is Param;
 type StrategyContextGuard<Context> = (context: any) => context is Context;
 
-export type Strategy<Param, Context> = {
+export type Strategy<Param, Context, Report> = {
   id: string,
   paramGuard: StrategyParamGuard<Param>,
   contextGuard: StrategyContextGuard<Context>,
   func: StrategyFunction<Param, Context>,
+  reportDefinition?: ReportDefinition<Report>,
 };

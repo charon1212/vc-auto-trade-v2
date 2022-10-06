@@ -9,6 +9,7 @@ import { createTradeFactory } from '../Trade/createTradeFactory';
 import { ITradeManager } from '../Trade/ITradeManager';
 import { tradeManager } from '../Trade/TradeManager';
 import { penaltyCounter } from '../PenaltyCounter/PenaltyCounter';
+import { Report } from '../../strategy/bridge';
 
 export type StrategyBoxStatus = 'Running' | 'Sleep' | 'Error';
 
@@ -22,7 +23,7 @@ export class StrategyBox<StrategyParam, StrategyContext> {
   constructor(
     public strategyBoxId: string,
     public pair: Pair,
-    public strategy: Strategy<StrategyParam, StrategyContext>,
+    public strategy: Strategy<StrategyParam, StrategyContext, Report>,
     public param: StrategyParam,
     public isForwardTest: boolean,
     initialContext: StrategyContext,

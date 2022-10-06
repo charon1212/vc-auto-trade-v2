@@ -61,3 +61,9 @@ type TradeRequestParam = {
   amount?: number,
   amountBuyMarket?: number,
 };
+
+export type ReportDefinition<Report> = {
+  createSpanMs: number,
+  marketHistorySpanMs: number,
+  creator: (marketHistory: Market[]) => Report,
+};

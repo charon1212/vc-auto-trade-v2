@@ -1,10 +1,12 @@
+import { MyDate } from "util-charon1212";
 import { Trade } from "../../bridge";
 import { Strategy } from "../../Strategy";
 
 export type StrategyParamSample = {};
 export type StrategyContextSample = {};
+export type ReportSample = { test: number } | { test2: string } | { test3: boolean };
 
-export const strategySample: Strategy<StrategyParamSample, StrategyContextSample> = {
+export const strategySample: Strategy<StrategyParamSample, StrategyContextSample, ReportSample> = {
   id: 'strategy-sample',
   paramGuard: (param): param is StrategyParamSample => true,
   contextGuard: (context): context is StrategyContextSample => true,
@@ -13,5 +15,10 @@ export const strategySample: Strategy<StrategyParamSample, StrategyContextSample
     logger.log('sample');
     const newTradeList = [] as Trade[];
     return { context, newTradeList, };
+  },
+  reportDefinition: {
+    createSpanMs: MyDate.ms1m * 15,
+    marketHistorySpanMs: MyDate.ms1d,
+    creator: () => ({ test: 0 }),
   },
 };
