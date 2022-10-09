@@ -14,6 +14,7 @@ import { clearDbData } from '../testutil/clearDbData';
 import { marketPolling } from '../../src/domain/Market/MarketPolling';
 import { insertMarket } from '../../src/lib/typeorm/repository/Market/insertMarket';
 import { marketCache } from '../../src/domain/Market/MarketCache';
+import { penaltyCounter } from '../../src/domain/PenaltyCounter/PenaltyCounter';
 
 export class ScenarioTest {
   public dummyCoincheck: DummyCoincheck;
@@ -26,6 +27,10 @@ export class ScenarioTest {
   ) {
     this.dummyCoincheck = new DummyCoincheck(price, initialTime);
     spyCommon();
+    jest.spyOn(penaltyCounter, 'addYellowCard').mockImplementation((args) => { throw new Error(`call addYellowCard. ${JSON.stringify({ args })}`) });
+    jest.spyOn(penaltyCounter, 'addRedCard').mockImplementation((args) => { throw new Error(`call addRedCard. ${JSON.stringify({ args })}`) });
+    jest.spyOn(penaltyCounter, 'addAllYellowCard').mockImplementation((args) => { throw new Error(`call addAllYellowCard. ${JSON.stringify({ args })}`) });
+    jest.spyOn(penaltyCounter, 'addAllRedCard').mockImplementation((args) => { throw new Error(`call addAllRedCard. ${JSON.stringify({ args })}`) });
   };
   async setup() {
     await clearDbData(ExecutionEntity, MarketEntity, StrategyBoxEntity, TradeEntity);

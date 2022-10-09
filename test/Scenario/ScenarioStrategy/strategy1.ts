@@ -23,6 +23,7 @@ export const strategy1: Strategy<Param, Context, Report> = {
     return {
       context: { side: newSide },
       newTradeList: newTradeList,
+      cancelTradeList: [],
     };
   },
   paramGuard: (obj): obj is Param => true,

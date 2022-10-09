@@ -24,7 +24,7 @@ describe('StrategyBox.tick', () => {
         expect(priceShortHistory[7]).toBe(7); // sampleで8番目をチェック。
         expect(tradeList.length).toBe(0);
       },
-      () => ({ context: { id: 'afterContext' }, newTradeList: [], }),
+      () => ({ context: { id: 'afterContext' }, newTradeList: [], cancelTradeList: [], }),
     );
 
     // prepare - strategy box

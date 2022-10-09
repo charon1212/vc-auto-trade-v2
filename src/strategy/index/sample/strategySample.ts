@@ -14,7 +14,8 @@ export const strategySample: Strategy<StrategyParamSample, StrategyContextSample
     const { context, param, priceShortHistory, tradeFactory, tradeList, logger } = args;
     logger.log('sample');
     const newTradeList = [] as Trade[];
-    return { context, newTradeList, };
+    const cancelTradeList = [] as Trade[];
+    return { context, newTradeList, cancelTradeList, };
   },
   reportDefinition: {
     createSpanMs: MyDate.ms1m * 15,
