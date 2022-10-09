@@ -11,6 +11,7 @@ import { tradeManager } from '../Trade/TradeManager';
 import { penaltyCounter } from '../PenaltyCounter/PenaltyCounter';
 import { Report } from '../../strategy/bridge';
 import { reportManager } from '../Report/ReportManager';
+import { tradeCancelManager } from '../Trade/TradeCancelManager';
 
 export type StrategyBoxStatus = 'Running' | 'Sleep' | 'Error';
 
@@ -84,12 +85,18 @@ export class StrategyBox<StrategyParam, StrategyContext> {
     this.strategyLogger.log(`end:${JSON.stringify(strategyResult)}`);
 
     // ■後処理
-    const { newTradeList, context } = strategyResult;
+    const { newTradeList, context, cancelTradeList } = strategyResult;
     this.context = context;
     await updateStrategyBox(this);
-    for (let newTrade of newTradeList) {
-      const result = await this.tradeManager.order(newTrade);
-      if (result.isEr) await penaltyCounter.addRedCard(this.strategyBoxId, `fail this.tradeManager.order(newTrade). trade=${JSON.stringify(newTrade)}`);
-    }
+    await tradeCancelManager.subscribe({
+      strategyBoxId: this.strategyBoxId,
+      cancelList: cancelTradeList,
+      proceed: async () => {
+        for (let newTrade of newTradeList) {
+          const result = await this.tradeManager.order(newTrade);
+          if (result.isEr) return await penaltyCounter.addRedCard(this.strategyBoxId, `fail this.tradeManager.order(newTrade). trade=${JSON.stringify(newTrade)}`);
+        }
+      },
+    })
   };
 };

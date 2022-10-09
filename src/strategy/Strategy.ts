@@ -13,6 +13,7 @@ export type StrategyFunctionArgs<Param, Context, Report> = {
 export type StrategyFunctionResult<Context> = {
   context: Context,
   newTradeList: Trade[],
+  cancelTradeList: Trade[],
 };
 type StrategyFunction<Param, Context, Report> = (args: StrategyFunctionArgs<Param, Context, Report>) => StrategyFunctionResult<Context>;
 type StrategyParamGuard<Param> = (param: any) => param is Param;

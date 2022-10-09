@@ -3,6 +3,7 @@ import { handleErrorByMessage } from "../../common/error/handleError";
 import { findPenalty } from "../../lib/typeorm/repository/Penalty/findPenalty";
 import { insertPenalty } from "../../lib/typeorm/repository/Penalty/insertPenalty";
 import { strategyBoxContainer } from "../StrategyBoxContainer/StrategyBoxContainer";
+import { tradeCancelManager } from "../Trade/TradeCancelManager";
 import { Penalty, PenaltyColor } from "./Penalty";
 
 const yellowLimit = 3;
@@ -33,6 +34,7 @@ class PenaltyCounter {
       await handleErrorByMessage(logMessage, slackMessage);
       if (strategyBoxId) strategyBoxContainer.changeStatus('Error', strategyBoxId);
       else strategyBoxContainer.changeStatus('Sleep');
+      tradeCancelManager.unsubscribe(strategyBoxId);
     }
   }
 };
