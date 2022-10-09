@@ -1,5 +1,4 @@
-import { ReportDefinition } from '../domain/BaseType';
-import { DR, StrategyLogger, Trade, TradeFactory } from './bridge';
+import { DR, StrategyLogger, Trade, TradeFactory, ReportDefinition } from './bridge';
 
 export type StrategyFunctionArgs<Param, Context, Report> = {
   param: Param,
