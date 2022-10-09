@@ -54,8 +54,8 @@ export type TradeSide = 'buy' | 'sell';
 export type TradeType = 'limit' | 'market';
 
 export type TradeParam<T extends TradeType = TradeType> = TradeParamMarket<T> | TradeParamLimit<T>;
-type TradeParamMarket<T extends TradeType> = T extends 'market' ? { type: 'market', side: TradeSide, amount: number, } : never;
-type TradeParamLimit<T extends TradeType> = T extends 'limit' ? { type: 'limit', rate: number, side: TradeSide, amount: number, } : never;
+type TradeParamMarket<T extends TradeType> = T extends 'market' ? { type: 'market', side: TradeSide, amount: number, stopLossRate?: number, } : never;
+type TradeParamLimit<T extends TradeType> = T extends 'limit' ? { type: 'limit', rate: number, side: TradeSide, amount: number, stopLossRate?: number, } : never;
 
 type TradeRequestParam = {
   amount?: number,

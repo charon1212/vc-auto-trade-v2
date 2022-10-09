@@ -6,11 +6,11 @@ import { CoincheckPostOrder } from "../apiTool/CoincheckPostOrder";
 
 export const postOrder = ea(__filename, async (trade: DR<Trade>) => {
   const { pair, tradeParam } = trade;
-  const { side, type } = tradeParam;
+  const { side, type, stopLossRate } = tradeParam;
   const rate = tradeParam.type === 'limit' ? tradeParam.rate : undefined;
   const amount = (tradeParam.type === 'market' && tradeParam.side == 'buy') ? undefined : tradeParam.amount;
   const amountMarketBuy = (tradeParam.type === 'market' && tradeParam.side == 'buy') ? calcAmountMarketBuy(pair, tradeParam.amount) : undefined;
-  const result = await CoincheckPostOrder.request({ pair, side, type, rate, amount, amountMarketBuy });
+  const result = await CoincheckPostOrder.request({ pair, side, type, rate, amount, amountMarketBuy, stopLossRate });
   return result.handleOk((body) => {
     return {
       id: body.id.toString(),
