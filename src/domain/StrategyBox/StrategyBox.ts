@@ -33,12 +33,18 @@ export class StrategyBox<StrategyParam, StrategyContext> {
     public isForwardTest: boolean,
     initialContext: StrategyContext,
   ) {
-    if (!strategy.paramGuard(param)) throw new Error('StrategyParamの型が一致しません。'); // TODO: エラー処理
-    if (!strategy.contextGuard(initialContext)) throw new Error('StrategyContextの型が一致しません。'); // TODO: エラー処理
     this.context = initialContext;
     this.strategyLogger = new StrategyLogger(strategyBoxId);
     this.iTradeManager = isForwardTest ? tradeManagerForwardTest : tradeManager;
     this.iTradeCancelManager = isForwardTest ? tradeCancelManager : tradeCancelManager;
+    if (!strategy.paramGuard(param)) {
+      penaltyCounter.addRedCard(strategyBoxId, 'StrategyParamの型が一致しません。');
+      return;
+    }
+    if (!strategy.contextGuard(initialContext)) {
+      penaltyCounter.addRedCard(strategyBoxId, 'StrategyContextの型が一致しません。');
+      return;
+    }
   };
 
   private timer: NodeJS.Timer | undefined = undefined;

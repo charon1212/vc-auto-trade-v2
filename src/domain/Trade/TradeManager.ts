@@ -4,6 +4,7 @@ import { fetchOpenOrderIdList } from "../../lib/coincheck/interface/fetchOpenOrd
 import { postOrder } from "../../lib/coincheck/interface/postOrder";
 import { updateTrade } from "../../lib/typeorm/repository/Trade/updateTrade";
 import { Execution, Trade, TradeStatus } from "../BaseType";
+import { penaltyCounter } from "../PenaltyCounter/PenaltyCounter";
 import { ITradeManager } from "./ITradeManager";
 import { TradeCache } from "./TradeCache";
 
@@ -72,7 +73,7 @@ class TradeManager implements ITradeManager {
       const totalExecutedAmountJp = trade.executions.map(({ amountJp }) => amountJp).reduce((p, c) => p + c, 0);
       return totalExecutedAmountJp > trade.tradeRequestParam.amountBuyMarket * 0.99;
     } else {
-      throw new Error('TradeRequestParamについて、amountとamountBuyMarketが両方undefinedです。') // TODO:エラー処理。
+      penaltyCounter.addRedCard(trade.strategyBoxId, 'TradeRequestParamについて、amountとamountBuyMarketが両方undefinedです。');
     }
   };
 

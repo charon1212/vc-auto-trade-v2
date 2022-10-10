@@ -2,6 +2,7 @@ import { findTrade } from "../../lib/typeorm/repository/Trade/findTrade";
 import { insertTrade } from "../../lib/typeorm/repository/Trade/insertTrade";
 import { updateTrade } from "../../lib/typeorm/repository/Trade/updateTrade";
 import { Trade, TradeStatus } from "../BaseType";
+import { penaltyCounter } from "../PenaltyCounter/PenaltyCounter";
 
 export class TradeCache {
   private cacheAll: Trade[] = [];
@@ -26,9 +27,7 @@ export class TradeCache {
   };
   async changeStatus(tradeUid: string, status: TradeStatus) {
     const trade = this.cacheAll.find(({ uid }) => uid === tradeUid);
-    if (!trade) {
-      throw new Error(''); // TODO: エラー処理
-    };
+    if (!trade) return penaltyCounter.addAllRedCard('状態変更対象の取引が見つかりません。');
     const beforeStatus = trade.status;
     trade.status = status;
     this.cache[beforeStatus].filter(({ uid }) => uid !== tradeUid);
