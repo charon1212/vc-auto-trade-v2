@@ -76,6 +76,10 @@ class TradeManager implements ITradeManager {
     }
   };
 
+  async cancelTrade(trade: Trade,) {
+    await this.tradeCache.changeStatus(trade.uid, 'cancel');
+  };
+
   /**
    * 本システムで裁判したUIDと、取引所APIで裁判したIDのマップを取得する。
    */

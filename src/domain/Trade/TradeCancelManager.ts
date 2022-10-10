@@ -3,6 +3,7 @@ import { fetchOrderIsCancel } from "../../lib/coincheck/interface/fetchOrderIsCa
 import { Trade } from "../BaseType";
 import { penaltyCounter } from "../PenaltyCounter/PenaltyCounter";
 import { ITradeCancelManager } from "./ITradeCancelManager";
+import { tradeManager } from "./TradeManager";
 
 export type CancelSubscription = {
   strategyBoxId: string,
@@ -23,7 +24,7 @@ class TradeCancelManager implements ITradeCancelManager {
   private scheduleCancelStatusCheck() {
     this.subscriptions.forEach(async (sub) => {
       const { strategyBoxId, cancelList, proceed } = sub;
-      for (let cancelTrade of cancelList) {
+      for (let cancelTrade of [...cancelList]) {
         const resultCancelComplete = await fetchOrderIsCancel(+cancelTrade.apiId);
         if (resultCancelComplete.isEr) {
           this.removeSubscription(sub);
@@ -32,7 +33,8 @@ class TradeCancelManager implements ITradeCancelManager {
         // @ts-ignore  ts-jestがここをエラーとしてしまい、テストできないための暫定措置。POSTしてみたけど反応なし：https://github.com/kulshekhar/ts-jest/issues/3860
         const isCancelComplete = resultCancelComplete.ok;
         if (!isCancelComplete) return;
-        // TODO: キャンセル状態への変更。
+        await tradeManager.cancelTrade(cancelTrade);
+        sub.cancelList = cancelList.filter((v) => v !== cancelTrade);
       }
       this.removeSubscription(sub);
       if (!sub.proceedCalled) {
