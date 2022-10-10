@@ -23,6 +23,6 @@ export const spyCoincheckGetTransactions = (mockSuccess: boolean, mockReturnTran
     return ok({
       success: mockSuccess,
       transactions: mockReturnTransactions().map((v) => ({ ...defaultTransaction, ...v, })),
-    });
+    } as ResponseBodyGetTransactions);
   });
 };

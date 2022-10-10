@@ -42,6 +42,7 @@ describe('executionMonitor', () => {
     expect(spy2.mock.calls.length).toBe(3);
 
     const executions = await getTypeormRepository(Execution).find({});
+    console.log(executions);
     expect(executions.length).toBe(3);
     A_obj(executions.find(({ apiId }) => apiId === '20001'))
       .desc('assert execution 1')

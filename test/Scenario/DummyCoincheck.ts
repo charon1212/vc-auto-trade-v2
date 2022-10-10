@@ -4,6 +4,7 @@ import { spyCoincheckGetTicker } from "../spy/coincheck/spyCoincheckGetTicker";
 import { spyCoincheckGetTransactions } from "../spy/coincheck/spyCoincheckGetTransactions";
 import { spyCoincheckPostOrder } from "../spy/coincheck/spyCoincheckPostOrder";
 import { RequestParamPostOrder } from '../../src/lib/coincheck/apiTool/CoincheckPostOrder';
+import { getLegalCurrency, getVirtualCurrency, LegalCurrency, VirtualCurrency } from "../../src/domain/Exchange/currency";
 
 type Order = {
   id: number,
@@ -16,18 +17,17 @@ type Order = {
   stop_loss_rate: null,
   created_at: string,
 };
-type Transaction = {
+type FundLegal<P extends Pair> = { [key in LegalCurrency<P>]: string };
+type FundVirtual<P extends Pair> = { [key in VirtualCurrency<P>]: string };
+type Transaction<P extends Pair> = {
   id: number,
   order_id: number, // 注文のID
   created_at: string, // 取引時間
-  funds: { // 各残高の増減
-    btc: number,
-    jpy: number, // TODO: 貨幣はこれだけじゃない。ETCとかやる場合は追加が必要。
-  },
-  pair: Pair, // 取引ペア
-  rate: number, // 約定価格
-  fee_currency: '', // 手数料の通貨
-  fee: '', // 手数料
+  funds: FundLegal<P> & FundVirtual<P>, // 各残高の増減
+  pair: P, // 取引ペア
+  rate: string, // 約定価格
+  fee_currency: string, // 手数料の通貨
+  fee: string, // 手数料
   liquidity: 'T' | 'M', // Taker/Maker
   side: 'buy' | 'sell', // 売り/買い
 };
@@ -37,7 +37,7 @@ const toStr = (a: number | null) => a === null ? null : `${a}`;
 export class DummyCoincheck {
   public now: number;
   public openOrderList: Order[] = [];
-  public transactionList: Transaction[] = [];
+  public transactionList: Transaction<Pair>[] = [];
   public postOrderCallHistory = [] as RequestParamPostOrder[];
 
   public spyCoincheckGetOpenOrder;
@@ -57,8 +57,8 @@ export class DummyCoincheck {
     ));
     this.spyCoincheckGetTicker = spyCoincheckGetTicker((pair) => this.price(pair, this.now));
     this.spyCoincheckGetTransactions = spyCoincheckGetTransactions(true, () => this.transactionList.map(
-      ({ id, order_id, created_at, funds: { btc, jpy }, pair, rate, fee_currency, fee, liquidity, side }) =>
-        ({ id, order_id, created_at, pair, fee_currency, fee, liquidity, side, funds: { btc: `${btc}`, jpy: `${jpy}` }, rate: `${rate}`, })
+      ({ id, order_id, created_at, funds, pair, rate, fee_currency, fee, liquidity, side }) =>
+        ({ id, order_id, created_at, pair, fee_currency, fee, liquidity, side, funds, rate: `${rate}`, })
     ));
     this.spyCoincheckPostOrder = spyCoincheckPostOrder((args) => {
       this.postOrderCallHistory.push(args);
@@ -80,20 +80,25 @@ export class DummyCoincheck {
           created_at,
         });
       } else { // Makerの場合、OpenOrderに登録せずに即約定する。
+        const vcKey = getVirtualCurrency(pair);
+        const jpKey = getLegalCurrency(pair);
         const btc = side === 'buy' ? (amountMarketBuy || 0) / p : (amount || 0);
         const jpy = side === 'buy' ? (amountMarketBuy || 0) : (amount || 0) * p;
         this.transactionList.push({
           id: this.getId(),
           order_id,
           created_at,
-          funds: { btc, jpy },
+          funds: {
+            [vcKey]: `${btc}`,
+            [jpKey]: `${jpy}`,
+          },
           pair,
-          rate: p,
+          rate: `${p}`,
           fee_currency: '',
           fee: '',
           liquidity: 'M',
           side,
-        });
+        } as Transaction<Pair>);
       }
       return order_id;
     });
@@ -109,21 +114,23 @@ export class DummyCoincheck {
     this.openOrderList.forEach(({ id, order_type, rate, pair, pending_amount }) => {
       const p = this.price(pair, this.now);
       if ((order_type === 'buy' && p <= rate!) || (order_type === 'sell' && p >= rate!)) {
+        const vcKey = getVirtualCurrency(pair);
+        const jpKey = getLegalCurrency(pair);
         this.transactionList.push({
           id: this.getId(),
           order_id: id,
           created_at: (new Date(this.now)).toISOString(),
           funds: {
-            btc: (pending_amount ?? 0) * (order_type === 'buy' ? 1 : -1),
-            jpy: (pending_amount ?? 0) * (order_type === 'buy' ? -1 : 1),
+            [vcKey]: `${(pending_amount ?? 0) * (order_type === 'buy' ? 1 : -1)}`,
+            [jpKey]: `${(pending_amount ?? 0) * (order_type === 'buy' ? -1 : 1)}`,
           },
           pair,
-          rate: p,
+          rate: `${p}`,
           fee_currency: '',
           fee: '',
           liquidity: 'M',
           side: order_type,
-        });
+        } as Transaction<Pair>);
         executedId.push(id);
       }
     });
