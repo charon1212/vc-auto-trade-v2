@@ -7,9 +7,10 @@ import { Trade, } from "../BaseType";
 import { TradeCache } from "../Trade/TradeCache";
 import { createExecutionForwardTest } from "./createExecutionForwardTest";
 import { ITradeManager } from "../Trade/ITradeManager";
-import { okVoid } from "../../common/error/Result";
+import { er, okVoid } from "../../common/error/Result";
 import { Vcat2Result } from "../../common/error/Vcat2Result";
 import { isMarketBuy } from "../Trade/isMarketBuy";
+import { Vcat2Error } from "../../common/error/Vcat2Error";
 
 /**
  * 取引管理クラス(ForwardTest用)
@@ -41,9 +42,7 @@ class TradeManagerForwardTest implements ITradeManager {
    */
   async order(trade: Trade): Promise<Vcat2Result<void>> {
     const lastPrice = marketCache.getLastHistory(trade.pair)?.price;
-    if (!lastPrice) {
-      throw new Error('最終価格が取得できません。') // TODO:エラー処理
-    }
+    if (!lastPrice) return er(new Vcat2Error(__filename, { message: 'TradeManager.orderでLastPriceが取得できません。' }));
     // tradeに付加情報を設定してDB保存
     trade.apiId = 'forwardtest';
     trade.status = 'requested';
