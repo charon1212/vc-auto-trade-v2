@@ -2,14 +2,15 @@ import { ea } from "../../../common/error/Vcat2Result";
 import { DR } from "../../../common/typescript/deepreadonly";
 import { Pair, Trade } from "../../../domain/BaseType";
 import { marketCache } from "../../../domain/Market/MarketCache";
+import { isMarketBuy } from "../../../domain/Trade/isMarketBuy";
 import { CoincheckPostOrder } from "../apiTool/CoincheckPostOrder";
 
 export const postOrder = ea(__filename, async (trade: DR<Trade>) => {
   const { pair, tradeParam } = trade;
   const { side, type, stopLossRate } = tradeParam;
   const rate = tradeParam.type === 'limit' ? tradeParam.rate : undefined;
-  const amount = (tradeParam.type === 'market' && tradeParam.side == 'buy') ? undefined : tradeParam.amount;
-  const amountMarketBuy = (tradeParam.type === 'market' && tradeParam.side == 'buy') ? calcAmountMarketBuy(pair, tradeParam.amount) : undefined;
+  const amount = isMarketBuy(tradeParam) ? undefined : tradeParam.amount;
+  const amountMarketBuy = isMarketBuy(tradeParam) ? calcAmountMarketBuy(pair, tradeParam.amount) : undefined;
   const result = await CoincheckPostOrder.request({ pair, side, type, rate, amount, amountMarketBuy, stopLossRate });
   return result.handleOk((body) => {
     return {
