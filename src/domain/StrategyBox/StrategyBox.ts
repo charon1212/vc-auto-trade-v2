@@ -13,6 +13,7 @@ import { Report } from '../../strategy/bridge';
 import { reportManager } from '../Report/ReportManager';
 import { tradeCancelManager } from '../Trade/TradeCancelManager';
 import { ITradeCancelManager } from '../Trade/ITradeCancelManager';
+import { clearInterval } from 'timers';
 
 export type StrategyBoxStatus = 'Running' | 'Sleep' | 'Error';
 
@@ -40,24 +41,28 @@ export class StrategyBox<StrategyParam, StrategyContext> {
     this.iTradeCancelManager = isForwardTest ? tradeCancelManager : tradeCancelManager;
   };
 
+  private timer: NodeJS.Timer | undefined = undefined;
   start() {
-    this.t();
+    this.timer = setInterval(this.tick, 10000); // 10秒ごとにtick()を実行する。
   };
-
-  /**
-   * 定間隔ごとにtick()を実行する。
-   */
-  private t() {
-    if (this.status !== 'Running') return;
-    this.lastTickMs = Date.now();
-    this.tick().then(() => {
-      setTimeout(() => {
-        this.t();
-      }, 5000);
-    });
+  stop() {
+    if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = undefined;
+    }
   }
 
+  private runningTick: boolean = false;
   private async tick() {
+    // ■運用系の設定
+    if (this.status !== 'Running') {
+      this.stop();
+      return;
+    }
+    if (this.runningTick) return;
+    this.runningTick = true;
+    this.lastTickMs = Date.now();
+
     // ■入力情報取得
     const priceShortHistory = marketCache.getPriceHistory(this.pair)?.map(({ price }) => price) || [];
     const tradeList = this.iTradeManager.getTradeListByStrategyBoxId(this.strategyBoxId);
@@ -100,6 +105,7 @@ export class StrategyBox<StrategyParam, StrategyContext> {
           if (result.isEr) return await penaltyCounter.addRedCard(this.strategyBoxId, `fail this.tradeManager.order(newTrade). trade=${JSON.stringify(newTrade)}`);
         }
       },
-    })
+    });
+    this.runningTick = false;
   };
 };
