@@ -2,6 +2,7 @@ import { cancelOrder } from "../../lib/coincheck/interface/cancelOrder";
 import { fetchOrderIsCancel } from "../../lib/coincheck/interface/fetchOrderIsCancel";
 import { Trade } from "../BaseType";
 import { penaltyCounter } from "../PenaltyCounter/PenaltyCounter";
+import { ITradeCancelManager } from "./ITradeCancelManager";
 
 export type CancelSubscription = {
   strategyBoxId: string,
@@ -9,7 +10,7 @@ export type CancelSubscription = {
   proceed: () => void | Promise<void>,
 };
 
-class TradeCancelManager {
+class TradeCancelManager implements ITradeCancelManager {
 
   private subscriptions: (CancelSubscription & { proceedCalled: boolean, })[] = [];
 
@@ -31,6 +32,7 @@ class TradeCancelManager {
         // @ts-ignore  ts-jestがここをエラーとしてしまい、テストできないための暫定措置。POSTしてみたけど反応なし：https://github.com/kulshekhar/ts-jest/issues/3860
         const isCancelComplete = resultCancelComplete.ok;
         if (!isCancelComplete) return;
+        // TODO: キャンセル状態への変更。
       }
       this.removeSubscription(sub);
       if (!sub.proceedCalled) {

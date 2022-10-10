@@ -12,6 +12,7 @@ import { penaltyCounter } from '../PenaltyCounter/PenaltyCounter';
 import { Report } from '../../strategy/bridge';
 import { reportManager } from '../Report/ReportManager';
 import { tradeCancelManager } from '../Trade/TradeCancelManager';
+import { ITradeCancelManager } from '../Trade/ITradeCancelManager';
 
 export type StrategyBoxStatus = 'Running' | 'Sleep' | 'Error';
 
@@ -20,7 +21,8 @@ export class StrategyBox<StrategyParam, StrategyContext> {
   public status: StrategyBoxStatus = 'Running';
   public lastTickMs: number = 0; // 死活監視用の最終実行時刻
   private strategyLogger: StrategyLogger;
-  private tradeManager: ITradeManager;
+  private iTradeManager: ITradeManager;
+  private iTradeCancelManager: ITradeCancelManager;
 
   constructor(
     public strategyBoxId: string,
@@ -34,7 +36,8 @@ export class StrategyBox<StrategyParam, StrategyContext> {
     if (!strategy.contextGuard(initialContext)) throw new Error('StrategyContextの型が一致しません。'); // TODO: エラー処理
     this.context = initialContext;
     this.strategyLogger = new StrategyLogger(strategyBoxId);
-    this.tradeManager = isForwardTest ? tradeManagerForwardTest : tradeManager;
+    this.iTradeManager = isForwardTest ? tradeManagerForwardTest : tradeManager;
+    this.iTradeCancelManager = isForwardTest ? tradeCancelManager : tradeCancelManager;
   };
 
   start() {
@@ -57,7 +60,7 @@ export class StrategyBox<StrategyParam, StrategyContext> {
   private async tick() {
     // ■入力情報取得
     const priceShortHistory = marketCache.getPriceHistory(this.pair)?.map(({ price }) => price) || [];
-    const tradeList = this.tradeManager.getTradeListByStrategyBoxId(this.strategyBoxId);
+    const tradeList = this.iTradeManager.getTradeListByStrategyBoxId(this.strategyBoxId);
     const tradeFactory = createTradeFactory(this);
     const report = reportManager.getLastReport(this.strategy.id, this.pair);
 
@@ -66,7 +69,7 @@ export class StrategyBox<StrategyParam, StrategyContext> {
       const update = await executionMonitor.update();
       if (update.isEr)
         return await penaltyCounter.addYellowCard(this.strategyBoxId, 'fail executionMonitor.update()');
-      const checkRequestedTradeHasExecuted = await this.tradeManager.checkRequestedTradeHasExecuted();
+      const checkRequestedTradeHasExecuted = await this.iTradeManager.checkRequestedTradeHasExecuted();
       if (checkRequestedTradeHasExecuted.isEr)
         return await penaltyCounter.addYellowCard(this.strategyBoxId, 'fail this.tradeManager.checkRequestedTradeHasExecuted()');
     }
@@ -88,12 +91,12 @@ export class StrategyBox<StrategyParam, StrategyContext> {
     const { newTradeList, context, cancelTradeList } = strategyResult;
     this.context = context;
     await updateStrategyBox(this);
-    await tradeCancelManager.subscribe({
+    await this.iTradeCancelManager.subscribe({
       strategyBoxId: this.strategyBoxId,
       cancelList: cancelTradeList,
       proceed: async () => {
         for (let newTrade of newTradeList) {
-          const result = await this.tradeManager.order(newTrade);
+          const result = await this.iTradeManager.order(newTrade);
           if (result.isEr) return await penaltyCounter.addRedCard(this.strategyBoxId, `fail this.tradeManager.order(newTrade). trade=${JSON.stringify(newTrade)}`);
         }
       },
