@@ -48,18 +48,11 @@ export class DummyCoincheck {
   constructor(private price: (pair: Pair, time: number) => number, initialTime: number) {
     this.now = initialTime;
     this.spyCoincheckGetOpenOrder = spyCoincheckGetOpenOrder(true, () => this.openOrderList.map(
-      ({ id, order_type, created_at, pair, pending_amount, pending_market_buy_amount, rate, stop_loss_rate }) =>
-      ({
-        id, order_type, created_at, pair, rate, stop_loss_rate,
-        pending_amount: toStr(pending_amount),
-        pending_market_buy_amount: toStr(pending_market_buy_amount),
-      })
+      ({ pending_amount, pending_market_buy_amount, ...rest }) =>
+        ({ ...rest, pending_amount: toStr(pending_amount), pending_market_buy_amount: toStr(pending_market_buy_amount), })
     ));
     this.spyCoincheckGetTicker = spyCoincheckGetTicker((pair) => this.price(pair, this.now));
-    this.spyCoincheckGetTransactions = spyCoincheckGetTransactions(true, () => this.transactionList.map(
-      ({ id, order_id, created_at, funds, pair, rate, fee_currency, fee, liquidity, side }) =>
-        ({ id, order_id, created_at, pair, fee_currency, fee, liquidity, side, funds, rate: `${rate}`, })
-    ));
+    this.spyCoincheckGetTransactions = spyCoincheckGetTransactions(true, () => this.transactionList.map(({ rate, ...rest }) => ({ ...rest, rate: `${rate}`, })));
     this.spyCoincheckPostOrder = spyCoincheckPostOrder((args) => {
       this.postOrderCallHistory.push(args);
       const { pair, side, type, amount, amountMarketBuy, rate } = args;
