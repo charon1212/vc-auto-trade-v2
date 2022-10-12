@@ -1,10 +1,10 @@
-import { Pair } from "../../src/domain/BaseType";
-import { spyCoincheckGetOpenOrder } from "../spy/coincheck/spyCoincheckGetOpenOrder";
-import { spyCoincheckGetTicker } from "../spy/coincheck/spyCoincheckGetTicker";
-import { spyCoincheckGetTransactions } from "../spy/coincheck/spyCoincheckGetTransactions";
-import { spyCoincheckPostOrder } from "../spy/coincheck/spyCoincheckPostOrder";
-import { RequestParamPostOrder } from '../../src/lib/coincheck/apiTool/CoincheckPostOrder';
-import { getLegalCurrency, getVirtualCurrency, LegalCurrency, VirtualCurrency } from "../../src/domain/Exchange/currency";
+import { Pair } from "../../../src/domain/BaseType";
+import { spyCoincheckGetOpenOrder } from "../../spy/coincheck/spyCoincheckGetOpenOrder";
+import { spyCoincheckGetTicker } from "../../spy/coincheck/spyCoincheckGetTicker";
+import { spyCoincheckGetTransactions } from "../../spy/coincheck/spyCoincheckGetTransactions";
+import { spyCoincheckPostOrder } from "../../spy/coincheck/spyCoincheckPostOrder";
+import { RequestParamPostOrder } from '../../../src/lib/coincheck/apiTool/CoincheckPostOrder';
+import { getLegalCurrency, getVirtualCurrency, LegalCurrency, VirtualCurrency } from "../../../src/domain/Exchange/currency";
 
 type Order = {
   id: number,
