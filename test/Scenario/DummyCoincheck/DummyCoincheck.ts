@@ -14,12 +14,12 @@ type Order = {
   pair: Pair,
   pending_amount: number | null,
   pending_market_buy_amount: number | null,
-  stop_loss_rate: null,
+  stop_loss_rate: number | null,
   created_at: string,
 };
 type FundLegal<P extends Pair> = { [key in LegalCurrency<P>]: string };
 type FundVirtual<P extends Pair> = { [key in VirtualCurrency<P>]: string };
-type Transaction<P extends Pair> = {
+type Transaction<P extends Pair> = P extends any ? {
   id: number,
   order_id: number, // 注文のID
   created_at: string, // 取引時間
@@ -30,13 +30,24 @@ type Transaction<P extends Pair> = {
   fee: string, // 手数料
   liquidity: 'T' | 'M', // Taker/Maker
   side: 'buy' | 'sell', // 売り/買い
-};
+} : never;
 
 const toStr = (a: number | null) => a === null ? null : `${a}`;
+const createTransaction = <P extends Pair>({ id, pair, order, created_at, liquidity, price, }: { id: number, pair: P, order: Order, created_at: string, liquidity: 'T' | 'M', price: number, },): Transaction<P> => {
+  const { id: order_id, order_type, type, pending_amount, pending_market_buy_amount, } = order;
+  const amountVc = order_type === 'buy' && type === 'market' ? pending_market_buy_amount! / price : pending_amount!;
+  const amountJp = amountVc * price;
+  const transaction = {
+    id, order_id, created_at, pair, liquidity, fee: '', fee_currency: '', side: order_type, rate: `${price}`,
+    funds: { [getLegalCurrency(pair)]: amountJp, [getVirtualCurrency(pair)]: amountVc },
+  } as Transaction<P>;
+  return transaction;
+};
 
 export class DummyCoincheck {
   public now: number;
   public openOrderList: Order[] = [];
+  public stopLossOrderList: Order[] = [];
   public transactionList: Transaction<Pair>[] = [];
   public postOrderCallHistory = [] as RequestParamPostOrder[];
 
@@ -48,52 +59,37 @@ export class DummyCoincheck {
   constructor(private price: (pair: Pair, time: number) => number, initialTime: number) {
     this.now = initialTime;
     this.spyCoincheckGetOpenOrder = spyCoincheckGetOpenOrder(true, () => this.openOrderList.map(
-      ({ pending_amount, pending_market_buy_amount, ...rest }) =>
-        ({ ...rest, pending_amount: toStr(pending_amount), pending_market_buy_amount: toStr(pending_market_buy_amount), })
+      ({ pending_amount, pending_market_buy_amount, stop_loss_rate, ...rest }) =>
+      ({
+        ...rest,
+        pending_amount: toStr(pending_amount),
+        pending_market_buy_amount: toStr(pending_market_buy_amount),
+        stop_loss_rate: toStr(stop_loss_rate),
+      })
     ));
     this.spyCoincheckGetTicker = spyCoincheckGetTicker((pair) => this.price(pair, this.now));
     this.spyCoincheckGetTransactions = spyCoincheckGetTransactions(true, () => this.transactionList.map(({ rate, ...rest }) => ({ ...rest, rate: `${rate}`, })));
     this.spyCoincheckPostOrder = spyCoincheckPostOrder((args) => {
       this.postOrderCallHistory.push(args);
-      const { pair, side, type, amount, amountMarketBuy, rate } = args;
+      const { pair, side, type, amount, amountMarketBuy, rate, stopLossRate } = args;
       const p = this.price(pair, this.now);
       const created_at = (new Date(this.now)).toISOString();
-      const order_id = this.getId();
-      // Takerの場合 = 指値注文で即約定ではない場合。
-      if (type === 'limit' && ((side === 'buy' && rate! < p) || (side === 'sell' && rate! > p))) {
-        this.openOrderList.push({
-          id: order_id,
-          order_type: side,
-          type,
-          rate: rate ?? null,
-          pair,
-          pending_amount: amount ?? null,
-          pending_market_buy_amount: amountMarketBuy ?? null,
-          stop_loss_rate: null,
-          created_at,
-        });
-      } else { // Makerの場合、OpenOrderに登録せずに即約定する。
-        const vcKey = getVirtualCurrency(pair);
-        const jpKey = getLegalCurrency(pair);
-        const btc = side === 'buy' ? (amountMarketBuy || 0) / p : (amount || 0);
-        const jpy = side === 'buy' ? (amountMarketBuy || 0) : (amount || 0) * p;
-        this.transactionList.push({
-          id: this.getId(),
-          order_id,
-          created_at,
-          funds: {
-            [vcKey]: `${btc}`,
-            [jpKey]: `${jpy}`,
-          },
-          pair,
-          rate: `${p}`,
-          fee_currency: '',
-          fee: '',
-          liquidity: 'M',
-          side,
-        } as Transaction<Pair>);
+      const order: Order = {
+        pair, type, created_at, id: this.getId(), order_type: side,
+        rate: rate ?? null,
+        pending_amount: amount ?? null,
+        pending_market_buy_amount: amountMarketBuy ?? null,
+        stop_loss_rate: stopLossRate ?? null,
+      };
+
+      if (stopLossRate !== undefined) { // StopLossの場合
+        this.stopLossOrderList.push(order);
+      } else if (type === 'limit' && ((side === 'buy' && rate! < p) || (side === 'sell' && rate! > p))) { // Takerの場合 = 指値注文で即約定ではない場合。
+        this.openOrderList.push(order);
+      } else { // Makerの場合
+        this.transactionList.push(createTransaction({ id: this.getId(), pair, created_at, liquidity: 'M', order, price: p }));
       }
-      return order_id;
+      return order.id;
     });
   }
 
@@ -103,44 +99,32 @@ export class DummyCoincheck {
 
   private next() {
     this.now += 1000;
-    const executedId = [] as number[];
-    this.openOrderList.forEach(({ id, order_type, rate, pair, pending_amount }) => {
-      const p = this.price(pair, this.now);
-      if ((order_type === 'buy' && p <= rate!) || (order_type === 'sell' && p >= rate!)) {
-        const vcKey = getVirtualCurrency(pair);
-        const jpKey = getLegalCurrency(pair);
-        this.transactionList.push({
-          id: this.getId(),
-          order_id: id,
-          created_at: (new Date(this.now)).toISOString(),
-          funds: {
-            [vcKey]: `${(pending_amount ?? 0) * (order_type === 'buy' ? 1 : -1)}`,
-            [jpKey]: `${(pending_amount ?? 0) * (order_type === 'buy' ? -1 : 1)}`,
-          },
-          pair,
-          rate: `${p}`,
-          fee_currency: '',
-          fee: '',
-          liquidity: 'M',
-          side: order_type,
-        } as Transaction<Pair>);
-        executedId.push(id);
+    const created_at = (new Date(this.now)).toISOString();
+    for (let order of [...this.stopLossOrderList]) {
+      const price = this.price(order.pair, this.now);
+      const stopLossRate = order.stop_loss_rate!;
+      if ((order.order_type === 'buy' && price >= stopLossRate) || (order.order_type === 'sell' && price <= stopLossRate)) {
+        if (order.type === 'limit' && ((order.order_type === 'buy' && order.rate! < price) || (order.order_type === 'sell' && order.rate! > price))) {
+          this.openOrderList.push(order);
+        } else {
+          this.transactionList.push(createTransaction({ id: this.getId(), pair: order.pair, created_at, liquidity: 'M', order, price }));
+        }
+        this.stopLossOrderList = this.stopLossOrderList.filter((v) => v !== order);
       }
-    });
-    this.openOrderList = this.openOrderList.filter(({ id }) => !executedId.includes(id));
+    }
+    for (let order of [...this.openOrderList]) {
+      const price = this.price(order.pair, this.now);
+      if ((order.order_type === 'buy' && price <= order.rate!) || (order.order_type === 'sell' && price >= order.rate!)) {
+        this.transactionList.push(createTransaction({ id: this.getId(), pair: order.pair, created_at, liquidity: 'T', order, price: order.rate! }));
+        this.openOrderList = this.openOrderList.filter((v) => v !== order);
+      }
+    }
   }
 
-  clearCallHistory() {
-    this.postOrderCallHistory = [];
-  }
-  getPostOrderCallHistory() {
-    return this.postOrderCallHistory;
-  }
+  clearCallHistory() { this.postOrderCallHistory = []; };
+  getPostOrderCallHistory() { return this.postOrderCallHistory; };
 
   // ID採番
   private idCount = 1;
-  private getId() {
-    this.idCount++;
-    return this.idCount;
-  }
+  private getId() { return ++this.idCount; };
 };
