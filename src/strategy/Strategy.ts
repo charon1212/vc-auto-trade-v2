@@ -14,9 +14,9 @@ export type StrategyFunctionResult<Context> = {
   newTradeList: Trade[],
   cancelTradeList: Trade[],
 };
-type StrategyFunction<Param, Context, Report> = (args: StrategyFunctionArgs<Param, Context, Report>) => StrategyFunctionResult<Context>;
-type StrategyParamGuard<Param> = (param: any) => param is Param;
-type StrategyContextGuard<Context> = (context: any) => context is Context;
+export type StrategyFunction<Param, Context, Report> = (args: StrategyFunctionArgs<Param, Context, Report>) => StrategyFunctionResult<Context>;
+export type StrategyParamGuard<Param> = (param: any) => param is Param;
+export type StrategyContextGuard<Context> = (context: any) => context is Context;
 
 export type Strategy<Param, Context, Report> = {
   id: string,
