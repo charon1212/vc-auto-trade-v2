@@ -2,7 +2,7 @@ dist/
 node_modules/
 package-lock.json
 .env
-.env.ec2
+.env.ec2*
 vcat-2.log
 logs/
 files/*/
